@@ -2,6 +2,13 @@ MESSAGE BOARD
 Format: Timestamp \n User \n Message
 
 May 8, 2012
+Andy
+This is a sweet idea, just a trial run to make sure i can edit this and push back to the repo successfully. I don't think my previous Facebook post from my phone went through. I have also slowed on coding since we last spoke, the obj-c books seemed somewhat dated, or xCode just had an update, either way it was a weird format, i still got it working but it seemed like xCode wanted everything in header files and it was just awkward. Do we have a language for Project Euler stuff? Or just whatever we want to do?
+
+
+
+
+May 8, 2012
 Zach
 I figure instead of individually uploading a bunch of different messages to each other, we can just use one (like this) as a message board of sorts. I guess we could have others like a changelog or buglist once we're really collaborating. Also, lets push the older messages down and write the newer ones on top.
 
