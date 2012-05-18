@@ -1,0 +1,35 @@
+{
+Zach - 5/17/12
+Okay, a whole bunch of changes. Tough to recall them all.
+
+MyPanel.java:
+Updated to the one I use with Yahtzee now, so that in the constructor you can 
+specify what gridLayout you want (and save a bunch of lines of code while 
+doing the panel setup).
+
+Tetris.java:
+Added functionality to the three buttons.
+	- New game just spawns a new Tetris()
+	- Pause calls pause(), which toggles the boolean 'paused' and sends the 
+	  current value to the terminal.
+	- Quit calls System.exit(0)
+	
+Piece.java:
+Created this class. It's just an idea and has lots of room for changes and 
+improvements. I want it to be abstract so that a lot of the same methods 
+(like moving right, left, returning instance variables) can be called through 
+a common interface.
+The general idea is to keep track of the grid size (4 for line and square, 3 
+for everything else), the lower x,y position, and then calculate everything 
+else based on that.
+The rest is very self explanatory and ready to be changed.
+
+SquarePiece.java:
+Definitely the easiest piece since it can't rotate.
+Spawn has my idea of how that will work, and a little picture above to 
+help visualize it.
+
+GameBoard.java:
+Not really sure what this should end up being, so I just threw some stuff 
+in for now.
+}
