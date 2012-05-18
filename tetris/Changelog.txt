@@ -1,5 +1,9 @@
 {
 Zach - 5/17/12
+Links- these should prove invaluable:
+http://tetris.wikia.com/wiki/Tetris_Guideline
+http://tetris.wikia.com/wiki/TGM_Rotation
+
 Okay, a whole bunch of changes. Tough to recall them all.
 
 MyPanel.java:
