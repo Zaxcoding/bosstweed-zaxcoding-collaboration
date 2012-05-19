@@ -1,4 +1,14 @@
 {
+Andy - 5/19/12
+-made a bunch of changes to rotate functions
+
+Piece.java- added a clearGrid() function (I'm not sure if this is necessary, i think we need to discuss how this movement is going to work with the square you are monitoring, as in how do you know if something is under it? And I'm not sure i understand the move down function)
+
+IPiece.java - added this file so we have the I piece now, i added a system of rotation based on changing the grid based on the current grid, the current grid is known from a new position variable. all pieces should have the get and set position functions( i should probably put this in Piece.java
+
+JPiece.java - this is the big file. this shows how the rotateL and rotateR really coexist together with the position variable. Really check this out and see if this makes sense and in your opinion if it will work or not. I'm going to now continue with this approach for the rest of the pieces. stop me on Facebook if you think this approach is not worth doing.
+
+
 Zach - 5/17/12
 Links- these should prove invaluable:
 http://tetris.wikia.com/wiki/Tetris_Guideline

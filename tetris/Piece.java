@@ -26,6 +26,12 @@ public abstract class Piece
 		return grid;
 	}
 	
+	public void setGrid(int [] [] newGrid)
+	{
+	
+		grid = newGrid;
+	}
+	
 	public int getGridSize()
 	{
 		return gridSize;
@@ -57,6 +63,19 @@ public abstract class Piece
 	{
 		if (canMoveDown(board) && gridY < board.HEIGHT)
 			gridY++;
+	}
+	
+	public void clearGrid()
+	{
+		for(int i=0; i<5; i++)
+		{
+			for(int j=0; j<5; j++)
+			{
+				grid[i][j] = 0;
+			}
+		}
+	}
+	
 	}
 }
 	
