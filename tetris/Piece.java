@@ -8,18 +8,18 @@ public abstract class Piece
 	protected int [][] grid;
 
 	protected int gridSize, gridX, gridY;	
-	
+	/*
 	public abstract boolean canMoveLeft(GameBoard board);
 	 
 	public abstract boolean canMoveRight(GameBoard board);
 	 
 	public abstract boolean canMoveDown(GameBoard board);
-	 
+	*/ 
 	public abstract void spawn();
 	
-	public abstract void rotateL();
+	public abstract void rotate(int d);
 	
-	public abstract void rotateR();
+	
 		
 	public int [][] getGrid()
 	{
@@ -46,7 +46,7 @@ public abstract class Piece
 	{
 		return gridY;
 	}
-	
+	/*
 	public void moveLeft(GameBoard board)
 	{
 		if (canMoveLeft(board) && gridX > board.MAX_LEFT)
@@ -64,7 +64,7 @@ public abstract class Piece
 		if (canMoveDown(board) && gridY < board.HEIGHT)
 			gridY++;
 	}
-	
+	*/
 	public void clearGrid()
 	{
 		for(int i=0; i<5; i++)
@@ -76,6 +76,6 @@ public abstract class Piece
 		}
 	}
 	
-	}
+	
 }
 	

@@ -1,14 +1,9 @@
-/* My idea is to basically just keep track of the
- * 3x3 grid and where it fits into that, (or 4x4 for line)
- * and also the bottom left x and y of the grid, 
- * with all other coordinates derived relative to that */
-
-public class IPiece extends Piece
+public class SPiece extends Piece
 {	
-	/* 0010
-	 * 0010
-	 * 0010
-	 * 0010 */
+	/* 0000
+	 * 0000
+	 * 0011
+	 * 0110 */
 	
 	int position;
 	
@@ -19,11 +14,14 @@ public class IPiece extends Piece
 		gridX = 3;
 		gridY = 0;
 		grid = new int[gridSize][gridSize];
-		grid[1][3] = 1;
-		grid[2][3] = 1;
-		grid[3][3] = 1;
+		grid[4][2] = 1;
 		grid[4][3] = 1;
-		position =1;
+		grid[3][3] = 1;
+		grid[3][4] = 1;
+		/* 0000
+	 	 * 0000
+	 	 * 0011
+	 	 * 0110 */
 	}
 	/*
 	public boolean canMoveLeft(GameBoard board)
@@ -57,7 +55,6 @@ public class IPiece extends Piece
 		setGrid(changedGrid);
 	
 	}
-	
 	public int getPosition()
 	{
 		return position;
@@ -65,42 +62,37 @@ public class IPiece extends Piece
 	
 	public void setPosition(int p)
 	{
-		
 		position = p;
 	}
 	
-	public int [][] setPiece(int d, int[][] newGrid)
+	public int [][] setPiece(int d,int [][] newGrid)
 	{
 		if(d==1)
 		{
-			newGrid[1][3] = 1;
-			newGrid[2][3] = 1;
-			newGrid[3][3] = 1;
+			newGrid[4][2] = 1;
 			newGrid[4][3] = 1;
+			newGrid[3][3] = 1;
+			newGrid[3][4] = 1;
 			setPosition(d);
-			
-			/* 0010
-		 	 * 0010
-	 		 * 0010
-	 		 * 0010 */
+			/* 0000
+	 		* 0000
+	 	 	* 0011
+	 	 	* 0110 */
 	 	 	
 		}
 		else if(d==2)
 		{
-			newGrid[4][1] = 1;
-		 	newGrid[4][2] = 1;
-		 	newGrid[4][3] = 1;
-			newGrid[4][4] = 1; 
-	 	
+			newGrid[2][2] = 1;
+			newGrid[3][2] = 1;
+			newGrid[3][3] = 1;
+			newGrid[4][3] = 1;
 			setPosition(d);
-			
 			/* 0000
-	 	 	 * 0000
-	 	 	 * 0000
-	 		 * 1111 */
+	 		 * 0100
+			 * 0110
+	 		 * 0010 */
 		}
 		
 		return newGrid;
 	}
-	
 }

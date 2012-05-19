@@ -10,6 +10,7 @@ import java.awt.*;
 import java.awt.event.*;
 
 public class Tetris
+
 {
 	JFrame theWindow;
 	Container thePane;
@@ -19,6 +20,16 @@ public class Tetris
 	MyPanel linesPanel, totalPanel, nextLinePanel, levelPanel;
 	JButton newGame, pause, endGame;
 	MyListener theListener;
+	Piece p;
+	IPiece i= new IPiece();
+	SPiece s= new SPiece();
+	ZPiece z= new ZPiece();
+	OPiece o= new OPiece();
+	LPiece L= new LPiece();
+	JPiece J= new JPiece();
+	TPiece t= new TPiece();
+	
+	GameBoard board = new GameBoard(10,20);
 	
 	boolean paused;
 

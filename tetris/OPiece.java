@@ -21,7 +21,7 @@ public class OPiece extends Piece
 		grid[3][2] = 1;
 		grid[3][3] = 1;
 	}
-	
+	/*
 	public boolean canMoveLeft(GameBoard board)
 	{}
 		
@@ -30,11 +30,11 @@ public class OPiece extends Piece
 	
 	public abstract boolean canMoveDown(GameBoard board)
 	{}
-	 
-	public abstract void rotate(int d)
-	{
-		// nothing to do
-	}
+	*/
+	public void rotate(int d)
+	{}
+	
+	
 	
 	
 	
