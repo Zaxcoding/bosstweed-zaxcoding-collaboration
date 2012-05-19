@@ -16,9 +16,9 @@ public class LPiece extends Piece
 		gridY = 0;
 		grid = new int[gridSize][gridSize];
 		grid[2][2] = 1;
-		grid[2][3] = 1;
-		grid[2][4] = 1;
-		grid[3][4] = 1;
+		grid[3][2] = 1;
+		grid[4][2] = 1;
+		grid[4][3] = 1;
 		position = 1;
 		/* 0000
 	 	* 0100
@@ -103,10 +103,10 @@ public class LPiece extends Piece
 	{
 		if(d==1)
 		{
-			newGrid[2][4] = 1;
-			newGrid[2][3] = 1;
 			newGrid[2][2] = 1;
-			newGrid[3][4] = 1;
+			newGrid[3][2] = 1;
+			newGrid[4][2] = 1;
+			newGrid[4][3] = 1;
 			setPosition(d);
 			/* 0000
 	 		 * 0100
@@ -115,9 +115,9 @@ public class LPiece extends Piece
 		}
 		else if(d==2)
 		{
-			newGrid[1][3] = 1;
-			newGrid[1][4] = 1;
-			newGrid[2][3] = 1;
+			newGrid[3][1] = 1;
+			newGrid[4][1] = 1;
+			newGrid[3][2] = 1;
 			newGrid[3][3] = 1;
 		 	setPosition(d);
 		   /* 0000
@@ -130,7 +130,7 @@ public class LPiece extends Piece
 			newGrid[2][3] = 1;
 			newGrid[2][2] = 1;
 			newGrid[3][3] = 1;
-			newGrid[3][4] = 1; 
+			newGrid[4][3] = 1; 
 		 	setPosition(d);
 	 		/* 0000
 	 		 * 0110
@@ -142,7 +142,7 @@ public class LPiece extends Piece
 			newGrid[3][4] = 1;
 			newGrid[4][2] = 1;
 			newGrid[4][3] = 1;
-			newGrid[4][3] = 1; 
+			newGrid[4][4] = 1; 
 		 	setPosition(d);
 	 		/* 0000
 	 		 * 0000

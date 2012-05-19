@@ -24,6 +24,10 @@ public class IPiece extends Piece
 		grid[3][3] = 1;
 		grid[4][3] = 1;
 		position =1;
+		/* 0010
+	 	* 0010
+	 	* 0010
+	 	* 0010 */
 	}
 	/*
 	public boolean canMoveLeft(GameBoard board)

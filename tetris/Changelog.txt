@@ -1,6 +1,10 @@
 {
 Andy - 5/19/12
 
+-as far as i can tell all coordinates for rotates are correct and completed
+
+Andy - 5/19/12
+
 -completed rotates(rechecking if all grid coordinates represent what i expect)
 - compiled all files successfully.
 

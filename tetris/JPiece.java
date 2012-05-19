@@ -97,10 +97,10 @@ public class JPiece extends Piece
 	{
 		if(d==1)
 		{
-			newGrid[2][4] = 1;
-			newGrid[3][2] = 1;
+			newGrid[2][3] = 1;
 			newGrid[3][3] = 1;
-			newGrid[3][4] = 1;
+			newGrid[4][2] = 1;
+			newGrid[4][3] = 1;
 			setPosition(d);
 			/* 0000
 	 		 * 0010
@@ -109,10 +109,10 @@ public class JPiece extends Piece
 		}
 		else if(d==2)
 		{
-			newGrid[1][3] = 1;
-			newGrid[1][4] = 1;
-			newGrid[2][4] = 1;
-			newGrid[3][4] = 1;
+			newGrid[3][1] = 1;
+			newGrid[4][1] = 1;
+			newGrid[4][2] = 1;
+			newGrid[4][3] = 1;
 		 	setPosition(d);
 		   /* 0000
 	 		* 0000
@@ -121,10 +121,10 @@ public class JPiece extends Piece
 		}
 		else if(d==3)
 		{
-			newGrid[3][2] = 1;
 			newGrid[2][2] = 1;
-			newGrid[2][3] = 1;
-			newGrid[2][4] = 1; 
+			newGrid[3][2] = 1;
+			newGrid[4][2] = 1;
+			newGrid[2][3] = 1; 
 		 	setPosition(d);
 	 		/* 0000
 	 		 * 0110
