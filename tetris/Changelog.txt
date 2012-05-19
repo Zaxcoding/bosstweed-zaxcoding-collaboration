@@ -1,7 +1,13 @@
-Zach - 5/19/12
-I sent you a facebook message, go check it out. I like what you've got.
-
 {
+Andy - 5/19/12
+
+-completed rotates(rechecking if all grid coordinates represent what i expect)
+- compiled all files successfully.
+
+- added all pieces
+-renamed SquarePiece.java - OPiece.java for consistency
+
+
 Andy - 5/19/12
 -made a bunch of changes to rotate functions
 
