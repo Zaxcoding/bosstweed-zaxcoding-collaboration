@@ -20,14 +20,13 @@ public class Tetris
 	MyPanel linesPanel, totalPanel, nextLinePanel, levelPanel;
 	JButton newGame, pause, endGame;
 	MyListener theListener;
-	Piece p;
-	IPiece i= new IPiece();
-	SPiece s= new SPiece();
-	ZPiece z= new ZPiece();
-	OPiece o= new OPiece();
-	LPiece L= new LPiece();
-	JPiece J= new JPiece();
-	TPiece t= new TPiece();
+	Piece i = new IPiece();
+	Piece s = new SPiece();
+	Piece z = new ZPiece();
+	Piece o = new OPiece();
+	Piece l = new LPiece();
+	Piece j = new JPiece();
+	Piece t = new TPiece();
 	
 	GameBoard board = new GameBoard(10,20);
 	
@@ -137,7 +136,7 @@ public class Tetris
 
 		array = new MyPanel[200];
 
-		for(int i=0;i<200;i++)
+		for(int i = 0; i < 200; i++)
 		{
 			array[i] = new MyPanel(10,10);
 			array[i].setBorder(BorderFactory.createLineBorder(Color.gray));

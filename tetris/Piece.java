@@ -8,6 +8,8 @@ public abstract class Piece
 	protected int [][] grid;
 
 	protected int gridSize, gridX, gridY;	
+	
+	protected int position;
 	/*
 	public abstract boolean canMoveLeft(GameBoard board);
 	 
@@ -16,19 +18,22 @@ public abstract class Piece
 	public abstract boolean canMoveDown(GameBoard board);
 	*/ 
 	public abstract void spawn();
+		
+	public abstract void setPiece();
 	
-	public abstract void rotate(int d);
-	
-	
+	public Piece()
+	{
+		position = 1;
+		spawn();
+	}
 		
 	public int [][] getGrid()
 	{
 		return grid;
 	}
 	
-	public void setGrid(int [] [] newGrid)
+	public void setGrid(int [][] newGrid)
 	{
-	
 		grid = newGrid;
 	}
 	
@@ -46,6 +51,17 @@ public abstract class Piece
 	{
 		return gridY;
 	}
+	
+	public int getPosition()
+	{
+		return position;
+	}
+	
+	public void setPosition(int p)
+	{
+		position = p;
+	}
+	
 	/*
 	public void moveLeft(GameBoard board)
 	{
@@ -67,15 +83,34 @@ public abstract class Piece
 	*/
 	public void clearGrid()
 	{
-		for(int i=0; i<5; i++)
-		{
-			for(int j=0; j<5; j++)
-			{
+		for(int i = 0; i < gridSize; i++)
+			for(int j = 0; j < gridSize; j++)
 				grid[i][j] = 0;
-			}
-		}
 	}
 	
+	public void rotateR()
+	{
+		rotate(1);
+	}
 	
+	public void rotateL()
+	{
+		rotate(-1);
+	}
+	
+	public void rotate(int d)
+	{
+		//1 - cw
+		//2 - ccw
+		// 1 for R, -1 for L
+		
+		// note- need to also add the rotation checking to make sure
+		// it's possible to do this rotate
+		clearGrid();
+		position = (position + d) % 4;
+		if (position <= 0)		// since java % can give negative results
+			position += 4;
+		setPiece();
+		System.out.println("Position: " + position);
+	}
 }
-	

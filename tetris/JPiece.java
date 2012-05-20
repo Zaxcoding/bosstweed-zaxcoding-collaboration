@@ -1,25 +1,19 @@
 public class JPiece extends Piece
 {	
-	/* 0000
-	 * 0010
-	 * 0010
-	 * 0110 */
+	/* 001
+	 * 001
+	 * 011 */
 	
-	//position indicator so hardcoding rotations will work, we can rotate based on current position
-	int position;
-	
-	//Assuming that grid indicies start at 1
+	// position indicator so hardcoding rotations will work, we can rotate
+	// based on current position
+		
 	public void spawn()
 	{
-		gridSize = 4;
+		gridSize = 3;
 		gridX = 3;
 		gridY = 0;
 		grid = new int[gridSize][gridSize];
-		grid[2][4] = 1;
-		grid[3][2] = 1;
-		grid[3][3] = 1;
-		grid[3][4] = 1;
-		position = 1;
+		setPiece();
 	}
 	/*
 	public boolean canMoveLeft(GameBoard board)
@@ -31,121 +25,48 @@ public class JPiece extends Piece
 	public abstract boolean canMoveDown(GameBoard board)
 	{}
 	*/
-	public void rotate(int d)
-	{
-		//1 - cw
-		//2 - ccw
-		int [][] changedGrid= new int[gridSize][gridSize];
-		int [][] newGrid;
-		newGrid = new int[gridSize][gridSize];
-		clearGrid();
-		int p = getPosition();
-		if(d == 1)
-		{
-			if(p ==1 )
-			{
-				changedGrid = setPiece(2,newGrid);
-			}
-			else if(p ==2)
-			{
-				changedGrid = setPiece(3,newGrid);
-			}
-			else if(p == 3)
-			{
-				changedGrid = setPiece(4,newGrid);
-			}
-			else if(p==4)
-			{
-				changedGrid = setPiece(1,newGrid);
-			}
-		}
-		else if(d == -1)
-		{
-			if(p ==1 )
-			{
-				changedGrid = setPiece(4,newGrid);
-			}
-			else if(p ==2)
-			{
-				changedGrid = setPiece(1,newGrid);
-			}
-			else if(p == 3)
-			{
-				changedGrid = setPiece(2,newGrid);
-			}
-			else if(p==4)
-			{
-				changedGrid = setPiece(3,newGrid);
-			}
-		}
-		
-		
-	 	setGrid(changedGrid);
 	
-	}
-	public int getPosition()
+	public void setPiece()
 	{
-		return position;
+		if (position == 1)
+		{
+			grid[0][2] = 1;
+			grid[1][2] = 1;
+			grid[2][1] = 1;
+			grid[2][2] = 1;
+			/* 001
+			 * 001
+	 		 * 011 */
+		}
+		else if (position == 2)
+		{
+			grid[1][0] = 1;
+			grid[2][0] = 1;
+			grid[2][1] = 1;
+			grid[2][2] = 1;
+		   /* 000
+	 	    * 100
+	 		* 111 */
+		}
+		else if (position == 3)
+		{
+			grid[0][1] = 1;
+			grid[0][2] = 1; 
+			grid[1][1] = 1;
+			grid[2][1] = 1;
+	 		/* 011
+	 	 	 * 010
+	 		 * 010 */
+		}
+		else if (position == 4)
+		{
+			grid[1][0] = 1;
+			grid[1][1] = 1;
+			grid[1][2] = 1;
+			grid[2][2] = 1; 
+	 		/* 000
+	 	 	 * 111
+	 		 * 001 */
+		}
 	}
-	
-	public void setPosition(int p)
-	{
-		position = p;
-	}
-	
-	public int [][] setPiece(int d,int[][] newGrid)
-	{
-		if(d==1)
-		{
-			newGrid[2][3] = 1;
-			newGrid[3][3] = 1;
-			newGrid[4][2] = 1;
-			newGrid[4][3] = 1;
-			setPosition(d);
-			/* 0000
-	 		 * 0010
-			 * 0010
-	 		 * 0110 */
-		}
-		else if(d==2)
-		{
-			newGrid[3][1] = 1;
-			newGrid[4][1] = 1;
-			newGrid[4][2] = 1;
-			newGrid[4][3] = 1;
-		 	setPosition(d);
-		   /* 0000
-	 		* 0000
-	 	    * 1000
-	 		* 1110 */
-		}
-		else if(d==3)
-		{
-			newGrid[2][2] = 1;
-			newGrid[3][2] = 1;
-			newGrid[4][2] = 1;
-			newGrid[2][3] = 1; 
-		 	setPosition(d);
-	 		/* 0000
-	 		 * 0110
-	 	 	 * 0100
-	 		 * 0100 */
-		}
-		else if(d==4)
-		{
-			newGrid[3][1] = 1;
-			newGrid[3][2] = 1;
-			newGrid[3][3] = 1;
-			newGrid[4][3] = 1; 
-		 	setPosition(d);
-	 		/* 0000
-	 		 * 0000
-	 	 	 * 1110
-	 		 * 0010 */
-		}
-		
-		return newGrid;
-	}
-		
-	
 }

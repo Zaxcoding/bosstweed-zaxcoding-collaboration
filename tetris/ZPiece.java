@@ -1,23 +1,16 @@
 public class ZPiece extends Piece
 {	
-	/* 0000
-	 * 0000
-	 * 1100
-	 * 0110 */
-	
-	int position;
-	
-	//Assuming that grid indicies start at 1
+	/* 000
+	 * 110
+	 * 011 */
+		
 	public void spawn()
 	{
-		gridSize = 4;
+		gridSize = 3;
 		gridX = 3;
 		gridY = 0;
 		grid = new int[gridSize][gridSize];
-		grid[4][2] = 1;
-		grid[4][3] = 1;
-		grid[3][1] = 1;
-		grid[3][2] = 1;
+		setPiece();
 		/* 0000
 	 	 * 0000
 	 	 * 1100
@@ -33,66 +26,28 @@ public class ZPiece extends Piece
 	public abstract boolean canMoveDown(GameBoard board)
 	{}
 	*/
-	public void rotate(int d)
-	{
-		//1 - cw
-		//2 - ccw
-		clearGrid();
-		int [][] changedGrid= new int[gridSize][gridSize];
-		int [][] newGrid;
-		newGrid = new int[gridSize][gridSize];
-		
-		int p = getPosition();
-		if(p ==1 )
-		{
-			changedGrid=setPiece(2,newGrid);
-		}
-		else if(p ==2)
-		{
-			changedGrid=setPiece(1,newGrid);
-		}
-		
-		setGrid(changedGrid);
 	
-	}
-	public int getPosition()
+	public void setPiece()
 	{
-		return position;
-	}
-	
-	public void setPosition(int p)
-	{
-		position = p;
-	}
-	
-	public int [][] setPiece(int d,int [][] newGrid)
-	{
-		if(d==1)
+		if (position == 1 || position == 3)
 		{
-			newGrid[4][2] = 1;
-			newGrid[4][3] = 1;
-			newGrid[3][1] = 1;
-			newGrid[3][2] = 1;
-			setPosition(d);
-			/* 0000
-	 		 * 0000
-	 	 	 * 1100
-	 	 	 * 0110 */
-	 	 	
+			grid[1][0] = 1;
+			grid[1][1] = 1;
+			grid[2][1] = 1;
+			grid[2][2] = 1;
+			/* 000
+	 	 	 * 110
+	 	 	 * 011 */
 		}
-		else if(d==2)
+		else if (position == 2 || position == 4)
 		{
-			newGrid[4][2] = 1;
-			newGrid[3][3] = 1;
-			newGrid[3][2] = 1;
-			newGrid[2][3] = 1;
-			setPosition(d);
-			/* 0000
-	 		 * 0010
-			 * 0110
-	 		 * 0100 */
+			grid[0][2] = 1;
+			grid[1][1] = 1;
+			grid[1][2] = 1;
+			grid[2][1] = 1;
+			/* 001
+			 * 011
+	 		 * 010 */
 		}
-		
-		return newGrid;
 	}
 }

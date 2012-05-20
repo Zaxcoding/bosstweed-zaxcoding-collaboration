@@ -1,5 +1,3 @@
-
-
 public class GameBoard
 {
 	int [][] grid;

@@ -1,8 +1,65 @@
 {
+Zach - 5/20/12
+Okay, I like your ideas but I'm going to shift the direction a bit.
+
+I'm going to make the vast majority of the work be done in Piece.java. I want
+very little- mostly only spawn() and setPiece()- to be different in each
+_Piece file. That way we have less to type, less lines total, and more 
+importantly we can access all of the methods for the pieces just through 
+a Piece variable. Then our call to rotate() will choose the correct rotate()
+based on the type of the piece.
+Also, remember that you don't need to use the accessors when we're working in 
+_Piece files, since we have direct access to the instance variables. Those 
+kinds of getPosition() and getGridSize() calls will be done from the GameBoard
+or Tetris files. 
+
+Another big change:
+A lot of your pieces had an empty top row and column. From poking around the
+Tetris wiki I found that only the I and O pieces require gridSize = 4, the
+rest can be done with gridSize = 3. I fixed all but I and O to have gridSize 3
+and adjusted them so that they work in that space.
+Additionally, I subtracted 1 from each of the [3][2] combos because 2d arrays
+start at 0,0 not 1,1 (my Yahtzee arrays are a little funky if that's where you
+got that idea). We can change it back if you like but for now they're 
+consistent.
+
+So here's what I did:
+Tetris.java:
+Changed the JPiece j = new JPiece(), LPiece... to Piece j = new JPiece() etc
+just to test it out. I also did a test run of rotateL() through the Piece
+variable (not, for example, JPiece variable) and had no problems.
+
+Piece.java:
+Added a constructor that sets position = 1 and calls spawn().
+Moved all of the rotate() calls from the individual files to here. I trimmed 
+down the work that's done, all it does is clear the grid, set position to the
+new position, and then call setPiece(). I also added the modulo math thing
+that I had mentioned earlier so that we don't have to have four different
+if(d==1) setPiece(2,..) calls, we just call setPiece(). You'll also notice
+that setPiece no longer takes any arguments- I'll get to that in a bit.
+I adjusted clearGrid so it does so based on the gridSize, not just a fixed 
+number.
+(I tested the modulo math and it works perfectly).
+I moved position to here so we don't have to redeclare it in each _Piece file.
+
+_Piece.java:
+I trimmed out all the stuff I moved to Piece.java, significantly reducing the 
+size of each file.
+The big change is to setPiece(). All I do is if (position == 1) grid[0][0] = 1
+and so on. Just those four calls, and that's it. We've already cleared the 
+grid (back in rotate()) and we already updated the position (also in rotate) 
+so there's nothing else to be done. Also, you'll notice that I subtracted 1 
+from each of the array numbers since the first number is 0,0 not 1,1.
+I also adjusted spawn() slightly by setting position = 1 and calling setPiece.
+}
+
+{
 Andy - 5/19/12
 
 -as far as i can tell all coordinates for rotates are correct and completed
+}
 
+{
 Andy - 5/19/12
 
 -completed rotates(rechecking if all grid coordinates represent what i expect)
@@ -10,18 +67,30 @@ Andy - 5/19/12
 
 - added all pieces
 -renamed SquarePiece.java - OPiece.java for consistency
+}
 
-
+{
 Andy - 5/19/12
 -made a bunch of changes to rotate functions
 
-Piece.java- added a clearGrid() function (I'm not sure if this is necessary, i think we need to discuss how this movement is going to work with the square you are monitoring, as in how do you know if something is under it? And I'm not sure i understand the move down function)
+Piece.java- added a clearGrid() function (I'm not sure if this is necessary, 
+i think we need to discuss how this movement is going to work with the square
+you are monitoring, as in how do you know if something is under it? And I'm
+not sure i understand the move down function)
 
-IPiece.java - added this file so we have the I piece now, i added a system of rotation based on changing the grid based on the current grid, the current grid is known from a new position variable. all pieces should have the get and set position functions( i should probably put this in Piece.java
+IPiece.java - added this file so we have the I piece now, i added a system of
+rotation based on changing the grid based on the current grid, the current
+grid is known from a new position variable. all pieces should have the get and
+set position functions( i should probably put this in Piece.java
 
-JPiece.java - this is the big file. this shows how the rotateL and rotateR really coexist together with the position variable. Really check this out and see if this makes sense and in your opinion if it will work or not. I'm going to now continue with this approach for the rest of the pieces. stop me on Facebook if you think this approach is not worth doing.
+JPiece.java - this is the big file. this shows how the rotateL and rotateR
+really coexist together with the position variable. Really check this out and
+see if this makes sense and in your opinion if it will work or not. I'm going
+to now continue with this approach for the rest of the pieces. stop me on
+Facebook if you think this approach is not worth doing.
+}
 
-
+{
 Zach - 5/17/12
 Links- these should prove invaluable:
 http://tetris.wikia.com/wiki/Tetris_Guideline
