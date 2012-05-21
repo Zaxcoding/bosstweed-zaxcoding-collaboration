@@ -6,11 +6,11 @@ import java.util.*;
 import java.io.*;
 import javax.swing.*;
 import javax.swing.border.*;
+import com.apple.eawt.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class Tetris
-
 {
 	JFrame theWindow;
 	Container thePane;
@@ -20,15 +20,16 @@ public class Tetris
 	MyPanel linesPanel, totalPanel, nextLinePanel, levelPanel;
 	JButton newGame, pause, endGame;
 	MyListener theListener;
-	Piece i = new IPiece();
-	Piece s = new SPiece();
-	Piece z = new ZPiece();
-	Piece o = new OPiece();
-	Piece l = new LPiece();
-	Piece j = new JPiece();
-	Piece t = new TPiece();
+	Piece currPiece, nextPiece;
 	
 	GameBoard board = new GameBoard(10,20);
+	Application app;
+	AppListener appListener;
+	JButton prefLeft, prefRight, prefRotateR, prefRotateL, prefHardDrop;
+	JButton prefSave, prefClose;
+	JLabel leftLabel, rightLabel, rotateRLabel, rotateLLabel, hardDropLabel;
+	JFrame preferences;
+	MyPanel prefPanel;
 	
 	boolean paused;
 
@@ -144,7 +145,6 @@ public class Tetris
 		}
 
 		gamePanel.add(leftPanel);
-
 		gamePanel.add(rightPanel);
 
 		thePane.add(gamePanel);
@@ -152,6 +152,10 @@ public class Tetris
 		theWindow.setVisible(true);
 		
 		paused = false;
+		
+		app = Application.getApplication();
+		appListener = new AppListener();
+		app.setPreferencesHandler(appListener);
 
 	}
 
@@ -161,7 +165,68 @@ public class Tetris
 		System.out.println("Paused: " + paused);
 	}
 
-	class MyListener implements ActionListener
+	private class AppListener implements PreferencesHandler
+	{
+		public void handlePreferences(AppEvent.PreferencesEvent e)
+		{
+			preferences = new JFrame("Preferences");
+			preferences.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+			preferences.setLocation(350, 200);
+			MyPanel prefPanel = new MyPanel(300, 400, 4, 1);
+			
+			prefPanel.add(new JLabel("<html><p>Change the controls! <br>Just click a button and then press the key you'd like to use.</p><html>"));
+			MyPanel temp = new MyPanel(500, 116, 5, 2);
+			prefLeft 	 = new JButton("Move Left");
+			prefRight    = new JButton("Move Right");
+			prefRotateR  = new JButton("Rotate R");
+			prefRotateL  = new JButton("Rotate L");
+			prefHardDrop = new JButton("Hard Drop");
+			prefLeft.addActionListener(theListener);
+			prefRight.addActionListener(theListener);
+			prefRotateR.addActionListener(theListener);
+			prefRotateL.addActionListener(theListener);
+			prefHardDrop.addActionListener(theListener);
+			
+			leftLabel = new JLabel("A", SwingConstants.CENTER);
+			rightLabel = new JLabel("D", SwingConstants.CENTER);
+			rotateLLabel = new JLabel("K", SwingConstants.CENTER);
+			rotateRLabel = new JLabel("L", SwingConstants.CENTER);
+			hardDropLabel = new JLabel("SPACE", SwingConstants.CENTER);
+			
+			temp.add(prefLeft);
+			temp.add(leftLabel);
+			temp.add(prefRight);
+			temp.add(rightLabel);
+			temp.add(prefRotateR);
+			temp.add(rotateRLabel);
+			temp.add(prefRotateL);
+			temp.add(rotateLLabel);
+			temp.add(prefHardDrop);
+			temp.add(hardDropLabel);
+			prefPanel.add(temp);
+			
+			prefPanel.add(new MyPanel(300, 10));
+			
+			temp = new MyPanel(500, 116, 1, 2);
+			prefSave		 = new JButton("Save changes");
+			prefClose 		 = new JButton("Close");
+			prefSave.addActionListener(theListener);
+			prefClose.addActionListener(theListener);
+			temp.add(prefSave);
+			temp.add(prefClose);			
+			prefPanel.add(temp);
+			
+			prefPanel.addKeyListener(theListener);
+			prefPanel.setFocusable(true);
+			prefPanel.grabFocus();
+			
+			preferences.add(prefPanel);
+	        preferences.pack();
+	        preferences.setVisible(true);
+		}
+	}
+	
+	class MyListener extends KeyAdapter implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
@@ -174,6 +239,15 @@ public class Tetris
 				pause();
 			if (e.getSource() == endGame)
 				System.exit(0);
+			if (e.getSource() == prefClose)
+				preferences.setVisible(false);
+		
 		}
+		
+		public void keyPressed(KeyEvent e) 
+		{
+			
+	    }
+		
 	}
 }
