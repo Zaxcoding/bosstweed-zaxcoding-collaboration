@@ -3,6 +3,8 @@
  * and also the bottom left x and y of the grid, 
  * with all other coordinates derived relative to that */
 
+import java.awt.Color;
+
 public abstract class Piece
 {
 	protected int [][] grid;
@@ -10,6 +12,8 @@ public abstract class Piece
 	protected int gridSize, gridX, gridY;	
 	
 	protected int position;
+	
+	protected Color color;
 	
 	public abstract boolean canMoveLeft(GameBoard board);
 	 
@@ -62,6 +66,10 @@ public abstract class Piece
 		position = p;
 	}
 	
+	public Color getColor()
+	{
+		return color;
+	}
 	/*
 	public void moveLeft(GameBoard board)
 	{

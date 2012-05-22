@@ -1,4 +1,24 @@
 {
+Zach - 5/22/12
+
+Tetris.java:
+Changed the functionality of the pause button to start at 'Start Game', then
+change to 'Pause' or 'Resume' according to what it should be. 
+Added a colorPieces method that should loop through and display the pieces
+with their correct colors.
+
+GameBoard.java:
+Adjusted the for loop on one because it said j<y<j++.
+Also, and this is pretty cool if it'll work, I changed the number we're
+filling with into the big grid from 1 (for all pieces) to piece.getRGB(). My
+reasoning is that once we do this we can just loop through and color all the
+non-zero values of the grid, with their values. I think this should work. 
+
+I have to go right now, I'll update this with more and also code some more 
+after I work out. See ya.
+}
+
+{
 Andy - 5/21/12
 
 ok lots to tell about, not a whole lot of new code though.
@@ -13,7 +33,9 @@ Gameboard.java- attempted to implement an idea of how i think fill should work. 
 My only concerns are when, in the case of the O piece, where there are 0's in the piece grid itself, i think this means the canmoveleft and canmoveright need much more logic than my initial attempt, and there is need for the contact() method for both canmoveright and fill.
 
 it seems there is still the entire piece logic to go yet, as far as how the pieces stay in the game board, and how pieces can freely fall and coexist on a board with an arbitrary amount of pieces already on the game board.
+}
 
+{
 Zach - 5/20/12
 Okay, I like your ideas but I'm going to shift the direction a bit.
 

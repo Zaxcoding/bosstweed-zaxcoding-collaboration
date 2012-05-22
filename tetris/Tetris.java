@@ -15,7 +15,7 @@ public class Tetris
 	JFrame theWindow;
 	Container thePane;
 	MyPanel gamePanel;
-	MyPanel array [];
+	MyPanel array [][];
 	MyPanel buttonPanel, leftPanel, rightPanel, nextPanel, timePanel;
 	MyPanel linesPanel, totalPanel, nextLinePanel, levelPanel;
 	JButton newGame, pause, endGame;
@@ -70,7 +70,7 @@ public class Tetris
 		buttonPanel.add(newGame);
 		newGame.addActionListener(theListener);
 
-		pause = new JButton("Pause");
+		pause = new JButton("Start Game");
 		pause.setFont(new Font("Serif", Font.ITALIC, 20));
 		buttonPanel.add(pause);
 		pause.addActionListener(theListener);
@@ -136,13 +136,16 @@ public class Tetris
 		rightPanel.add(levelPanel);
 		rightPanel.add(buttonPanel);
 
-		array = new MyPanel[200];
+		array = new MyPanel[20][10];
 
-		for(int i = 0; i < 200; i++)
+		for (int i = 0; i < 20; i++)
 		{
-			array[i] = new MyPanel(10,10);
-			array[i].setBorder(BorderFactory.createLineBorder(Color.gray));
-			leftPanel.add(array[i]);
+			for (int j = 0; j < 10; j++)
+			{
+				array[i][j] = new MyPanel(10,10);
+			array[i][j].setBorder(BorderFactory.createLineBorder(Color.gray));
+			leftPanel.add(array[i][j]);
+			}
 		}
 
 		gamePanel.add(leftPanel);
@@ -164,12 +167,21 @@ public class Tetris
 	public void pause()
 	{
 		if(!start)
-		{
 			start = true;
-			System.out.println("Game Start");
-		}
+		
 		paused = !paused;
-		System.out.println("Paused: " + paused);
+		if (!paused)
+			pause.setText("Pause");
+		else
+			pause.setText("Resume");
+	}
+	
+	public void colorPieces()
+	{
+		for (int i = 0; i < 20; i++)
+			for (int j = 0; j < 10; j++)
+				if (board.grid[i][j] != 0)
+					array[i][j].setBackground(new Color(board.grid[i][j]));
 	}
 
 	private class AppListener implements PreferencesHandler

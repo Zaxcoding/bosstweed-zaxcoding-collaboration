@@ -11,6 +11,7 @@ public class SPiece extends Piece
 		gridY = 0;
 		grid = new int[gridSize][gridSize];
 		setPiece();
+		color = new Color(Color.GREEN.getRGB());
 	}
 	// So my idea is that since we know the leftmost part of the grid, if it is on the edge
 	// of the board,(or in contact with another piece, which will be addressed later) it cant move

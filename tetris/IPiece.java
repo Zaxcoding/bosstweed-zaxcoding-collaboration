@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 public class IPiece extends Piece
 {	
 	/* 0010
@@ -12,6 +14,7 @@ public class IPiece extends Piece
 		gridY = 0;
 		grid = new int[gridSize][gridSize];
 		setPiece();
+		color = new Color(Color.CYAN.getRGB());
 		/* 0010
 	 	* 0010
 	 	* 0010
