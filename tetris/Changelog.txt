@@ -1,4 +1,19 @@
 {
+Andy - 5/21/12
+
+ok lots to tell about, not a whole lot of new code though.
+
+Tetris.java- made the game initially paused, so that the player doesn't open up the game to a falling piece, unease = start game..
+
+Piece.java, *Piece.java- put in a primitive version of canmoveleft and canmoveright
+
+The big one…
+Gameboard.java- attempted to implement an idea of how i think fill should work. I put in a 6 line comment or so above my weird for loop structure thing to attempt to explain what i did. This is all off of your idea of the grid over the game board, and the way i drew it out on my paper i think it works, or does what you had in mind.Please feel free to check it out and even dismiss it if its totally wrong
+
+My only concerns are when, in the case of the O piece, where there are 0's in the piece grid itself, i think this means the canmoveleft and canmoveright need much more logic than my initial attempt, and there is need for the contact() method for both canmoveright and fill.
+
+it seems there is still the entire piece logic to go yet, as far as how the pieces stay in the game board, and how pieces can freely fall and coexist on a board with an arbitrary amount of pieces already on the game board.
+
 Zach - 5/20/12
 Okay, I like your ideas but I'm going to shift the direction a bit.
 

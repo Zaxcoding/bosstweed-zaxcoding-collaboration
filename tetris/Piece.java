@@ -10,13 +10,13 @@ public abstract class Piece
 	protected int gridSize, gridX, gridY;	
 	
 	protected int position;
-	/*
+	
 	public abstract boolean canMoveLeft(GameBoard board);
 	 
 	public abstract boolean canMoveRight(GameBoard board);
 	 
-	public abstract boolean canMoveDown(GameBoard board);
-	*/ 
+	//public abstract boolean canMoveDown(GameBoard board);
+	
 	public abstract void spawn();
 		
 	public abstract void setPiece();

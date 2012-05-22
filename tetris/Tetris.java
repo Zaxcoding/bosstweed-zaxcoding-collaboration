@@ -31,7 +31,7 @@ public class Tetris
 	JFrame preferences;
 	MyPanel prefPanel;
 	
-	boolean paused;
+	boolean paused,start,game=true;
 
 	public static void main(String [] args)
 	{
@@ -41,6 +41,7 @@ public class Tetris
 	public Tetris()
 	{
 		setup();
+		
 	}
 
 	public void setup()
@@ -151,7 +152,8 @@ public class Tetris
 		theWindow.pack();
 		theWindow.setVisible(true);
 		
-		paused = false;
+		paused = true;
+		start = false;
 		
 		app = Application.getApplication();
 		appListener = new AppListener();
@@ -161,6 +163,11 @@ public class Tetris
 
 	public void pause()
 	{
+		if(!start)
+		{
+			start = true;
+			System.out.println("Game Start");
+		}
 		paused = !paused;
 		System.out.println("Paused: " + paused);
 	}
