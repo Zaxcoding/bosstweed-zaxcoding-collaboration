@@ -23,11 +23,14 @@ public class Tetris
 	Piece currPiece, nextPiece;
 	
 	GameBoard board = new GameBoard(10,20);
+	
+	// all stuff for preferences menu
 	Application app;
 	AppListener appListener;
 	JButton prefLeft, prefRight, prefRotateR, prefRotateL, prefHardDrop;
 	JButton prefSave, prefClose;
 	JLabel leftLabel, rightLabel, rotateRLabel, rotateLLabel, hardDropLabel;
+	JLabel prefFeedback;
 	JFrame preferences;
 	MyPanel prefPanel;
 	boolean changingKeys;	// are you changing the key?
@@ -211,7 +214,7 @@ public class Tetris
 			preferences.setLocation(350, 200);
 			prefPanel = new MyPanel(300, 400, 4, 1);
 			
-			prefPanel.add(new JLabel("<html><p>Change the controls! <br>Just click a button and then press the key you'd like to use.</p><html>"));
+			prefPanel.add(new JLabel("<html><p>Change the control scheme! <br>Just click a button and then press the key you'd like to use.</p><html>"));
 			MyPanel temp = new MyPanel(500, 116, 5, 2);
 			prefLeft 	 = new JButton("Move Left");
 			prefRight    = new JButton("Move Right");
@@ -249,8 +252,10 @@ public class Tetris
 			temp.add(hardDropLabel);
 			prefPanel.add(temp);
 			
-			prefPanel.add(new MyPanel(300, 10));
-			
+			prefFeedback = new JLabel("No changes have been made yet.",
+												SwingConstants.CENTER);
+			prefPanel.add(prefFeedback);
+						
 			temp = new MyPanel(500, 116, 1, 2);
 			prefSave		 = new JButton("Save changes");
 			prefClose 		 = new JButton("Close");
@@ -308,34 +313,39 @@ public class Tetris
 			{
 				changingKeys = true;
 				changingWhich = 0;
+				prefFeedback.setText("Press the key for Move Left");
 			}
 			if (e.getSource() == prefRight)
 			{
 				changingKeys = true;
 				changingWhich = 1;
+				prefFeedback.setText("Press the key for Move Right");
 			}
 			if (e.getSource() == prefRotateR)
 			{
 				changingKeys = true;
 				changingWhich = 2;
+				prefFeedback.setText("Press the key for Rotate Right");
 			}
 			if (e.getSource() == prefRotateL)
 			{
 				changingKeys = true;
 				changingWhich = 3;
+				prefFeedback.setText("Press the key for Rotate Left");
 			}
 			if (e.getSource() == prefHardDrop)
 			{
 				changingKeys = true;
 				changingWhich = 4;
+				prefFeedback.setText("Press the key for Hard Drop");
 			}
 			
 			if (e.getSource() == prefSave)
 			{	
 				boolean dupes = false;
 				for (int i = 0; i < 5; i++)
-					for (int j = i; j < 5; j++)
-						if (keys[i] == keys[j])
+					for (int j = i+1; j < 5; j++)
+						if (tempKeys[i] == tempKeys[j])
 							dupes = true;
 				if (dupes)
 					JOptionPane.showMessageDialog(null, 
@@ -346,6 +356,7 @@ public class Tetris
 					for (int i = 0; i < 5; i++)
 						keys[i] = tempKeys[i];
 					changingKeys = false;
+					prefFeedback.setText("Changes saved!");
 				}
 			}
 			prefPanel.grabFocus();
@@ -358,6 +369,7 @@ public class Tetris
 			{
 				System.out.println(e.getKeyCode());
 				tempKeys[changingWhich] = e.getKeyCode();
+
 				if (changingWhich == 0)
 					leftLabel.setText(KeyEvent.getKeyText(e.getKeyCode()));
 				if (changingWhich == 1)
@@ -370,6 +382,8 @@ public class Tetris
 				hardDropLabel.setText(KeyEvent.getKeyText(e.getKeyCode()));
 				if (changingWhich == 4 && e.getKeyCode() == 32)
 					hardDropLabel.setText("SPACE");
+				prefFeedback.setText("Key changed! Save"
+											+ " changes before closing.");
 			}    
 		}
 		
