@@ -1,4 +1,24 @@
 {
+Zach - 5/31/12
+
+Been a little while since I've programmed at all. Whoops. Here's what I've
+done so far today.
+
+GameBoard.java:
+Just fixed a single line so that it would compile. Made a silly mistake.
+
+Tetris.java:
+Put in a lot of good work on the preferences panel. I added an array of keys,
+which are just ints (each filled with a KeyEvent.KeyCode), and tempKeys, and
+implemented a simple 'click-the-button-then-press-the-key' way to change the
+control scheme. It's simple but also pretty comprehensive since it checks for
+duplicates (and won't let you save if you have them), and also prompts you to
+save your changes before closing the menu if tempKeys differs from Keys.
+I like it, it works very well, but I'm going to go in next and add a feedback
+label so you can tell what's going on (if you aren't a dev on this game).
+}
+
+{
 Zach - 5/22/12
 
 Tetris.java:

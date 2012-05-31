@@ -30,6 +30,14 @@ public class Tetris
 	JLabel leftLabel, rightLabel, rotateRLabel, rotateLLabel, hardDropLabel;
 	JFrame preferences;
 	MyPanel prefPanel;
+	boolean changingKeys;	// are you changing the key?
+	int changingWhich;		// which control are you changing?
+							// 0 = move left, 1 = move right, 2 = rotateR
+							// 3 = rotateL, 4 = hard drop
+	int [] keys, tempKeys;	// since KeyCodes are just ints, make an array
+							// for the current settings and the temporary
+							// settings when changing.
+	
 	
 	boolean paused,start,game=true;
 
@@ -161,7 +169,17 @@ public class Tetris
 		app = Application.getApplication();
 		appListener = new AppListener();
 		app.setPreferencesHandler(appListener);
-
+		
+		keys = new int[5];
+		tempKeys = new int[5];
+		
+		// hardcode in the default control settings
+		
+		keys[0] = 65;
+		keys[1] = 83;
+		keys[2] = 75;
+		keys[3] = 76;
+		keys[4] = 32;
 	}
 
 	public void pause()
@@ -191,7 +209,7 @@ public class Tetris
 			preferences = new JFrame("Preferences");
 			preferences.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 			preferences.setLocation(350, 200);
-			MyPanel prefPanel = new MyPanel(300, 400, 4, 1);
+			prefPanel = new MyPanel(300, 400, 4, 1);
 			
 			prefPanel.add(new JLabel("<html><p>Change the controls! <br>Just click a button and then press the key you'd like to use.</p><html>"));
 			MyPanel temp = new MyPanel(500, 116, 5, 2);
@@ -206,12 +224,19 @@ public class Tetris
 			prefRotateL.addActionListener(theListener);
 			prefHardDrop.addActionListener(theListener);
 			
-			leftLabel = new JLabel("A", SwingConstants.CENTER);
-			rightLabel = new JLabel("D", SwingConstants.CENTER);
-			rotateLLabel = new JLabel("K", SwingConstants.CENTER);
-			rotateRLabel = new JLabel("L", SwingConstants.CENTER);
-			hardDropLabel = new JLabel("SPACE", SwingConstants.CENTER);
-			
+			leftLabel = new JLabel("", SwingConstants.CENTER);
+			leftLabel.setText(KeyEvent.getKeyText(keys[0]));
+			rightLabel = new JLabel("", SwingConstants.CENTER);
+			rightLabel.setText(KeyEvent.getKeyText(keys[1]));
+			rotateRLabel = new JLabel("", SwingConstants.CENTER);
+			rotateRLabel.setText(KeyEvent.getKeyText(keys[2]));
+			rotateLLabel = new JLabel("", SwingConstants.CENTER);
+			rotateLLabel.setText(KeyEvent.getKeyText(keys[3]));
+			hardDropLabel = new JLabel("", SwingConstants.CENTER);
+			hardDropLabel.setText(KeyEvent.getKeyText(keys[4]));
+			if (keys[4] == 32)
+				hardDropLabel.setText("SPACE");
+
 			temp.add(prefLeft);
 			temp.add(leftLabel);
 			temp.add(prefRight);
@@ -242,6 +267,10 @@ public class Tetris
 			preferences.add(prefPanel);
 	        preferences.pack();
 	        preferences.setVisible(true);
+			
+			// copy in the key values to tempKeys
+			for (int i = 0; i < 5; i++)
+				tempKeys[i] = keys[i];
 		}
 	}
 	
@@ -259,14 +288,90 @@ public class Tetris
 			if (e.getSource() == endGame)
 				System.exit(0);
 			if (e.getSource() == prefClose)
-				preferences.setVisible(false);
+			{
+				boolean same = true;
+				for (int i = 0; i < 5; i++)
+					if (keys[i] != tempKeys[i])
+						same = false;
+				if (!same)
+				{	
+					if (JOptionPane.showConfirmDialog(null, "You have unsaved"
+				 	 + " changes. Quit anyways?",	"", 
+						JOptionPane.YES_NO_OPTION) == 0)
+						preferences.setVisible(false);
+				}
+				else
+					preferences.setVisible(false);	
+			}		
 		
+			if (e.getSource() == prefLeft)
+			{
+				changingKeys = true;
+				changingWhich = 0;
+			}
+			if (e.getSource() == prefRight)
+			{
+				changingKeys = true;
+				changingWhich = 1;
+			}
+			if (e.getSource() == prefRotateR)
+			{
+				changingKeys = true;
+				changingWhich = 2;
+			}
+			if (e.getSource() == prefRotateL)
+			{
+				changingKeys = true;
+				changingWhich = 3;
+			}
+			if (e.getSource() == prefHardDrop)
+			{
+				changingKeys = true;
+				changingWhich = 4;
+			}
+			
+			if (e.getSource() == prefSave)
+			{	
+				boolean dupes = false;
+				for (int i = 0; i < 5; i++)
+					for (int j = i; j < 5; j++)
+						if (keys[i] == keys[j])
+							dupes = true;
+				if (dupes)
+					JOptionPane.showMessageDialog(null, 
+					"You have created duplicate keys, please fix this.",
+					"Duplicates", JOptionPane.INFORMATION_MESSAGE);	
+				else
+				{
+					for (int i = 0; i < 5; i++)
+						keys[i] = tempKeys[i];
+					changingKeys = false;
+				}
+			}
+			prefPanel.grabFocus();
+			
 		}
 		
 		public void keyPressed(KeyEvent e) 
 		{
-			
-	    }
+			if (changingKeys)
+			{
+				System.out.println(e.getKeyCode());
+				tempKeys[changingWhich] = e.getKeyCode();
+				if (changingWhich == 0)
+					leftLabel.setText(KeyEvent.getKeyText(e.getKeyCode()));
+				if (changingWhich == 1)
+					rightLabel.setText(KeyEvent.getKeyText(e.getKeyCode()));
+				if (changingWhich == 2)
+					rotateRLabel.setText(KeyEvent.getKeyText(e.getKeyCode()));
+				if (changingWhich == 3)
+				 rotateLLabel.setText(KeyEvent.getKeyText(e.getKeyCode()));
+				if (changingWhich == 4)
+				hardDropLabel.setText(KeyEvent.getKeyText(e.getKeyCode()));
+				if (changingWhich == 4 && e.getKeyCode() == 32)
+					hardDropLabel.setText("SPACE");
+			}    
+		}
 		
 	}
 }

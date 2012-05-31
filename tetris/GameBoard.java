@@ -52,7 +52,7 @@ public class GameBoard
 			{
 				if(PieceGrid[px][py] ==1)
 				{
-					grid[i][j] = piece.getColor().toRGB();
+					grid[i][j] = piece.getColor().getRGB();
 				}
 				py++;
 			}
