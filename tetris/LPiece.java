@@ -1,3 +1,6 @@
+import java.awt.Color;
+
+
 public class LPiece extends Piece
 {	
 	/* 010

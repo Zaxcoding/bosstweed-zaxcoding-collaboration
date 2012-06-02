@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 public class JPiece extends Piece
 {	
 	/* 001

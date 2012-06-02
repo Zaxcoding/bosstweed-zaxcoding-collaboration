@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 public class TPiece extends Piece
 {	
 	/* 0000
@@ -11,7 +13,7 @@ public class TPiece extends Piece
 		gridY = 0;
 		grid = new int[gridSize][gridSize];
 		setPiece();
-		color = new Color(Color.PURPLE.getRGB());
+		color = new Color(Color.MAGENTA.getRGB());
 		/* 000
 	 	 * 010
 	 	 * 111 */

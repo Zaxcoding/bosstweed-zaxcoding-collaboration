@@ -9,6 +9,8 @@ import javax.swing.border.*;
 import com.apple.eawt.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Tetris
 {
@@ -21,6 +23,7 @@ public class Tetris
 	JButton newGame, pause, endGame;
 	MyListener theListener;
 	Piece currPiece, nextPiece;
+	
 	
 	GameBoard board = new GameBoard(10,20);
 	
@@ -42,7 +45,8 @@ public class Tetris
 							// settings when changing.
 	
 	
-	boolean paused,start,game=true;
+	boolean paused,start,game=true, newpiece=true;
+	TimeUp t;
 
 	public static void main(String [] args)
 	{
@@ -52,8 +56,51 @@ public class Tetris
 	public Tetris()
 	{
 		setup();
+		while(game)
+		{
+			if(newpiece)
+			{
+				Random r = new Random();
+  				int pieceDigit = r.nextInt(6);
+  				selectPiece(pieceDigit);
+ 			}
+			t = new TimeUp(1,currPiece);
+		}
 		
 	}
+	
+	public void selectPiece(int a)
+	{
+		if(a ==0)
+		{
+			currPiece = new JPiece();
+		}
+		else if(a ==1)
+		{
+			currPiece = new LPiece();
+		}
+		else if(a ==2)
+		{
+			currPiece = new OPiece();
+		}
+		else if(a ==3)
+		{
+			currPiece = new SPiece();
+		}
+		else if(a ==4)
+		{
+			currPiece = new ZPiece();
+		}
+		else if(a ==5)
+		{
+			currPiece = new IPiece();
+		}
+		else if(a ==6)
+		{
+			currPiece = new TPiece();
+		}
+	}
+		
 
 	public void setup()
 	{
@@ -204,6 +251,35 @@ public class Tetris
 				if (board.grid[i][j] != 0)
 					array[i][j].setBackground(new Color(board.grid[i][j]));
 	}
+
+	//found this timer structure, looks to be useful
+	// should call run() every 1 second then call the movedown of the currentpiece on the board
+	// movedown not yet officially implemented
+	private class TimeUp 
+	{
+    	Timer timer;
+		//Piece current;
+    	public TimeUp(int seconds,Piece p) 
+    	{
+    		//current =p;
+        	timer = new Timer();
+        	timer.schedule(new Task(), seconds*1000);
+		}
+
+    	class Task extends TimerTask 
+    	{
+        
+        	public void run() 
+        	{
+            	//current.moveDown(board);//does movedown exist here?, does current exist here? ..so rusty 
+            	//currPiece.moveDown(board);//does movedown exist here?, does currPiece exist here? ..so rusty 
+            	System.out.println("hey");
+            	//timer.cancel(); //Terminate the timer thread
+        	}
+    
+    	}
+	}
+
 
 	private class AppListener implements PreferencesHandler
 	{

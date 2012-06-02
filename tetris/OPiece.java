@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 public class OPiece extends Piece
 {		
 	public void spawn()

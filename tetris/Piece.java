@@ -5,6 +5,7 @@
 
 import java.awt.Color;
 
+
 public abstract class Piece
 {
 	protected int [][] grid;
@@ -29,6 +30,7 @@ public abstract class Piece
 	{
 		position = 1;
 		spawn();
+		 
 	}
 		
 	public int [][] getGrid()

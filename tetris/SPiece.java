@@ -1,3 +1,6 @@
+import java.awt.Color;
+
+
 public class SPiece extends Piece
 {	
 	/* 000

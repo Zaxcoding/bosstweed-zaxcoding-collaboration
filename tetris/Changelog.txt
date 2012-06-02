@@ -1,4 +1,18 @@
 {
+Andy - 6/2/12
+
+Yay for getting back in the swing of things.(get the swing pun?! ;) ) 
+
+Tetris.java - set up a timing loop, that works until i hit start game, I'm not sure how to keep a loop going after the action listener occurs, maybe it ends because theres an exception with the button? I'm not sure but I'm pretty happy that the loop repeats
+
+-Secondly attempted to set the current piece as a randomly selected piece. I did this with a new method in tetris called selectPiece, which is called when the boolean new piece is true.(not sure what the conditions are for this yet, we'll have to look into it and decide exactly 'when' we need to spawn a new piece).
+
+.*Piece- apparently each individual piece class needs to import the color package, i assumed it was ok with what you had, but when i created individual pieces in tetris.java with selectPiece, none of the pieces compiled, so i added them. 
+
+TPiece.java - PURPLE does not exist in the color package, so we'll have to settle for MAGENTA.
+}
+
+{
 Zach - 5/31/12
 
 Been a little while since I've programmed at all. Whoops. Here's what I've
