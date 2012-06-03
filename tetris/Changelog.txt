@@ -1,4 +1,13 @@
 {
+Andy - 6/3/12
+
+Big day for boss coding today, just got some timing down.
+
+Tetris.java - The timing starts initially with the starting of the program, and every full second the piece is moved down one spot. I couldn't get stability in the timing using tenths or hundreds of a second the time would go like 12.9999999999985 and it looked really dumb so, full seconds is what we got right now. Also fixed the hard drop so that it does hard drop, potential problem of if you keep holding down the spacebar it kind of spawns the piece at the bottom. it looks really sweet right now though!
+
+}
+
+{
 Zach - 6/3/12
 
 GameBoard.java:

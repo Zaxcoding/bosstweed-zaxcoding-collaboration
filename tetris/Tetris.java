@@ -9,8 +9,9 @@ import javax.swing.border.*;
 import com.apple.eawt.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.Timer;
+//import java.util.Timer;
 import java.util.TimerTask;
+import javax.swing.Timer;
 
 public class Tetris
 {
@@ -22,8 +23,9 @@ public class Tetris
 	MyPanel linesPanel, totalPanel, nextLinePanel, levelPanel;
 	JButton newGame, pause, endGame;
 	MyListener theListener;
+	Timer timer;
 	Piece currPiece, nextPiece;
-	
+	JLabel gameTime;
 	GameBoard board = new GameBoard(10,20);
 	
 	// all stuff for preferences menu
@@ -55,8 +57,31 @@ public class Tetris
 	public Tetris()
 	{
 		setup();
+		
 		int pieceDigit = rng.nextInt(6);		// get rand int
 		currPiece = selectPiece(pieceDigit); 	// and that piece
+		
+		
+		// new timing structure with its own action listener
+		ActionListener timerListener = new ActionListener() 
+        { 
+        	public void actionPerformed(ActionEvent evt) 
+        	{ 
+        		// everytime the timer goes off (every second) it will basically move the piece down, with all existing logic
+        		board.eraseTrail(currPiece);	
+            	gameTime.setText(Double.parseDouble(gameTime.getText()) + 1 + "");
+            	currPiece.moveDown(board);
+            	board.fill(currPiece);
+				colorPieces();
+				
+				if (!currPiece.canMoveDown(board))
+					currPiece = selectPiece(rng.nextInt(6));// and that piece
+            	
+       		} 
+        };
+                
+        timer = new Timer(1000,timerListener);
+		timer.start();
 	}
 	
 	/* I changed this method to return a Piece, since we may want to use
@@ -169,7 +194,7 @@ public class Tetris
 		JLabel timeText = new JLabel("Time",SwingConstants.CENTER);
 		timeText.setFont(new Font("Serif", Font.ITALIC, 20));
 		timeText.setBorder(BorderFactory.createLineBorder(Color.gray));
-		JLabel gameTime = new JLabel("0",SwingConstants.CENTER);
+		gameTime = new JLabel("0.00",SwingConstants.CENTER); 
 		gameTime.setFont(new Font("Serif", Font.ITALIC, 20));
 		gameTime.setBorder(BorderFactory.createLineBorder(Color.gray));
 		timePanel.add(timeText);
@@ -248,13 +273,22 @@ public class Tetris
 	public void pause()
 	{
 		if(!start)
+		{
 			start = true;
+			//timer.start();
+		}
 		
 		paused = !paused;
 		if (!paused)
+		{
 			pause.setText("Pause");
+			//timer.start();
+		}
 		else
+		{
 			pause.setText("Resume");
+			timer.stop();
+		}
 	}
 	
 	// this method colors all the pieces on the GameBoard
@@ -491,8 +525,10 @@ public class Tetris
 				if (e.getKeyCode() == keys[3])	// rotateL
 					currPiece.rotateL();
 				// for now, just move down instead of hardDrop()
+				//** this works for hard drop, potential problem is that if you keep holding space, the piece basically spawns at the bottom
 				if (e.getKeyCode() == keys[4])
-					currPiece.moveDown(board);
+					while(currPiece.canMoveDown(board))
+						currPiece.moveDown(board);
 					
 				System.out.println("\n\nDEBUG INFO:\n"
 				 		+ "x value: " + currPiece.getGridX() + "\n"
