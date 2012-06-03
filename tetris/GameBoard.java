@@ -1,3 +1,5 @@
+import java.awt.Color;
+
 public class GameBoard
 {
 	int [][] grid;
@@ -36,10 +38,29 @@ public class GameBoard
 		for (int i = x; i < (x + size); i++)
 		{
 			py = 0;
-			for (int j=y; j < (y + size); j++)
+			for (int j = y; j < (y + size); j++)
 			{
-				if(PieceGrid[px][py] ==1)
+				if(PieceGrid[px][py] == 1 && j < 20 && i >= 0 && i <= 9)
 						grid[j][i] = piece.getColor().getRGB();
+				py++;
+			}
+			px++;
+		}		
+	}
+	
+	public void eraseTrail(Piece piece)
+	{
+		int [][] PieceGrid = piece.getGrid();;
+		int x = piece.getGridX(), y = piece.getGridY(), size, px = 0, py = 0;
+		size = piece.getGridSize();
+		
+		for (int i = x; i < (x + size); i++)
+		{
+			py = 0;
+			for (int j = y; j < (y + size); j++)
+			{
+				if (PieceGrid[px][py] == 1 && j < 20 && i >= 0 && i <= 9)
+						grid[j][i] = Color.TRANSLUCENT;
 				py++;
 			}
 			px++;

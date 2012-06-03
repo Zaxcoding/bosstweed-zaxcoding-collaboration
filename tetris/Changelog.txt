@@ -1,6 +1,40 @@
 {
 Zach - 6/3/12
 
+GameBoard.java:
+Added eraseTrail, which just colors over the current Piece's position with 
+the same black as the background. Then, if it the user hits a movement key 
+then the piece's position will be redrawn. This way we don't have to clear the
+board completely each time, so multiple pieces can now be spawned without
+issues! Woohoo! It's pretty cool!
+Ps, eraseTrail is nearly verbatim your fill method, with a different color.
+Inefficient to copy and paste, but much easier to read than adding an argument
+to fill() to choose the color to fill with, I think.
+
+_Piece.java:
+Erased the canMoveDown, canMoveLeft, and canMoveRight methods because...
+
+Piece.java:
+I added them here! I found a generic way to collision detect with the boundary 
+walls. I loop through the piece's grid until I find a filled in spot. First, I
+do the move (gridX--, gridX++, or gridY++), then I go through all of the 
+piece's filled in spots and test with that new grid coordinate to see if I'm
+out of bounds anywhere. If so, return false. It works really really well! The
+only issue I'm having is if you press up to the far left edge of the screen 
+and then rotate, instead of wall-kicking it can push you out of bounds. You
+can still come back in bounds- no exception occurs, because I don't test
+in the GameBoard fill and eraseTrails method to make sure I don't draw out
+of the array's bounds.
+
+It's pretty neat and a simple to add feature! Things are coming along well!
+
+Also, I think we can use the general idea I used here for canRotateR,
+canRotateL, and also adding collision detecting between pieces!
+}
+
+{
+Zach - 6/3/12
+
 So this is a pretty awesome step towards a working product, but it's limited
 in a few key areas. The main idea is that it only works for currPiece, and has
 no idea about how to store the pieces/display multiple pieces/etc. I do have a

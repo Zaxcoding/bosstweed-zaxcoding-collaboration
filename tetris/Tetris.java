@@ -45,7 +45,6 @@ public class Tetris
 	
 	
 	boolean paused, start, game = true, newpiece = true;
-	TimeUp t;
 	Random rng; 			// put this here so we can access it all over
 
 	public static void main(String [] args)
@@ -275,7 +274,8 @@ public class Tetris
 				array[i][j].setBackground(new Color(Color.TRANSLUCENT));
 	}
 	
-	// and this resets all the non-filled pieces with black
+	// this method is more of a hard wipe and is now basically
+	// obsolete thanks to GameBoard.eraseTrail()
 	public void clearBoard()
 	{
 		for (int i = 0; i < 20; i++)
@@ -480,6 +480,7 @@ public class Tetris
 			}    
 			else
 			{
+				board.eraseTrail(currPiece);
 				gamePanel.grabFocus();
 				if (e.getKeyCode() == keys[0])	// move left
 					currPiece.moveLeft(board);
@@ -498,15 +499,14 @@ public class Tetris
 						+ "y value: " + currPiece.getGridY() + "\n"
 						+ "Rotational Position: " + currPiece.getPosition());
 			
-				clearBoard();
 				board.fill(currPiece);
 				colorPieces();
 				
-				if (currPiece.getGridY() >= 16)
+				if (!currPiece.canMoveDown(board))
 					currPiece = selectPiece(rng.nextInt(6));// and that piece
 	  				
 			/*	// Not yet implemented
-			 *	if (e.getKeyCode() == keys[4])	// rotateR
+			 *	if (e.getKeyCode() == keys[4])	// hardDrop
 			 *		currPiece.hardDrop();
 			 */ 	
 			}

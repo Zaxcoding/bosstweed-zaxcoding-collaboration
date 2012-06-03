@@ -16,11 +16,53 @@ public abstract class Piece
 	
 	protected Color color;
 	
-	public abstract boolean canMoveLeft(GameBoard board);
+	public boolean canMoveLeft(GameBoard board)
+	{
+		boolean ans = true;
+		gridX--;		// temporarily do the move, then look for problems
+		
+		/* loop through, when we find a hit on the piece's grid
+		 * (a non-zero spot) see if there's a conflict */
+		for (int i = 0; i < gridSize; i++)
+			for (int j = 0; j < gridSize; j++)
+				if (grid[i][j] != 0)
+					if (gridX + i < 0)
+						ans = false;
+		gridX++;
+		return ans;
+	}
 	 
-	public abstract boolean canMoveRight(GameBoard board);
+	public boolean canMoveRight(GameBoard board)
+	{
+		boolean ans = true;
+		gridX++;		// temporarily do the move, then look for problems
+
+		/* loop through, when we find a hit on the piece's grid
+		 * (a non-zero spot) see if there's a conflict */
+		for (int i = 0; i < gridSize; i++)
+			for (int j = 0; j < gridSize; j++)
+				if (grid[i][j] != 0)
+					if (gridX + i >= 10)
+						ans = false;
+		gridX--;
+		return ans;
+	}
 	 
-	//public abstract boolean canMoveDown(GameBoard board);
+	public boolean canMoveDown(GameBoard board)
+	{
+		boolean ans = true;
+		gridY++;		// temporarily do the move, then look for problems
+
+		/* loop through, when we find a hit on the piece's grid
+		 * (a non-zero spot) see if there's a conflict */
+		for (int i = 0; i < gridSize; i++)
+			for (int j = 0; j < gridSize; j++)
+				if (grid[i][j] != 0)
+					if (gridY + j >= 20)
+						ans = false;
+		gridY--;
+		return ans;
+	}	
 	
 	public abstract void spawn();
 		
@@ -75,19 +117,19 @@ public abstract class Piece
 	
 	public void moveLeft(GameBoard board)
 	{
-		if (/*canMoveLeft(board) &&*/ gridX > 0)
+		if (canMoveLeft(board))
 			gridX--;
 	}
 	
 	public void moveRight(GameBoard board)
 	{
-		if (/*canMoveRight(board) &&*/ gridX < (10 - gridSize) )
+		if (canMoveRight(board))
 			gridX++;
 	}
 	
 	public void moveDown(GameBoard board)
 	{
-		if (/*canMoveDown(board) &&*/ gridY < (board.HEIGHT - gridSize) )
+		if (canMoveDown(board))
 			gridY++;
 	}
 	
