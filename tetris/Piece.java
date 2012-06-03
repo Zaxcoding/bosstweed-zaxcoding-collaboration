@@ -72,25 +72,25 @@ public abstract class Piece
 	{
 		return color;
 	}
-	/*
+	
 	public void moveLeft(GameBoard board)
 	{
-		if (canMoveLeft(board) && gridX > board.MAX_LEFT)
+		if (/*canMoveLeft(board) &&*/ gridX > 0)
 			gridX--;
 	}
 	
 	public void moveRight(GameBoard board)
 	{
-		if (canMoveRight(board) && gridX < board.MAX_RIGHT)
+		if (/*canMoveRight(board) &&*/ gridX < (10 - gridSize) )
 			gridX++;
 	}
 	
 	public void moveDown(GameBoard board)
 	{
-		if (canMoveDown(board) && gridY < board.HEIGHT)
+		if (/*canMoveDown(board) &&*/ gridY < (board.HEIGHT - gridSize) )
 			gridY++;
 	}
-	*/
+	
 	public void clearGrid()
 	{
 		for(int i = 0; i < gridSize; i++)
@@ -121,6 +121,6 @@ public abstract class Piece
 		if (position <= 0)		// since java % can give negative results
 			position += 4;
 		setPiece();
-		System.out.println("Position: " + position);
+	//	System.out.println("Position: " + position);
 	}
 }

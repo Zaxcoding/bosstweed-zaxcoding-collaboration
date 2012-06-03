@@ -45,8 +45,9 @@ public class Tetris
 							// settings when changing.
 	
 	
-	boolean paused,start,game=true, newpiece=true;
+	boolean paused, start, game = true, newpiece = true;
 	TimeUp t;
+	Random rng; 			// put this here so we can access it all over
 
 	public static void main(String [] args)
 	{
@@ -56,49 +57,66 @@ public class Tetris
 	public Tetris()
 	{
 		setup();
-		while(game)
-		{
+	//	while(game)
+	//	{
 			if(newpiece)
 			{
-				Random r = new Random();
-  				int pieceDigit = r.nextInt(6);
-  				selectPiece(pieceDigit);
+				int pieceDigit = rng.nextInt(6);		// get rand int
+  				currPiece = selectPiece(pieceDigit); 	// and that piece
  			}
-			t = new TimeUp(1,currPiece);
-		}
+	//		t = new TimeUp(1, currPiece);
+	//	}
 		
 	}
 	
-	public void selectPiece(int a)
+	// for playing around with spawning and moving a piece
+	
+	public void test()
 	{
-		if(a ==0)
+		
+		
+	}
+	
+	/* I changed this method to return a Piece, since we may want to use
+	 * it for more than just generating the current piece. We could use it
+	 * for previewing the next pieces or other areas where we just want a
+	 * particular piece */
+
+	public Piece selectPiece(int a)
+	{
+		// temp variable, just make it J, then change to what it needs to be
+		Piece temp = new JPiece();
+		
+		if (a == 0)
 		{
-			currPiece = new JPiece();
+			temp = new JPiece();
 		}
-		else if(a ==1)
+		else if (a == 1)
 		{
-			currPiece = new LPiece();
+			temp = new LPiece();
 		}
-		else if(a ==2)
+		else if (a == 2)
 		{
-			currPiece = new OPiece();
+			temp = new OPiece();
 		}
-		else if(a ==3)
+		else if (a == 3)
 		{
-			currPiece = new SPiece();
+			temp = new SPiece();
 		}
-		else if(a ==4)
+		else if (a == 4)
 		{
-			currPiece = new ZPiece();
+			temp = new ZPiece();
 		}
-		else if(a ==5)
+		else if (a == 5)
 		{
-			currPiece = new IPiece();
+			temp = new IPiece();
 		}
-		else if(a ==6)
+		else if (a == 6)
 		{
-			currPiece = new TPiece();
+			temp = new TPiece();
 		}
+		
+		return temp;
 	}
 		
 
@@ -213,23 +231,36 @@ public class Tetris
 		theWindow.pack();
 		theWindow.setVisible(true);
 		
+		gamePanel.setFocusable(true);
+		gamePanel.grabFocus();
+		gamePanel.addKeyListener(theListener);
+	
+	
+		/*--------------------------------------------------------------------
+		 * 					END OF GUI WINDOW SETUP
+	   	 *------------------------------------------------------------------*/
+			
 		paused = true;
 		start = false;
+		
+		// for preferences pane
 		
 		app = Application.getApplication();
 		appListener = new AppListener();
 		app.setPreferencesHandler(appListener);
 		
-		keys = new int[5];
-		tempKeys = new int[5];
-		
 		// hardcode in the default control settings
 		
+		keys = new int[5];
+		tempKeys = new int[5];
+				
 		keys[0] = 65;
 		keys[1] = 83;
 		keys[2] = 75;
 		keys[3] = 76;
 		keys[4] = 32;
+		
+		rng = new Random();		// init the random in setup
 	}
 
 	public void pause()
@@ -244,6 +275,19 @@ public class Tetris
 			pause.setText("Resume");
 	}
 	
+	public void overlay(Piece piece)
+	{
+	/*	int left = piece.getGridX();
+		int top = piece.getGridY();
+		
+		for (int i = 0; i < piece.gridSize; i++)
+		{
+			for (int j = 0; j < piece.gridSize; j++)
+			{
+	*/
+		
+	}
+	
 	public void colorPieces()
 	{
 		for (int i = 0; i < 20; i++)
@@ -252,18 +296,31 @@ public class Tetris
 					array[i][j].setBackground(new Color(board.grid[i][j]));
 	}
 
-	//found this timer structure, looks to be useful
-	// should call run() every 1 second then call the movedown of the currentpiece on the board
-	// movedown not yet officially implemented
+	public void clearBoard()
+	{
+		for (int i = 0; i < 20; i++)
+			for (int j = 0; j < 10; j++)
+				if (board.grid[i][j] != 0)
+				{
+					board.grid[i][j] = 0;
+					array[i][j].setBackground(new Color(Color.TRANSLUCENT));
+				}
+	}			
+	
+	
+	/* found this timer structure, looks to be useful
+	 * should call run() every 1 second then call the movedown of the
+	 * currentpiece on the board
+	 * movedown not yet officially implemented */
 	private class TimeUp 
 	{
     	Timer timer;
 		//Piece current;
     	public TimeUp(int seconds,Piece p) 
     	{
-    		//current =p;
+    		//current = p;
         	timer = new Timer();
-        	timer.schedule(new Task(), seconds*1000);
+        	timer.scheduleAtFixedRate(new Task(), 0, 1000000*seconds);
 		}
 
     	class Task extends TimerTask 
@@ -379,10 +436,18 @@ public class Tetris
 					if (JOptionPane.showConfirmDialog(null, "You have unsaved"
 				 	 + " changes. Quit anyways?",	"", 
 						JOptionPane.YES_NO_OPTION) == 0)
+					{
 						preferences.setVisible(false);
+						gamePanel.grabFocus();
+						changingKeys = false;
+					}
 				}
 				else
+				{
 					preferences.setVisible(false);	
+					gamePanel.grabFocus();
+					changingKeys = false;
+				}
 			}		
 		
 			if (e.getSource() == prefLeft)
@@ -390,30 +455,35 @@ public class Tetris
 				changingKeys = true;
 				changingWhich = 0;
 				prefFeedback.setText("Press the key for Move Left");
+				prefPanel.grabFocus();
 			}
 			if (e.getSource() == prefRight)
 			{
 				changingKeys = true;
 				changingWhich = 1;
 				prefFeedback.setText("Press the key for Move Right");
+				prefPanel.grabFocus();
 			}
 			if (e.getSource() == prefRotateR)
 			{
 				changingKeys = true;
 				changingWhich = 2;
 				prefFeedback.setText("Press the key for Rotate Right");
+				prefPanel.grabFocus();
 			}
 			if (e.getSource() == prefRotateL)
 			{
 				changingKeys = true;
 				changingWhich = 3;
 				prefFeedback.setText("Press the key for Rotate Left");
+				prefPanel.grabFocus();
 			}
 			if (e.getSource() == prefHardDrop)
 			{
 				changingKeys = true;
 				changingWhich = 4;
 				prefFeedback.setText("Press the key for Hard Drop");
+				prefPanel.grabFocus();
 			}
 			
 			if (e.getSource() == prefSave)
@@ -434,9 +504,8 @@ public class Tetris
 					changingKeys = false;
 					prefFeedback.setText("Changes saved!");
 				}
-			}
-			prefPanel.grabFocus();
-			
+				prefPanel.grabFocus();
+			}			
 		}
 		
 		public void keyPressed(KeyEvent e) 
@@ -460,6 +529,38 @@ public class Tetris
 				prefFeedback.setText("Key changed! Save"
 											+ " changes before closing.");
 			}    
+			else
+			{
+				gamePanel.grabFocus();
+				if (e.getKeyCode() == keys[0])	// move left
+					currPiece.moveLeft(board);
+				if (e.getKeyCode() == keys[1])	// move right
+					currPiece.moveRight(board);
+				if (e.getKeyCode() == keys[2])	// rotateR
+					currPiece.rotateR();
+				if (e.getKeyCode() == keys[3])	// rotateL
+					currPiece.rotateL();
+				// for now, just move down instead of hardDrop()
+				if (e.getKeyCode() == keys[4])
+					currPiece.moveDown(board);
+					
+				System.out.println("\n\nDEBUG INFO:\n"
+				 		+ "x value: " + currPiece.getGridX() + "\n"
+						+ "y value: " + currPiece.getGridY() + "\n"
+						+ "Rotational Position: " + currPiece.getPosition());
+			
+				clearBoard();
+				board.fill(currPiece);
+				colorPieces();
+				
+				if (currPiece.getGridY() >= 16)
+					currPiece = selectPiece(rng.nextInt(6));// and that piece
+	  				
+			/*	// Not yet implemented
+			 *	if (e.getKeyCode() == keys[4])	// rotateR
+			 *		currPiece.hardDrop();
+			 */ 	
+			}
 		}
 		
 	}

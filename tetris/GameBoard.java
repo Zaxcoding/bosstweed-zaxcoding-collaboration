@@ -45,14 +45,17 @@ public class GameBoard
 		// so the px,py will progress through the piecegrid, while when that finds a truth(1)
 		// it will also produce that 1 on the superimposed grid, showing the 1 in the correct location
 		// on the gameboard. 
-		for(int i=x; i<x+size-1; i++)
+		for(int i=x; i<x+size; i++)
 		{
 			py=0;
-			for(int j=y-size+1; j<y; j++)
+			for(int j=y; j<y+size; j++)
 			{
+				System.out.println("\nIN GAMEBOARD: "
+						+ "\n\tpx = " + px + " py = " + py
+						+ "\n\ti = " + i + " j = " + j);
 				if(PieceGrid[px][py] ==1)
 				{
-					grid[i][j] = piece.getColor().getRGB();
+					grid[j][i] = piece.getColor().getRGB();
 				}
 				py++;
 			}
