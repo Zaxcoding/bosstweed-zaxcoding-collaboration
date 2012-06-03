@@ -443,7 +443,6 @@ public class Tetris
 		{
 			if (changingKeys)
 			{
-				System.out.println(e.getKeyCode());
 				tempKeys[changingWhich] = e.getKeyCode();
 
 				if (changingWhich == 0)
