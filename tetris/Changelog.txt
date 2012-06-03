@@ -1,4 +1,47 @@
 {
+Zach - 6/3/12
+
+So this is a pretty awesome step towards a working product, but it's limited
+in a few key areas. The main idea is that it only works for currPiece, and has
+no idea about how to store the pieces/display multiple pieces/etc. I do have a
+plan on how to implement multiple pieces, but for now I just want to document
+this so we have something easy to fall back on if we lose our place.
+
+An example of where it falls short is it resets the entire GameBoard when it 
+calls clearBoard(). We'll have to change this to just clearPiece() to get rid
+of the current piece's ghost trail.
+
+GameBoard.java:
+Really just did some formatting adjustments. The logic was all there. There 
+was a single 1-off error but otherwise you nailed it. That fill() method was
+really awesome to see work. Took out some of the debug info I had added.
+
+Tetris.java:
+Removed a lot of the stuff that I didn't use (mostly timing) and cleaned a few
+things up. From top to bottom:
+
+selectPiece(int a) - changed this to return a Piece instead of being void(), 
+so that we can hopefully use it for the preview pieces and maybe other things.
+
+Made the gamePanel focusable and set it to grabFocus most of the time a button
+is pushed. This should keep the user able to use the keyboard without having 
+to re-click the panel to select it. We'll have to adjust this for pausing.
+
+Initialize the Random rng in setup and make it a global variable in case we 
+want to get some randInt()s other places.
+
+colorPieces(), initBoard(), clearBoard() - these are really easy, just for
+loops that set the appropriate spots to the appropriate color.
+
+MyListener - this is where all of the keyboard controls went.
+
+I also went through and cleared out some old comments where we both know 
+what's going on, and I added some comments where I wrote new code.
+
+Good stuff! More features to come now!
+}
+
+{
 Andy - 6/2/12
 
 Yay for getting back in the swing of things.(get the swing pun?! ;) ) 

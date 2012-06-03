@@ -24,7 +24,6 @@ public class Tetris
 	MyListener theListener;
 	Piece currPiece, nextPiece;
 	
-	
 	GameBoard board = new GameBoard(10,20);
 	
 	// all stuff for preferences menu
@@ -57,31 +56,14 @@ public class Tetris
 	public Tetris()
 	{
 		setup();
-	//	while(game)
-	//	{
-			if(newpiece)
-			{
-				int pieceDigit = rng.nextInt(6);		// get rand int
-  				currPiece = selectPiece(pieceDigit); 	// and that piece
- 			}
-	//		t = new TimeUp(1, currPiece);
-	//	}
-		
-	}
-	
-	// for playing around with spawning and moving a piece
-	
-	public void test()
-	{
-		
-		
+		int pieceDigit = rng.nextInt(6);		// get rand int
+		currPiece = selectPiece(pieceDigit); 	// and that piece
 	}
 	
 	/* I changed this method to return a Piece, since we may want to use
 	 * it for more than just generating the current piece. We could use it
 	 * for previewing the next pieces or other areas where we just want a
 	 * particular piece */
-
 	public Piece selectPiece(int a)
 	{
 		// temp variable, just make it J, then change to what it needs to be
@@ -119,7 +101,6 @@ public class Tetris
 		return temp;
 	}
 		
-
 	public void setup()
 	{
 		theWindow = new JFrame("Tetris- by bosscoding");
@@ -130,7 +111,6 @@ public class Tetris
 
 		leftPanel = new MyPanel(100, 500, 20, 5);
 		leftPanel.setBorder(BorderFactory.createLineBorder(Color.black));
-
 
 		rightPanel = new MyPanel(400,500, 5, 1);
 		nextPanel = new MyPanel(1,1, 2, 1);
@@ -261,6 +241,9 @@ public class Tetris
 		keys[4] = 32;
 		
 		rng = new Random();		// init the random in setup
+	
+		initBoard();
+		colorPieces();
 	}
 
 	public void pause()
@@ -275,19 +258,7 @@ public class Tetris
 			pause.setText("Resume");
 	}
 	
-	public void overlay(Piece piece)
-	{
-	/*	int left = piece.getGridX();
-		int top = piece.getGridY();
-		
-		for (int i = 0; i < piece.gridSize; i++)
-		{
-			for (int j = 0; j < piece.gridSize; j++)
-			{
-	*/
-		
-	}
-	
+	// this method colors all the pieces on the GameBoard
 	public void colorPieces()
 	{
 		for (int i = 0; i < 20; i++)
@@ -296,6 +267,15 @@ public class Tetris
 					array[i][j].setBackground(new Color(board.grid[i][j]));
 	}
 
+	// this simply makes all the labels initially black
+	public void initBoard()
+	{
+		for (int i = 0; i < 20; i++)
+			for (int j = 0; j < 10; j++)
+				array[i][j].setBackground(new Color(Color.TRANSLUCENT));
+	}
+	
+	// and this resets all the non-filled pieces with black
 	public void clearBoard()
 	{
 		for (int i = 0; i < 20; i++)
@@ -306,37 +286,6 @@ public class Tetris
 					array[i][j].setBackground(new Color(Color.TRANSLUCENT));
 				}
 	}			
-	
-	
-	/* found this timer structure, looks to be useful
-	 * should call run() every 1 second then call the movedown of the
-	 * currentpiece on the board
-	 * movedown not yet officially implemented */
-	private class TimeUp 
-	{
-    	Timer timer;
-		//Piece current;
-    	public TimeUp(int seconds,Piece p) 
-    	{
-    		//current = p;
-        	timer = new Timer();
-        	timer.scheduleAtFixedRate(new Task(), 0, 1000000*seconds);
-		}
-
-    	class Task extends TimerTask 
-    	{
-        
-        	public void run() 
-        	{
-            	//current.moveDown(board);//does movedown exist here?, does current exist here? ..so rusty 
-            	//currPiece.moveDown(board);//does movedown exist here?, does currPiece exist here? ..so rusty 
-            	System.out.println("hey");
-            	//timer.cancel(); //Terminate the timer thread
-        	}
-    
-    	}
-	}
-
 
 	private class AppListener implements PreferencesHandler
 	{
