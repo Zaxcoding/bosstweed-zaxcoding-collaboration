@@ -1,9 +1,46 @@
 {
+Zach - 6/4/12
+
+OH GOD YES THIS IS AWESOME!
+
+Haha, so the big change is piece to piece collision detection. I'll get to it.
+
+Piece.java:
+Added pieceCollision(GameBoard board), a method used to check piece-piece 
+collision detection. It's actually really simple. It just looks where the 
+piece is (going to be, since you call it in the middle of a temporary gridX++
+or gridY++ call, etc) and see if there are any non translucent-pieces there.
+The tricky part was figuring out that you can't have the piece filled- you 
+have to eraseTrail before checking or else you pick up your own piece. Once
+I rearranged the order of some stuff in Tetris, it worked perfectly!
+
+I also added a cool way to visualize the board for debugging, kinda based off
+of Ramirez's MyRectangle visualization.
+
+Tetris.java:
+I did some reordering as I mentioned above. I really didn't write any new code 
+except I fill in the board.grid with translucent when I call initBoard() and I 
+also set the hardcoded filepath to a relative one ("Tetronimoes/J.png" etc).
+
+And that's really it! Again it was a case of having all the pieces (pun) there
+and just figuring out how to use them together (and in the right order) to
+make the finished product.
+}
+
+{
 Andy - 6/4/12
 
 Next piece images are functional
 
-Tetris.java- so the rng is basically using next piece now instead of currpiece, so that we can keep track of the image to be displayed. when we need a new piece, currpiece = next piece, and we pick a next piece. pretty sweet. only problem right now that i can think of is that i have hardcoded the image locations to my local desktop, you are probably more experienced than me about how to define the path so that we can both use it without hardcoding the path every time, but for now i just have them on my desktop and I'm assuming you can put them there as well, and just change /beersandrew/ in the path to whatever your macbook is registered under. 
+Tetris.java- so the rng is basically using next piece now instead of 
+currpiece, so that we can keep track of the image to be displayed. when we 
+need a new piece, currpiece = next piece, and we pick a next piece. pretty 
+sweet. only problem right now that i can think of is that i have hardcoded the 
+image locations to my local desktop, you are probably more experienced than me 
+about how to define the path so that we can both use it without hardcoding the 
+path every time, but for now i just have them on my desktop and I'm assuming 
+you can put them there as well, and just change /beersandrew/ in the path to 
+whatever your macbook is registered under. 
 
 Tetrominoes Folder - holds all the .png images for the pieces.
 
@@ -34,7 +71,13 @@ Andy - 6/3/12
 
 Big day for boss coding today, just got some timing down.
 
-Tetris.java - The timing starts initially with the starting of the program, and every full second the piece is moved down one spot. I couldn't get stability in the timing using tenths or hundreds of a second the time would go like 12.9999999999985 and it looked really dumb so, full seconds is what we got right now. Also fixed the hard drop so that it does hard drop, potential problem of if you keep holding down the spacebar it kind of spawns the piece at the bottom. it looks really sweet right now though!
+Tetris.java - The timing starts initially with the starting of the program, 
+and every full second the piece is moved down one spot. I couldn't get 
+stability in the timing using tenths or hundreds of a second the time would go 
+like 12.9999999999985 and it looked really dumb so, full seconds is what we 
+got right now. Also fixed the hard drop so that it does hard drop, potential 
+problem of if you keep holding down the spacebar it kind of spawns the piece 
+at the bottom. it looks really sweet right now though!
 
 }
 
@@ -120,13 +163,24 @@ Andy - 6/2/12
 
 Yay for getting back in the swing of things.(get the swing pun?! ;) ) 
 
-Tetris.java - set up a timing loop, that works until i hit start game, I'm not sure how to keep a loop going after the action listener occurs, maybe it ends because theres an exception with the button? I'm not sure but I'm pretty happy that the loop repeats
+Tetris.java - set up a timing loop, that works until i hit start game, I'm not 
+sure how to keep a loop going after the action listener occurs, maybe it ends 
+because theres an exception with the button? I'm not sure but I'm pretty happy 
+that the loop repeats
 
--Secondly attempted to set the current piece as a randomly selected piece. I did this with a new method in tetris called selectPiece, which is called when the boolean new piece is true.(not sure what the conditions are for this yet, we'll have to look into it and decide exactly 'when' we need to spawn a new piece).
+-Secondly attempted to set the current piece as a randomly selected piece. I 
+did this with a new method in tetris called selectPiece, which is called when 
+the boolean new piece is true.(not sure what the conditions are for this yet, 
+we'll have to look into it and decide exactly 'when' we need to spawn a new 
+piece).
 
-.*Piece- apparently each individual piece class needs to import the color package, i assumed it was ok with what you had, but when i created individual pieces in tetris.java with selectPiece, none of the pieces compiled, so i added them. 
+.*Piece- apparently each individual piece class needs to import the color 
+package, i assumed it was ok with what you had, but when i created individual 
+pieces in tetris.java with selectPiece, none of the pieces compiled, so i 
+added them. 
 
-TPiece.java - PURPLE does not exist in the color package, so we'll have to settle for MAGENTA.
+TPiece.java - PURPLE does not exist in the color package, so we'll have to 
+settle for MAGENTA.
 }
 
 {
@@ -174,16 +228,28 @@ Andy - 5/21/12
 
 ok lots to tell about, not a whole lot of new code though.
 
-Tetris.java- made the game initially paused, so that the player doesn't open up the game to a falling piece, unease = start game..
+Tetris.java- made the game initially paused, so that the player doesn't open 
+up the game to a falling piece, unease = start game..
 
-Piece.java, *Piece.java- put in a primitive version of canmoveleft and canmoveright
+Piece.java, *Piece.java- put in a primitive version of canmoveleft and 
+canmoveright
 
 The big one…
-Gameboard.java- attempted to implement an idea of how i think fill should work. I put in a 6 line comment or so above my weird for loop structure thing to attempt to explain what i did. This is all off of your idea of the grid over the game board, and the way i drew it out on my paper i think it works, or does what you had in mind.Please feel free to check it out and even dismiss it if its totally wrong
+Gameboard.java- attempted to implement an idea of how i think fill should 
+work. I put in a 6 line comment or so above my weird for loop structure thing 
+to attempt to explain what i did. This is all off of your idea of the grid 
+over the game board, and the way i drew it out on my paper i think it works, 
+or does what you had in mind.Please feel free to check it out and even dismiss 
+it if its totally wrong
 
-My only concerns are when, in the case of the O piece, where there are 0's in the piece grid itself, i think this means the canmoveleft and canmoveright need much more logic than my initial attempt, and there is need for the contact() method for both canmoveright and fill.
+My only concerns are when, in the case of the O piece, where there are 0's in 
+the piece grid itself, i think this means the canmoveleft and canmoveright 
+need much more logic than my initial attempt, and there is need for the 
+contact() method for both canmoveright and fill.
 
-it seems there is still the entire piece logic to go yet, as far as how the pieces stay in the game board, and how pieces can freely fall and coexist on a board with an arbitrary amount of pieces already on the game board.
+it seems there is still the entire piece logic to go yet, as far as how the 
+pieces stay in the game board, and how pieces can freely fall and coexist on a 
+board with an arbitrary amount of pieces already on the game board.
 }
 
 {
