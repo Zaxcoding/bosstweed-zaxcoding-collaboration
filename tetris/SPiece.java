@@ -14,7 +14,7 @@ public class SPiece extends Piece
 		gridY = 0;
 		grid = new int[gridSize][gridSize];
 		setPiece();
-		color = new Color(Color.GREEN.getRGB());
+		color = new Color(Color.RED.getRGB());
 	}
 	
 	public void setPiece()

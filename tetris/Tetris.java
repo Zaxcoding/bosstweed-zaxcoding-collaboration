@@ -26,10 +26,10 @@ public class Tetris
 	MyListener theListener;
 	Timer timer;
 	Piece currPiece, nextPiece;
-	JLabel gameTime,picLabel;
+	JLabel gameTime,picLabel,line1Text,line2Text,line4Text,currentLevel;
 	GameBoard board = new GameBoard(10,20);
 	BufferedImage [] myPicture = new BufferedImage[7];
-	
+	//int time=1000;
 	// all stuff for preferences menu
 	Application app;
 	AppListener appListener;
@@ -60,7 +60,7 @@ public class Tetris
 	{
 		setup();
 		
-		int pieceDigit = rng.nextInt(6);		// get rand int
+		int pieceDigit = rng.nextInt(7);		// get rand int
 		nextPiece = selectPiece(pieceDigit); 	// and that piece
 		currPiece = nextPiece;
 		nextPiece = null;
@@ -71,14 +71,14 @@ public class Tetris
         	{ 
         		if (nextPiece == null)
         		{
-        			int rand = rng.nextInt(6);
+        			int rand = rng.nextInt(7);
         			nextPiece = selectPiece(rand); // and that piece
         			picLabel.setIcon(new ImageIcon( myPicture[rand] )); 
         		}
         			
         		// everytime the timer goes off (every second) it will basically move the piece down, with all existing logic
         		board.eraseTrail(currPiece);	
-            	gameTime.setText(Double.parseDouble(gameTime.getText()) + 1 + "");
+            	gameTime.setText(Double.parseDouble(gameTime.getText()) + .5 + "");
  
 				currPiece.moveDown(board);
             	
@@ -86,12 +86,14 @@ public class Tetris
 				{
 					board.fill(currPiece);
 					currPiece = nextPiece;
-					int rand = rng.nextInt(6);
+					int rand = rng.nextInt(7);
         			nextPiece = selectPiece(rand); // and that piece
         			picLabel.setIcon(new ImageIcon( myPicture[rand] ));	
 				}
+				checkBoard();
 				board.fill(currPiece);
 				colorPieces();
+				
        		} 
         };
                 
@@ -178,7 +180,7 @@ public class Tetris
 		JLabel levelText = new JLabel("Level",SwingConstants.CENTER);
 		levelText.setFont(new Font("Serif", Font.ITALIC, 20));
 		levelText.setBorder(BorderFactory.createLineBorder(Color.gray));
-		JLabel currentLevel = new JLabel("0",SwingConstants.CENTER);
+		currentLevel = new JLabel("1",SwingConstants.CENTER);
 		currentLevel.setBorder(BorderFactory.createLineBorder(Color.gray));
 		currentLevel.setFont(new Font("Serif", Font.ITALIC, 20));
 		levelPanel.add(levelText);
@@ -188,16 +190,16 @@ public class Tetris
 										SwingConstants.CENTER);
 		lineText.setFont(new Font("Serif", Font.ITALIC, 20));
 		lineText.setBorder(BorderFactory.createLineBorder(Color.gray));
-		JLabel line1Text = new JLabel("Total",SwingConstants.CENTER);
+		line1Text = new JLabel("Total",SwingConstants.CENTER);
 		line1Text.setFont(new Font("Serif", Font.ITALIC, 16));
 		line1Text.setBorder(BorderFactory.createLineBorder(Color.gray));
-		JLabel line2Text = new JLabel("0",SwingConstants.CENTER);
+		line2Text = new JLabel("0",SwingConstants.CENTER);
 		line2Text.setFont(new Font("Serif", Font.ITALIC, 16));
 		line2Text.setBorder(BorderFactory.createLineBorder(Color.gray));
 		JLabel line3Text = new JLabel("Next Level in",SwingConstants.CENTER);
 		line3Text.setFont(new Font("Serif", Font.ITALIC, 16));
 		line3Text.setBorder(BorderFactory.createLineBorder(Color.gray));
-		JLabel line4Text = new JLabel("10",SwingConstants.CENTER);
+		line4Text = new JLabel("10",SwingConstants.CENTER);
 		line4Text.setFont(new Font("Serif", Font.ITALIC, 16));
 		line4Text.setBorder(BorderFactory.createLineBorder(Color.gray));
 		linesPanel.add(lineText);
@@ -222,11 +224,11 @@ public class Tetris
 		
 		try
 		{
-			myPicture[0] = ImageIO.read(new File("Tetrominoes/J.png"));	
-			myPicture[1] = ImageIO.read(new File("Tetrominoes/L.png"));
+			myPicture[0] = ImageIO.read(new File("Tetrominoes/L.png"));	
+			myPicture[1] = ImageIO.read(new File("Tetrominoes/J.png"));
 			myPicture[2] = ImageIO.read(new File("Tetrominoes/O.png"));
-			myPicture[3] = ImageIO.read(new File("Tetrominoes/S.png"));
-			myPicture[4] = ImageIO.read(new File("Tetrominoes/Z.png"));
+			myPicture[3] = ImageIO.read(new File("Tetrominoes/Z.png"));
+			myPicture[4] = ImageIO.read(new File("Tetrominoes/S.png"));
 			myPicture[5] = ImageIO.read(new File("Tetrominoes/I.png"));
 			myPicture[6] = ImageIO.read(new File("Tetrominoes/T.png"));
 			
@@ -359,6 +361,51 @@ public class Tetris
 					array[i][j].setBackground(new Color(Color.TRANSLUCENT));
 				}
 	}			
+	
+	public void checkBoard()
+	{
+		boolean check=false;
+		for (int i = 0; i < 20; i++)
+			for (int j = 0; j < 10; j++)
+			{
+				if (board.grid[i][j] == Color.TRANSLUCENT)
+				{
+					j=9;
+					check = false;
+				}
+				else
+				{
+					if(j ==9)
+						check = true;
+				}
+				
+				if(check)
+				{
+					killLine(i);
+					check =false;
+				}
+			}
+	}
+	
+	public void killLine(int a)
+	{
+		
+		for(int i =a; i>1; i--)
+			for(int j =0;j<10;j++)
+				board.grid[i][j] = board.grid[i-1][j];
+			
+		line2Text.setText(Integer.parseInt(line2Text.getText()) + 1 + "");	
+		
+		if(Integer.parseInt(line4Text.getText()) ==1)
+		{
+			line4Text.setText("10");
+			currentLevel.setText(Integer.parseInt(currentLevel.getText()) + 1 + "");
+			//time = time/2;
+		}
+		else
+			line4Text.setText(Integer.parseInt(line4Text.getText()) - 1 + "");
+				
+	}
 
 	private class AppListener implements PreferencesHandler
 	{

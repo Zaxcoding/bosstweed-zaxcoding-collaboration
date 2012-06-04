@@ -1,4 +1,19 @@
 {
+Andy - 6/4/12
+
+ok here we go with another big functional push.
+
+Tetris.java- new methods checkBoard and killLine implemented. checkBoard scans the board when the last piece was placed to see if any of the rows on the board are filled, if so i call killLine to move all the lines above this line down one. it seems to work pretty well as its individually called for each row, i.e if the line gets 4, it'll call kill line 4 times, so this seems pretty good at least for debugging in the future if there are issues. 
+also in killLine, i increment the total lines column, decrement the lines until next level value, and if its 1 away from the level reset lines until next level and increment the level. there is a potential issue with the leveling, i tried to use the timer time setting as a variable and cut it in half every level so it speeds up but it seems like that can't be dynamically changed, once the timer is created thats what we got so we'll have to look into leveling yet. 
+
+*_Piece.java - messed around with these more than i thought i had to with colors and the rng with selecting a piece i had to do some switching but they match the pictures now so I'm happy with it.
+
+lastly changed that rng to go to 7 so the T tetromino spawns.
+
+}
+
+
+{
 Zach - 6/4/12
 
 OH GOD YES THIS IS AWESOME!

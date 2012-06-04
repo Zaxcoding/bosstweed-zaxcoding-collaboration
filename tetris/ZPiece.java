@@ -13,7 +13,7 @@ public class ZPiece extends Piece
 		gridY = 0;
 		grid = new int[gridSize][gridSize];
 		setPiece();
-		color = new Color(Color.RED.getRGB());
+		color = new Color(Color.GREEN.getRGB());
 		/* 0000
 	 	 * 0000
 	 	 * 1100
