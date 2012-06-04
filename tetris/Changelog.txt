@@ -1,4 +1,18 @@
 {
+Andy - 6/4/12
+
+Next piece images are functional
+
+Tetris.java- so the rng is basically using next piece now instead of currpiece, so that we can keep track of the image to be displayed. when we need a new piece, currpiece = next piece, and we pick a next piece. pretty sweet. only problem right now that i can think of is that i have hardcoded the image locations to my local desktop, you are probably more experienced than me about how to define the path so that we can both use it without hardcoding the path every time, but for now i just have them on my desktop and I'm assuming you can put them there as well, and just change /beersandrew/ in the path to whatever your macbook is registered under. 
+
+Tetrominoes Folder - holds all the .png images for the pieces.
+
+
+
+If piece -piece collision gets done today we are seriously on a roll! good luck :)
+}
+
+{
 Zach - 6/3/12
 
 Not going to do as big of a push, but I've done a little work so I'll put it

@@ -9,9 +9,10 @@ import javax.swing.border.*;
 import com.apple.eawt.*;
 import java.awt.*;
 import java.awt.event.*;
-//import java.util.Timer;
 import java.util.TimerTask;
 import javax.swing.Timer;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 
 public class Tetris
 {
@@ -25,8 +26,9 @@ public class Tetris
 	MyListener theListener;
 	Timer timer;
 	Piece currPiece, nextPiece;
-	JLabel gameTime;
+	JLabel gameTime,picLabel;
 	GameBoard board = new GameBoard(10,20);
+	BufferedImage [] myPicture = new BufferedImage[7];
 	
 	// all stuff for preferences menu
 	Application app;
@@ -59,14 +61,23 @@ public class Tetris
 		setup();
 		
 		int pieceDigit = rng.nextInt(6);		// get rand int
-		currPiece = selectPiece(pieceDigit); 	// and that piece
-		
-		
+		nextPiece = selectPiece(pieceDigit); 	// and that piece
+		currPiece = nextPiece;
+		nextPiece = null;
 		// new timing structure with its own action listener
 		ActionListener timerListener = new ActionListener() 
         { 
         	public void actionPerformed(ActionEvent evt) 
         	{ 
+        		if(nextPiece == null)
+        		{
+        			int rand = rng.nextInt(6);
+        			nextPiece = selectPiece(rand);// and that piece
+        			picLabel.setIcon(new ImageIcon( myPicture[rand] )); 
+        			
+        			
+        		}
+        			
         		// everytime the timer goes off (every second) it will basically move the piece down, with all existing logic
         		board.eraseTrail(currPiece);	
             	gameTime.setText(Double.parseDouble(gameTime.getText()) + 1 + "");
@@ -75,7 +86,14 @@ public class Tetris
 				colorPieces();
 				
 				if (!currPiece.canMoveDown(board))
-					currPiece = selectPiece(rng.nextInt(6));// and that piece
+				{
+					currPiece = nextPiece;
+					int rand = rng.nextInt(6);
+        			nextPiece = selectPiece(rand);// and that piece
+        			picLabel.setIcon(new ImageIcon( myPicture[rand] ));
+        			
+					
+				}
             	
        		} 
         };
@@ -204,12 +222,38 @@ public class Tetris
 										,SwingConstants.CENTER);
 		nextText.setFont(new Font("Serif", Font.ITALIC, 20));
 		nextText.setBorder(BorderFactory.createLineBorder(Color.gray));
-		JLabel nextPiece = new JLabel("0",SwingConstants.CENTER);
-		nextPiece.setFont(new Font("Serif", Font.ITALIC, 20));
-
-		nextPanel.add(nextText);
-		nextPanel.add(nextPiece);
-
+		
+		try
+		{
+			//ALL IMAGES ARE CURRENTLY RUN FROM MY LOCAL DESKTOP, MUST BE CHANGED
+			
+			myPicture[0] = ImageIO.read(new File("/Users/beersandrew/Desktop/J.png"));
+			
+			myPicture[1] = ImageIO.read(new File("/Users/beersandrew/Desktop/L.png"));
+			
+			myPicture[2] = ImageIO.read(new File("/Users/beersandrew/Desktop/O.png"));
+			
+			myPicture[3] = ImageIO.read(new File("/Users/beersandrew/Desktop/S.png"));
+			
+			myPicture[4] = ImageIO.read(new File("/Users/beersandrew/Desktop/Z.png"));
+			
+			myPicture[5] = ImageIO.read(new File("/Users/beersandrew/Desktop/I.png"));
+			
+			myPicture[6] = ImageIO.read(new File("/Users/beersandrew/Desktop/T.png"));
+			
+			picLabel = new JLabel("",JLabel.CENTER);
+			
+			nextPanel.add(nextText);
+		    nextPanel.add(picLabel);
+		    nextPanel.add(nextText);
+		    nextPanel.add(picLabel);
+		}
+		catch(Exception a)
+		{
+			System.out.println("pic didnt work :/");
+			System.exit(0);
+		}
+	
 		rightPanel.add(nextPanel);
 		rightPanel.add(timePanel);
 		rightPanel.add(linesPanel);
@@ -539,7 +583,13 @@ public class Tetris
 				colorPieces();
 				
 				if (!currPiece.canMoveDown(board))
-					currPiece = selectPiece(rng.nextInt(6));// and that piece
+				{
+					currPiece = nextPiece;
+					int rand = rng.nextInt(6);
+        			nextPiece = selectPiece(rand);// and that piece
+        			picLabel.setIcon(new ImageIcon( myPicture[rand] ));
+        			
+        		}
 	  				
 			/*	// Not yet implemented
 			 *	if (e.getKeyCode() == keys[4])	// hardDrop
