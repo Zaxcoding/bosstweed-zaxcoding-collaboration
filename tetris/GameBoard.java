@@ -50,7 +50,7 @@ public class GameBoard
 	
 	public void eraseTrail(Piece piece)
 	{
-		int [][] PieceGrid = piece.getGrid();;
+		int [][] PieceGrid = piece.getGrid();
 		int x = piece.getGridX(), y = piece.getGridY(), size, px = 0, py = 0;
 		size = piece.getGridSize();
 		

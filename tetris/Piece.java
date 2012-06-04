@@ -64,6 +64,38 @@ public abstract class Piece
 		return ans;
 	}	
 	
+	public boolean canRotateR(GameBoard board)
+	{
+		boolean ans = true;
+		rotate(1);		// temporarily do the move, then look for problems
+
+		/* loop through, when we find a hit on the piece's grid
+		 * (a non-zero spot) see if there's a conflict */
+		for (int i = 0; i < gridSize; i++)
+			for (int j = 0; j < gridSize; j++)
+				if (grid[i][j] != 0)
+					if (gridX + i >= 10 || gridX + i < 0)
+						ans = false;
+		rotate(-1);
+		return ans;
+	}
+	
+	public boolean canRotateL(GameBoard board)
+	{
+		boolean ans = true;
+		rotate(-1);		// temporarily do the move, then look for problems
+
+		/* loop through, when we find a hit on the piece's grid
+		 * (a non-zero spot) see if there's a conflict */
+		for (int i = 0; i < gridSize; i++)
+			for (int j = 0; j < gridSize; j++)
+				if (grid[i][j] != 0)
+					if (gridX + i >= 10 || gridX + i < 0)
+						ans = false;
+		rotate(1);
+		return ans;
+	}
+		
 	public abstract void spawn();
 		
 	public abstract void setPiece();
@@ -140,17 +172,19 @@ public abstract class Piece
 				grid[i][j] = 0;
 	}
 	
-	public void rotateR()
+	public void rotateR(GameBoard board)
 	{
-		rotate(1);
+		if (canRotateR(board))
+			rotate(1);
 	}
 	
-	public void rotateL()
+	public void rotateL(GameBoard board)
 	{
-		rotate(-1);
+		if (canRotateL(board))
+			rotate(-1);
 	}
 	
-	public void rotate(int d)
+	private void rotate(int d)
 	{
 		//1 - cw
 		//2 - ccw

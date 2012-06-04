@@ -80,7 +80,7 @@ public class Tetris
        		} 
         };
                 
-        timer = new Timer(1000,timerListener);
+        timer = new Timer(500,timerListener);
 		timer.start();
 	}
 	
@@ -521,10 +521,10 @@ public class Tetris
 				if (e.getKeyCode() == keys[1])	// move right
 					currPiece.moveRight(board);
 				if (e.getKeyCode() == keys[2])	// rotateR
-					currPiece.rotateR();
+					currPiece.rotateR(board);
 				if (e.getKeyCode() == keys[3])	// rotateL
-					currPiece.rotateL();
-				// for now, just move down instead of hardDrop()
+					currPiece.rotateL(board);
+
 				//** this works for hard drop, potential problem is that if you keep holding space, the piece basically spawns at the bottom
 				if (e.getKeyCode() == keys[4])
 					while(currPiece.canMoveDown(board))

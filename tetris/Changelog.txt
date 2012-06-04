@@ -1,4 +1,21 @@
 {
+Zach - 6/3/12
+
+Not going to do as big of a push, but I've done a little work so I'll put it
+up. I added canRotateL() and canRotateR(). With this it won't let you rotate
+out of the left side of the screen. If we want we can change this to add wall
+kicking or whatever it's called so that it pushes you out if you rotate too
+close to the wall.
+
+Now there's really nothing standing in the way of trying to implement piece to
+piece collision detection. I'm going to start on it tomorrow because my quick
+try didn't work and I want to remain positive with today.
+
+Oh, I also cut the timing in half to speed it up a bit for debugging.
+
+}
+
+{
 Andy - 6/3/12
 
 Big day for boss coding today, just got some timing down.
