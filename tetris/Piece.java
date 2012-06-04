@@ -16,6 +16,18 @@ public abstract class Piece
 	
 	protected Color color;
 	
+	public boolean pieceCollision(GameBoard board)
+	{
+		boolean ans = false;	// by default, no collision
+
+		for (int i = 0; i < gridSize; i++)
+			for (int j = 0; j < gridSize; j++)
+				if (grid[i][j] != 0)
+					if (board.grid[gridY + j][gridX + i] != 3)
+						ans = true;
+		return ans;
+	}
+			
 	public boolean canMoveLeft(GameBoard board)
 	{
 		boolean ans = true;
@@ -28,6 +40,9 @@ public abstract class Piece
 				if (grid[i][j] != 0)
 					if (gridX + i < 0)
 						ans = false;
+				
+		ans = ans && !pieceCollision(board);
+						
 		gridX++;
 		return ans;
 	}
@@ -44,6 +59,9 @@ public abstract class Piece
 				if (grid[i][j] != 0)
 					if (gridX + i >= 10)
 						ans = false;
+		
+		ans = ans && !pieceCollision(board);						
+						
 		gridX--;
 		return ans;
 	}
@@ -60,6 +78,18 @@ public abstract class Piece
 				if (grid[i][j] != 0)
 					if (gridY + j >= 20)
 						ans = false;
+						
+
+		ans = ans && !pieceCollision(board);
+	/*	//	Debug
+		for (int i = 0; i < 20; i++)
+		{
+			for (int j = 0; j < 10; j++)
+					System.out.print(board.grid[i][j] + " ");
+			System.out.println();
+		}	
+	 */				
+						
 		gridY--;
 		return ans;
 	}	
@@ -76,6 +106,9 @@ public abstract class Piece
 				if (grid[i][j] != 0)
 					if (gridX + i >= 10 || gridX + i < 0)
 						ans = false;
+	
+		ans = ans && !pieceCollision(board);
+	
 		rotate(-1);
 		return ans;
 	}
@@ -92,6 +125,9 @@ public abstract class Piece
 				if (grid[i][j] != 0)
 					if (gridX + i >= 10 || gridX + i < 0)
 						ans = false;
+	
+		ans = ans && !pieceCollision(board);
+	
 		rotate(1);
 		return ans;
 	}

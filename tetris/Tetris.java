@@ -69,32 +69,29 @@ public class Tetris
         { 
         	public void actionPerformed(ActionEvent evt) 
         	{ 
-        		if(nextPiece == null)
+        		if (nextPiece == null)
         		{
         			int rand = rng.nextInt(6);
-        			nextPiece = selectPiece(rand);// and that piece
+        			nextPiece = selectPiece(rand); // and that piece
         			picLabel.setIcon(new ImageIcon( myPicture[rand] )); 
-        			
-        			
         		}
         			
         		// everytime the timer goes off (every second) it will basically move the piece down, with all existing logic
         		board.eraseTrail(currPiece);	
             	gameTime.setText(Double.parseDouble(gameTime.getText()) + 1 + "");
-            	currPiece.moveDown(board);
-            	board.fill(currPiece);
-				colorPieces();
-				
+ 
+				currPiece.moveDown(board);
+            	
 				if (!currPiece.canMoveDown(board))
 				{
+					board.fill(currPiece);
 					currPiece = nextPiece;
 					int rand = rng.nextInt(6);
-        			nextPiece = selectPiece(rand);// and that piece
-        			picLabel.setIcon(new ImageIcon( myPicture[rand] ));
-        			
-					
+        			nextPiece = selectPiece(rand); // and that piece
+        			picLabel.setIcon(new ImageIcon( myPicture[rand] ));	
 				}
-            	
+				board.fill(currPiece);
+				colorPieces();
        		} 
         };
                 
@@ -218,28 +215,20 @@ public class Tetris
 		timePanel.add(timeText);
 		timePanel.add(gameTime);
 
-		JLabel nextText = new JLabel("<html> <center>Next</center></html>"
+		JLabel nextText = new JLabel("<html><center>Next</center></html>"
 										,SwingConstants.CENTER);
 		nextText.setFont(new Font("Serif", Font.ITALIC, 20));
 		nextText.setBorder(BorderFactory.createLineBorder(Color.gray));
 		
 		try
 		{
-			//ALL IMAGES ARE CURRENTLY RUN FROM MY LOCAL DESKTOP, MUST BE CHANGED
-			
-			myPicture[0] = ImageIO.read(new File("/Users/beersandrew/Desktop/J.png"));
-			
-			myPicture[1] = ImageIO.read(new File("/Users/beersandrew/Desktop/L.png"));
-			
-			myPicture[2] = ImageIO.read(new File("/Users/beersandrew/Desktop/O.png"));
-			
-			myPicture[3] = ImageIO.read(new File("/Users/beersandrew/Desktop/S.png"));
-			
-			myPicture[4] = ImageIO.read(new File("/Users/beersandrew/Desktop/Z.png"));
-			
-			myPicture[5] = ImageIO.read(new File("/Users/beersandrew/Desktop/I.png"));
-			
-			myPicture[6] = ImageIO.read(new File("/Users/beersandrew/Desktop/T.png"));
+			myPicture[0] = ImageIO.read(new File("Tetrominoes/J.png"));	
+			myPicture[1] = ImageIO.read(new File("Tetrominoes/L.png"));
+			myPicture[2] = ImageIO.read(new File("Tetrominoes/O.png"));
+			myPicture[3] = ImageIO.read(new File("Tetrominoes/S.png"));
+			myPicture[4] = ImageIO.read(new File("Tetrominoes/Z.png"));
+			myPicture[5] = ImageIO.read(new File("Tetrominoes/I.png"));
+			myPicture[6] = ImageIO.read(new File("Tetrominoes/T.png"));
 			
 			picLabel = new JLabel("",JLabel.CENTER);
 			
@@ -312,6 +301,9 @@ public class Tetris
 	
 		initBoard();
 		colorPieces();
+	
+	//	currPiece = new JPiece();
+	//	nextPiece = new JPiece();
 	}
 
 	public void pause()
@@ -349,7 +341,10 @@ public class Tetris
 	{
 		for (int i = 0; i < 20; i++)
 			for (int j = 0; j < 10; j++)
+			{
 				array[i][j].setBackground(new Color(Color.TRANSLUCENT));
+				board.grid[i][j] = Color.TRANSLUCENT;
+			}
 	}
 	
 	// this method is more of a hard wipe and is now basically
@@ -582,21 +577,14 @@ public class Tetris
 				board.fill(currPiece);
 				colorPieces();
 				
-				if (!currPiece.canMoveDown(board))
+			/*	if (!currPiece.canMoveDown(board))
 				{
 					currPiece = nextPiece;
 					int rand = rng.nextInt(6);
-        			nextPiece = selectPiece(rand);// and that piece
+        			nextPiece = selectPiece(rand); // and that piece
         			picLabel.setIcon(new ImageIcon( myPicture[rand] ));
-        			
-        		}
-	  				
-			/*	// Not yet implemented
-			 *	if (e.getKeyCode() == keys[4])	// hardDrop
-			 *		currPiece.hardDrop();
-			 */ 	
+        		}*/
 			}
 		}
-		
 	}
 }
