@@ -108,7 +108,7 @@ public class Tetris
 	public Piece selectPiece(int a)
 	{
 		// temp variable, just make it J, then change to what it needs to be
-		Piece temp = new JPiece();
+		Piece temp = new TPiece();
 		
 		if (a == 0)
 		{
@@ -134,7 +134,7 @@ public class Tetris
 		{
 			temp = new IPiece();
 		}
-		else if (a == 6)
+		if (a == 6)
 		{
 			temp = new TPiece();
 		}

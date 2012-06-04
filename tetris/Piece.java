@@ -16,6 +16,16 @@ public abstract class Piece
 	
 	protected Color color;
 	
+	public abstract void spawn();
+		
+	public abstract void setPiece();
+	
+	public Piece()
+	{
+		position = 1;
+		spawn();
+	}
+	
 	public boolean pieceCollision(GameBoard board)
 	{
 		boolean ans = false;	// by default, no collision
@@ -27,21 +37,25 @@ public abstract class Piece
 						ans = true;
 		return ans;
 	}
-			
+	
+	public boolean wallCollision(GameBoard board)
+	{
+		boolean ans = false;
+		
+		for (int i = 0; i < gridSize; i++)
+			for (int j = 0; j < gridSize; j++)
+				if (grid[i][j] != 0)
+					if (gridX + i >= 10 || gridX + i < 0 || gridY + j >= 20)
+						ans = true;
+		return ans;
+	}
+		
 	public boolean canMoveLeft(GameBoard board)
 	{
 		boolean ans = true;
 		gridX--;		// temporarily do the move, then look for problems
-		
-		/* loop through, when we find a hit on the piece's grid
-		 * (a non-zero spot) see if there's a conflict */
-		for (int i = 0; i < gridSize; i++)
-			for (int j = 0; j < gridSize; j++)
-				if (grid[i][j] != 0)
-					if (gridX + i < 0)
-						ans = false;
-				
-		ans = ans && !pieceCollision(board);
+	
+		ans = !wallCollision(board) && !pieceCollision(board);
 						
 		gridX++;
 		return ans;
@@ -51,16 +65,8 @@ public abstract class Piece
 	{
 		boolean ans = true;
 		gridX++;		// temporarily do the move, then look for problems
-
-		/* loop through, when we find a hit on the piece's grid
-		 * (a non-zero spot) see if there's a conflict */
-		for (int i = 0; i < gridSize; i++)
-			for (int j = 0; j < gridSize; j++)
-				if (grid[i][j] != 0)
-					if (gridX + i >= 10)
-						ans = false;
 		
-		ans = ans && !pieceCollision(board);						
+		ans = !wallCollision(board) && !pieceCollision(board);
 						
 		gridX--;
 		return ans;
@@ -71,25 +77,8 @@ public abstract class Piece
 		boolean ans = true;
 		gridY++;		// temporarily do the move, then look for problems
 
-		/* loop through, when we find a hit on the piece's grid
-		 * (a non-zero spot) see if there's a conflict */
-		for (int i = 0; i < gridSize; i++)
-			for (int j = 0; j < gridSize; j++)
-				if (grid[i][j] != 0)
-					if (gridY + j >= 20)
-						ans = false;
-						
-
-		ans = ans && !pieceCollision(board);
-	/*	//	Debug
-		for (int i = 0; i < 20; i++)
-		{
-			for (int j = 0; j < 10; j++)
-					System.out.print(board.grid[i][j] + " ");
-			System.out.println();
-		}	
-	 */				
-						
+		ans = !wallCollision(board) && !pieceCollision(board);
+				
 		gridY--;
 		return ans;
 	}	
@@ -98,16 +87,8 @@ public abstract class Piece
 	{
 		boolean ans = true;
 		rotate(1);		// temporarily do the move, then look for problems
-
-		/* loop through, when we find a hit on the piece's grid
-		 * (a non-zero spot) see if there's a conflict */
-		for (int i = 0; i < gridSize; i++)
-			for (int j = 0; j < gridSize; j++)
-				if (grid[i][j] != 0)
-					if (gridX + i >= 10 || gridX + i < 0)
-						ans = false;
 	
-		ans = ans && !pieceCollision(board);
+		ans = !wallCollision(board) && !pieceCollision(board);
 	
 		rotate(-1);
 		return ans;
@@ -117,40 +98,16 @@ public abstract class Piece
 	{
 		boolean ans = true;
 		rotate(-1);		// temporarily do the move, then look for problems
-
-		/* loop through, when we find a hit on the piece's grid
-		 * (a non-zero spot) see if there's a conflict */
-		for (int i = 0; i < gridSize; i++)
-			for (int j = 0; j < gridSize; j++)
-				if (grid[i][j] != 0)
-					if (gridX + i >= 10 || gridX + i < 0)
-						ans = false;
 	
-		ans = ans && !pieceCollision(board);
+		ans = !wallCollision(board) && !pieceCollision(board);	
 	
 		rotate(1);
 		return ans;
 	}
 		
-	public abstract void spawn();
-		
-	public abstract void setPiece();
-	
-	public Piece()
-	{
-		position = 1;
-		spawn();
-		 
-	}
-		
 	public int [][] getGrid()
 	{
 		return grid;
-	}
-	
-	public void setGrid(int [][] newGrid)
-	{
-		grid = newGrid;
 	}
 	
 	public int getGridSize()
@@ -181,6 +138,11 @@ public abstract class Piece
 	public Color getColor()
 	{
 		return color;
+	}
+	
+	public void setGrid(int [][] newGrid)
+	{
+		grid = newGrid;
 	}
 	
 	public void moveLeft(GameBoard board)
@@ -222,17 +184,10 @@ public abstract class Piece
 	
 	private void rotate(int d)
 	{
-		//1 - cw
-		//2 - ccw
-		// 1 for R, -1 for L
-		
-		// note- need to also add the rotation checking to make sure
-		// it's possible to do this rotate
 		clearGrid();
 		position = (position + d) % 4;
 		if (position <= 0)		// since java % can give negative results
 			position += 4;
 		setPiece();
-	//	System.out.println("Position: " + position);
 	}
 }
