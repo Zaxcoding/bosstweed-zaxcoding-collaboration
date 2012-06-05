@@ -21,23 +21,23 @@ public class LPiece extends Piece
 	{
 		if (position == 1)
 		{
-			grid[0][1] = 1;
-			grid[1][1] = 1;
+			grid[0][0] = 1;
+			grid[1][0] = 1;
+			grid[2][0] = 1;
 			grid[2][1] = 1;
-			grid[2][2] = 1;
-			/* 010
-			 * 010
-	 		 * 011 */
+			/* 100
+			 * 100
+	 		 * 110 */
 		}
 		else if (position == 2)
 		{
+			grid[0][0] = 1;
 			grid[1][0] = 1;
-			grid[2][0] = 1;
-			grid[1][1] = 1;
-			grid[1][2] = 1;
-		   /* 000
-	 	    * 111
-	 		* 100 */
+			grid[0][1] = 1;
+			grid[0][2] = 1;
+		   /* 111
+	 	    * 100
+	 		* 000 */
 		}
 		else if (position == 3)
 		{

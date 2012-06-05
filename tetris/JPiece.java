@@ -43,23 +43,23 @@ public class JPiece extends Piece
 		}
 		else if (position == 3)
 		{
-			grid[0][1] = 1;
-			grid[0][2] = 1; 
-			grid[1][1] = 1;
-			grid[2][1] = 1;
-	 		/* 011
-	 	 	 * 010
-	 		 * 010 */
+			grid[0][0] = 1;
+			grid[0][1] = 1; 
+			grid[1][0] = 1;
+			grid[2][0] = 1;
+	 		/* 110
+	 	 	 * 100
+	 		 * 100 */
 		}
 		else if (position == 4)
 		{
-			grid[1][0] = 1;
-			grid[1][1] = 1;
-			grid[1][2] = 1;
-			grid[2][2] = 1; 
-	 		/* 000
-	 	 	 * 111
-	 		 * 001 */
+			grid[0][0] = 1;
+			grid[0][1] = 1;
+			grid[0][2] = 1;
+			grid[1][2] = 1; 
+	 		/* 111
+	 	 	 * 001
+	 		 * 000 */
 		}
 	}
 }

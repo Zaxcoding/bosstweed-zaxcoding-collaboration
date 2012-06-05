@@ -33,13 +33,13 @@ public class TPiece extends Piece
 		}
 		else if (position == 2)
 		{
-			grid[0][0] = 1;
-			grid[1][0] = 1;
+			grid[0][1] = 1;
 			grid[1][1] = 1;
-			grid[2][0] = 1;
-			/* 100
-	 		 * 110
-	 		 * 100 */
+			grid[1][2] = 1;
+			grid[2][1] = 1;
+			/* 010
+	 		 * 011
+	 		 * 010 */
 		}
 		else if (position == 3)
 		{
@@ -53,13 +53,13 @@ public class TPiece extends Piece
 		}
 		else if (position == 4)
 		{
-			grid[0][2] = 1;
+			grid[0][1] = 1;
+			grid[1][0] = 1;
 			grid[1][1] = 1;
-			grid[1][2] = 1;
-			grid[2][2] = 1;
-	 		/* 001
-	 	 	 * 011
-	 		 * 001 */
+			grid[2][1] = 1;
+	 		/* 010
+	 	 	 * 110
+	 		 * 010 */
 		}
 	}
 }

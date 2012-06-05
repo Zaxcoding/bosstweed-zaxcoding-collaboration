@@ -51,6 +51,9 @@ public class Tetris
 	boolean paused, start, game = true, newpiece = true;
 	Random rng; 			// put this here so we can access it all over
 
+	int timerDelay = 750;
+	ActionListener timerListener;
+	
 	public static void main(String [] args)
 	{
 		new Tetris();
@@ -65,7 +68,7 @@ public class Tetris
 		currPiece = nextPiece;
 		nextPiece = null;
 		// new timing structure with its own action listener
-		ActionListener timerListener = new ActionListener() 
+		timerListener = new ActionListener() 
         { 
         	public void actionPerformed(ActionEvent evt) 
         	{ 
@@ -78,7 +81,7 @@ public class Tetris
         			
         		// everytime the timer goes off (every second) it will basically move the piece down, with all existing logic
         		board.eraseTrail(currPiece);	
-            	gameTime.setText(Double.parseDouble(gameTime.getText()) + .5 + "");
+            	gameTime.setText(Double.parseDouble(gameTime.getText()) + timerDelay*.001 + "");
  
 				currPiece.moveDown(board);
             	
@@ -396,11 +399,14 @@ public class Tetris
 			
 		line2Text.setText(Integer.parseInt(line2Text.getText()) + 1 + "");	
 		
-		if(Integer.parseInt(line4Text.getText()) ==1)
+		if(Integer.parseInt(line4Text.getText()) == 1)
 		{
 			line4Text.setText("10");
 			currentLevel.setText(Integer.parseInt(currentLevel.getText()) + 1 + "");
-			//time = time/2;
+			timerDelay *= .9;
+			timer = new Timer(timerDelay,timerListener);
+			timer.start();
+	        
 		}
 		else
 			line4Text.setText(Integer.parseInt(line4Text.getText()) - 1 + "");

@@ -16,9 +16,9 @@ public class IPiece extends Piece
 		setPiece();
 		color = new Color(Color.CYAN.getRGB());
 		/* 0010
-	 	* 0010
-	 	* 0010
-	 	* 0010 */
+	 	 * 0010
+	 	 * 0010
+	 	 * 0010 */
 	}
 	
 	public void setPiece()
@@ -37,14 +37,14 @@ public class IPiece extends Piece
 		}
 		else if (position == 2 || position == 4)
 		{
-			grid[3][0] = 1;
-		 	grid[3][1] = 1;
-		 	grid[3][2] = 1;
-			grid[3][3] = 1; 	
+			grid[2][0] = 1;
+		 	grid[2][1] = 1;
+		 	grid[2][2] = 1;
+			grid[2][3] = 1; 	
 			/* 0000
 	 	 	 * 0000
-	 	 	 * 0000
-	 		 * 1111 */
+	 	 	 * 1111
+	 		 * 0000 */
 		}
 	}
 }
