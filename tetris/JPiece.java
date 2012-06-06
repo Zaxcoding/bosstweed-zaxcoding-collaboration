@@ -23,7 +23,7 @@ public class JPiece extends Piece
 	{
 		gridSize = 3;
 		gridX = 3;
-		gridY = 0;
+		gridY = -2;
 		grid = new int[gridSize][gridSize];
 		setPiece();
 		color = new Color(Color.ORANGE.getRGB());
@@ -31,7 +31,7 @@ public class JPiece extends Piece
 
 	public void setPiece()
 	{
-		if (position == 1)
+		if (position == 2)
 		{
 			grid[0][2] = 1;
 			grid[1][2] = 1;
@@ -41,7 +41,7 @@ public class JPiece extends Piece
 			 * 001
 	 		 * 011 */
 		}
-		else if (position == 2)
+		else if (position == 3)
 		{
 			grid[1][0] = 1;
 			grid[2][0] = 1;
@@ -51,7 +51,7 @@ public class JPiece extends Piece
 	 	    * 100
 	 		* 111 */
 		}
-		else if (position == 3)
+		else if (position == 4)
 		{
 			grid[0][0] = 1;
 			grid[0][1] = 1; 
@@ -61,7 +61,7 @@ public class JPiece extends Piece
 	 	 	 * 100
 	 		 * 100 */
 		}
-		else if (position == 4)
+		else if (position == 1)
 		{
 			grid[0][0] = 1;
 			grid[0][1] = 1;

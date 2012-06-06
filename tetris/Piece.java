@@ -34,7 +34,7 @@ public abstract class Piece
 
 		for (int i = 0; i < gridSize; i++)
 			for (int j = 0; j < gridSize; j++)
-				if (grid[i][j] != 0)
+				if (grid[i][j] != 0 && (gridY + j) > -1)
 					if (board.grid[gridY + j][gridX + i] != 3)
 						if (board.grid[gridY + j][gridX + i] 
 									!= Color.gray.getRGB())

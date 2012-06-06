@@ -33,9 +33,11 @@ public class Tetris
 	// all stuff for preferences menu
 	Application app;
 	AppListener appListener;
-	JButton prefLeft, prefRight, prefRotateR, prefRotateL, prefHardDrop;
+	JButton prefLeft, prefRight, prefRotateR, prefRotateL, prefSoftDrop, 
+			prefHardDrop;
 	JButton prefSave, prefClose;
-	JLabel leftLabel, rightLabel, rotateRLabel, rotateLLabel, hardDropLabel;
+	JLabel leftLabel, rightLabel, rotateRLabel, rotateLLabel, hardDropLabel, 	
+			softDropLabel;
 	JLabel prefFeedback;
 	JFrame preferences;
 	MyPanel prefPanel;
@@ -297,14 +299,15 @@ public class Tetris
 		
 		// hardcode in the default control settings
 		
-		keys = new int[5];
-		tempKeys = new int[5];
+		keys = new int[6];
+		tempKeys = new int[6];
 				
 		keys[0] = 65;
-		keys[1] = 83;
+		keys[1] = 68;
 		keys[2] = 75;
 		keys[3] = 76;
 		keys[4] = 32;
+		keys[5] = 83;
 		
 		rng = new Random();		// init the random in setup
 	
@@ -437,17 +440,19 @@ public class Tetris
 			prefPanel = new MyPanel(300, 400, 4, 1);
 			
 			prefPanel.add(new JLabel("<html><p>Change the control scheme! <br>Just click a button and then press the key you'd like to use.</p><html>"));
-			MyPanel temp = new MyPanel(500, 116, 5, 2);
+			MyPanel temp = new MyPanel(500, 116, 6, 2);
 			prefLeft 	 = new JButton("Move Left");
 			prefRight    = new JButton("Move Right");
 			prefRotateR  = new JButton("Rotate R");
 			prefRotateL  = new JButton("Rotate L");
 			prefHardDrop = new JButton("Hard Drop");
+			prefSoftDrop = new JButton("Soft Drop");
 			prefLeft.addActionListener(theListener);
 			prefRight.addActionListener(theListener);
 			prefRotateR.addActionListener(theListener);
 			prefRotateL.addActionListener(theListener);
 			prefHardDrop.addActionListener(theListener);
+			prefSoftDrop.addActionListener(theListener);
 			
 			leftLabel = new JLabel("", SwingConstants.CENTER);
 			leftLabel.setText(KeyEvent.getKeyText(keys[0]));
@@ -459,6 +464,9 @@ public class Tetris
 			rotateLLabel.setText(KeyEvent.getKeyText(keys[3]));
 			hardDropLabel = new JLabel("", SwingConstants.CENTER);
 			hardDropLabel.setText(KeyEvent.getKeyText(keys[4]));
+			softDropLabel = new JLabel("", SwingConstants.CENTER);
+			softDropLabel.setText(KeyEvent.getKeyText(keys[5]));
+			
 			if (keys[4] == 32)
 				hardDropLabel.setText("SPACE");
 
@@ -472,6 +480,9 @@ public class Tetris
 			temp.add(rotateLLabel);
 			temp.add(prefHardDrop);
 			temp.add(hardDropLabel);
+			temp.add(prefSoftDrop);
+			temp.add(softDropLabel);
+			
 			prefPanel.add(temp);
 			
 			prefFeedback = new JLabel("No changes have been made yet.",
@@ -496,7 +507,7 @@ public class Tetris
 	        preferences.setVisible(true);
 			
 			// copy in the key values to tempKeys
-			for (int i = 0; i < 5; i++)
+			for (int i = 0; i < 6; i++)
 				tempKeys[i] = keys[i];
 		}
 	}
@@ -517,7 +528,7 @@ public class Tetris
 			if (e.getSource() == prefClose)
 			{
 				boolean same = true;
-				for (int i = 0; i < 5; i++)
+				for (int i = 0; i < 6; i++)
 					if (keys[i] != tempKeys[i])
 						same = false;
 				if (!same)
@@ -574,7 +585,14 @@ public class Tetris
 				prefFeedback.setText("Press the key for Hard Drop");
 				prefPanel.grabFocus();
 			}
-			
+			if (e.getSource() == prefSoftDrop)
+			{
+				changingKeys = true;
+				changingWhich = 5;
+				prefFeedback.setText("Press the key for Soft Drop");
+				prefPanel.grabFocus();
+			}
+					
 			if (e.getSource() == prefSave)
 			{	
 				boolean dupes = false;
@@ -601,6 +619,7 @@ public class Tetris
 		{
 			if (changingKeys)
 			{
+				System.out.println(e.getKeyCode());
 				tempKeys[changingWhich] = e.getKeyCode();
 
 				if (changingWhich == 0)
@@ -615,6 +634,9 @@ public class Tetris
 				hardDropLabel.setText(KeyEvent.getKeyText(e.getKeyCode()));
 				if (changingWhich == 4 && e.getKeyCode() == 32)
 					hardDropLabel.setText("SPACE");
+				if (changingWhich == 5)
+				hardDropLabel.setText(KeyEvent.getKeyText(e.getKeyCode()));
+				
 				prefFeedback.setText("Key changed! Save"
 											+ " changes before closing.");
 			}    
@@ -636,6 +658,8 @@ public class Tetris
 				if (e.getKeyCode() == keys[4])
 					while(currPiece.canMoveDown(board))
 						currPiece.moveDown(board);
+				if (e.getKeyCode() == keys[5])
+					currPiece.moveDown(board);
 					
 				board.fill(currPiece);
 				ghostPiece();

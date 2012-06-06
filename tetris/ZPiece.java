@@ -20,7 +20,7 @@ public class ZPiece extends Piece
 	{
 		gridSize = 3;
 		gridX = 3;
-		gridY = 0;
+		gridY = -2;
 		grid = new int[gridSize][gridSize];
 		setPiece();
 		color = new Color(Color.GREEN.getRGB());
@@ -32,7 +32,7 @@ public class ZPiece extends Piece
 
 	public void setPiece()
 	{
-		if (position == 1 || position == 3)
+		if (position == 2 || position == 4)
 		{
 			grid[1][0] = 1;
 			grid[1][1] = 1;
@@ -42,7 +42,7 @@ public class ZPiece extends Piece
 	 	 	 * 110
 	 	 	 * 011 */
 		}
-		else if (position == 2 || position == 4)
+		else if (position == 1 || position == 3)
 		{
 			grid[0][2] = 1;
 			grid[1][1] = 1;

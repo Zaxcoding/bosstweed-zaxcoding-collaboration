@@ -1,6 +1,24 @@
 {
 Zach - 6/6/12
 
+Sorry, I don't feel like doing a proper changelog.
+
+GameBoard.java:
+Now doesn't fill if the piece is above the board (-1 or lower).
+
+*_Piece.java:
+Changed the spawn gridY to -2 for each piece, and changed their rotations 
+(they were all off by one) so that they come out as they should (for some 
+reason they're coming out in rotation 2. Not sure why.
+
+Tetris.java:
+Added label, button, and such for Soft Drop in the preferences. It just 
+movesDown one space.
+}
+
+{
+Zach - 6/6/12
+
 Wall-kicking and ghost piece! Woohoo! There's still a slight bug with letting 
 a piece just fall down over its ghost, because the ghost will appear over it, 
 but I think we can fix that later.

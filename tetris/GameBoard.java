@@ -41,7 +41,7 @@ public class GameBoard
 			py = 0;
 			for (int j = y; j < (y + size); j++)
 			{
-				if(PieceGrid[px][py] == 1 && j < 20 && i >= 0 && i <= 9)
+				if(PieceGrid[px][py] == 1 && j >= 0 && j < 20 && i >= 0 && i <= 9)
 						grid[j][i] =  color;
 				py++;
 			}

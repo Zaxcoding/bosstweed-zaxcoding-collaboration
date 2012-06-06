@@ -21,7 +21,7 @@ public class SPiece extends Piece
 	{
 		gridSize = 3;
 		gridX = 3;
-		gridY = 0;
+		gridY = -2;
 		grid = new int[gridSize][gridSize];
 		setPiece();
 		color = new Color(Color.RED.getRGB());
@@ -29,7 +29,7 @@ public class SPiece extends Piece
 	
 	public void setPiece()
 	{
-		if (position == 1 || position == 3)
+		if (position == 2 || position == 4)
 		{
 			grid[1][1] = 1;
 			grid[1][2] = 1;
@@ -39,7 +39,7 @@ public class SPiece extends Piece
 	 	 	 * 011
 	 	 	 * 110 */
 		}
-		else if (position == 2 || position == 4)
+		else if (position == 1 || position == 3)
 		{
 			grid[0][0] = 1;
 			grid[1][0] = 1;

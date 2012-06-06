@@ -20,7 +20,7 @@ public class TPiece extends Piece
 	{
 		gridSize = 3;
 		gridX = 3;
-		gridY = 0;
+		gridY = -2;
 		grid = new int[gridSize][gridSize];
 		setPiece();
 		color = new Color(Color.MAGENTA.getRGB());
@@ -31,7 +31,7 @@ public class TPiece extends Piece
 
 	public void setPiece()
 	{
-		if (position == 1)
+		if (position == 2)
 		{
 			grid[1][1] = 1;
 			grid[2][0] = 1;
@@ -41,7 +41,7 @@ public class TPiece extends Piece
 	 		 * 010
 	 		 * 111 */
 		}
-		else if (position == 2)
+		else if (position == 3)
 		{
 			grid[0][1] = 1;
 			grid[1][1] = 1;
@@ -51,7 +51,7 @@ public class TPiece extends Piece
 	 		 * 011
 	 		 * 010 */
 		}
-		else if (position == 3)
+		else if (position == 4)
 		{
 		    grid[1][0] = 1;
 		    grid[1][1] = 1;
@@ -61,7 +61,7 @@ public class TPiece extends Piece
 	 	 	 * 111
 	 		 * 010 */
 		}
-		else if (position == 4)
+		else if (position == 1)
 		{
 			grid[0][1] = 1;
 			grid[1][0] = 1;

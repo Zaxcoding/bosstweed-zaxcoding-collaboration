@@ -17,7 +17,7 @@ public class OPiece extends Piece
 	{
 		gridSize = 4;
 		gridX = 3;
-		gridY = 0;
+		gridY = -2;
 		grid = new int[gridSize][gridSize];
 		setPiece();
 		color = new Color(Color.YELLOW.getRGB());
