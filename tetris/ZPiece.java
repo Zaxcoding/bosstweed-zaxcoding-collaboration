@@ -6,6 +6,16 @@ public class ZPiece extends Piece
 	 * 110
 	 * 011 */
 		
+	public Piece clone()
+	{
+		Piece clone = new ZPiece();
+		clone.position = this.position;	
+		clone.spawn();
+		clone.gridX = this.gridX;
+		clone.gridY = this.gridY;
+		return clone;
+	}	
+		
 	public void spawn()
 	{
 		gridSize = 3;

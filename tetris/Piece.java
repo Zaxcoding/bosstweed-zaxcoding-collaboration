@@ -20,6 +20,8 @@ public abstract class Piece
 		
 	public abstract void setPiece();
 	
+	public abstract Piece clone();
+	
 	public Piece()
 	{
 		position = 1;
@@ -34,7 +36,9 @@ public abstract class Piece
 			for (int j = 0; j < gridSize; j++)
 				if (grid[i][j] != 0)
 					if (board.grid[gridY + j][gridX + i] != 3)
-						ans = true;
+						if (board.grid[gridY + j][gridX + i] 
+									!= Color.gray.getRGB())
+							ans = true;
 		return ans;
 	}
 	
@@ -174,12 +178,64 @@ public abstract class Piece
 	{
 		if (canRotateR(board))
 			rotate(1);
+		else
+		{
+			gridX--;
+			if (canRotateR(board))
+				rotate(1);
+			else
+			{
+				gridX--;
+				if (canRotateR(board))
+					rotate(1);
+				else
+				{
+					gridX += 3;
+					if (canRotateR(board))
+						rotate(1);
+					else
+					{
+						gridX++;
+						if (canRotateR(board))
+							rotate(1);
+						else
+							gridX -= 2;
+					}
+				}
+			}
+		}	
 	}
 	
 	public void rotateL(GameBoard board)
 	{
 		if (canRotateL(board))
 			rotate(-1);
+		else
+		{
+			gridX++;
+			if (canRotateL(board))
+				rotate(-1);
+			else
+			{
+				gridX++;
+				if (canRotateL(board))
+					rotate(-1);
+				else
+				{
+					gridX -= 3;
+					if (canRotateL(board))
+						rotate(-1);
+					else
+					{
+						gridX--;
+						if (canRotateL(board))
+							rotate(-1);
+						else
+							gridX += 2;
+					}
+				}
+			}
+		}	
 	}
 	
 	private void rotate(int d)

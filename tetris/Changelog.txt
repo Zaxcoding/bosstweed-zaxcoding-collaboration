@@ -1,4 +1,40 @@
 {
+Zach - 6/6/12
+
+Wall-kicking and ghost piece! Woohoo! There's still a slight bug with letting 
+a piece just fall down over its ghost, because the ghost will appear over it, 
+but I think we can fix that later.
+
+GameBoard.java:
+Added ghostFill, which just fills with gray or whatever other color we want.
+Note that if we change the color here we also have to change it also in 
+Piece.pieceCollision.
+
+*_Piece.java:
+Added a clone() method that makes a new *_Piece and gives it the same stats as
+the piece it's called from. I use it to clone the currPiece and then drop it 
+down as the ghost piece.
+
+Piece.java:
+Added the abstract method clone(), discussed above. Added a line in 
+pieceCollision() to allow pieces to flow through their ghost. For canRotateL 
+and canRotateR, I first just try to rotate, then try one spot to the right, 
+two spots to the right, one spot to the left, two spots to the left. This 
+effectively allows you to wallkick and spin into tight spots.
+
+Tetris.java:
+Added Piece ghost. Adjusted the timerDelay. Added method ghostPiece(). What it 
+does is temporarily eraseTrail(currPiece) (so that you don't pieceCollision),
+then clone the currPiece, then hardDrop it, then restore the currPiece to the 
+board. I also added eraseTrail(ghost) and board.fill(ghost) when the same 
+methods are called for currPiece.
+
+
+And that's really it. It didn't take a whole lot of code to implement things. 
+Pretty neat.
+}
+
+{
 Zach - 6/4/12
 
 Only two real changes-

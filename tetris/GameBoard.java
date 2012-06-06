@@ -23,6 +23,11 @@ public class GameBoard
 		doFill(piece, Color.TRANSLUCENT);
 	}
 	
+	public void ghostFill(Piece piece)
+	{
+		doFill(piece, Color.gray.getRGB());
+	}
+	
 	// this private method does all the work, but you can
 	// only call it from the two public methods
 	private void doFill(Piece piece, int color)

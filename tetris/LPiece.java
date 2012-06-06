@@ -7,6 +7,16 @@ public class LPiece extends Piece
 	 * 010
 	 * 011 */
 
+	public Piece clone()
+	{
+		Piece clone = new LPiece();
+		clone.position = this.position;	
+		clone.spawn();
+		clone.gridX = this.gridX;
+		clone.gridY = this.gridY;
+		return clone;
+	}
+
 	public void spawn()
 	{
 		gridSize = 3;

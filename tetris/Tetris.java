@@ -25,11 +25,11 @@ public class Tetris
 	JButton newGame, pause, endGame;
 	MyListener theListener;
 	Timer timer;
-	Piece currPiece, nextPiece;
+	Piece currPiece, nextPiece, ghost;
 	JLabel gameTime,picLabel,line1Text,line2Text,line4Text,currentLevel;
 	GameBoard board = new GameBoard(10,20);
 	BufferedImage [] myPicture = new BufferedImage[7];
-	//int time=1000;
+	
 	// all stuff for preferences menu
 	Application app;
 	AppListener appListener;
@@ -51,7 +51,7 @@ public class Tetris
 	boolean paused, start, game = true, newpiece = true;
 	Random rng; 			// put this here so we can access it all over
 
-	int timerDelay = 750;
+	int timerDelay = 1000;
 	ActionListener timerListener;
 	
 	public static void main(String [] args)
@@ -67,6 +67,7 @@ public class Tetris
 		nextPiece = selectPiece(pieceDigit); 	// and that piece
 		currPiece = nextPiece;
 		nextPiece = null;
+		ghost = new JPiece();
 		// new timing structure with its own action listener
 		timerListener = new ActionListener() 
         { 
@@ -80,7 +81,8 @@ public class Tetris
         		}
         			
         		// everytime the timer goes off (every second) it will basically move the piece down, with all existing logic
-        		board.eraseTrail(currPiece);	
+        		board.eraseTrail(currPiece);
+				board.eraseTrail(ghost);
             	gameTime.setText(Double.parseDouble(gameTime.getText()) + timerDelay*.001 + "");
  
 				currPiece.moveDown(board);
@@ -95,12 +97,14 @@ public class Tetris
 				}
 				checkBoard();
 				board.fill(currPiece);
+				ghostPiece();
+				board.ghostFill(ghost);
 				colorPieces();
 				
        		} 
         };
                 
-        timer = new Timer(500,timerListener);
+        timer = new Timer(timerDelay,timerListener);
 		timer.start();
 	}
 	
@@ -390,6 +394,16 @@ public class Tetris
 			}
 	}
 	
+	public void ghostPiece()
+	{
+		board.eraseTrail(currPiece);
+		ghost = currPiece.clone();
+		while(ghost.canMoveDown(board))
+			ghost.moveDown(board);
+		board.fill(currPiece);
+	}
+		
+	
 	public void killLine(int a)
 	{
 		
@@ -607,6 +621,7 @@ public class Tetris
 			else
 			{
 				board.eraseTrail(currPiece);
+				board.eraseTrail(ghost);
 				gamePanel.grabFocus();
 				if (e.getKeyCode() == keys[0])	// move left
 					currPiece.moveLeft(board);
@@ -622,21 +637,10 @@ public class Tetris
 					while(currPiece.canMoveDown(board))
 						currPiece.moveDown(board);
 					
-				System.out.println("\n\nDEBUG INFO:\n"
-				 		+ "x value: " + currPiece.getGridX() + "\n"
-						+ "y value: " + currPiece.getGridY() + "\n"
-						+ "Rotational Position: " + currPiece.getPosition());
-			
 				board.fill(currPiece);
+				ghostPiece();
+				board.ghostFill(ghost);
 				colorPieces();
-				
-			/*	if (!currPiece.canMoveDown(board))
-				{
-					currPiece = nextPiece;
-					int rand = rng.nextInt(6);
-        			nextPiece = selectPiece(rand); // and that piece
-        			picLabel.setIcon(new ImageIcon( myPicture[rand] ));
-        		}*/
 			}
 		}
 	}
