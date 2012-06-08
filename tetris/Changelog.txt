@@ -1,6 +1,35 @@
 {
 Zach - 6/8/12
 
+A few small changes, and some not so small.
+First, I reorganized the folders so the code is on the main level, then img 
+and sound for the images and sound. No more Tetrominoes folder.
+
+Tetris.java:
+I changed the default spawn location of the windows to all start at 350, 200. 
+It's a nice spot and that way they're not up in the top left corner all the 
+time.
+Made TimerListener into its own private class.
+Changed time to score and added the necessary stuff. Used the TETRIS DS 
+scoring system on the tetris wiki (didn't include spins or bonus points 
+really, just 1pt soft, 2pt hard, 100*level single, etc).
+Switched the order of rotateL and rotateR all over the place, especially in 
+the controls/preference panel.
+Fixed exit to menu (including trying to kill off the sound- not sure if it 
+works).
+You can no longer move after a hard drop, but you can move if you haven't 
+(soft or normal time drop).
+The music should still loop, had to change some conditionals because I took 
+out the timeLabel that was getting parsed for the current time. Instead I keep 
+track of the time with a double currentTime.
+
+Sorry I can't do a more complete changelog, I forgot I have to be at work 
+early today.
+}
+
+{
+Zach - 6/8/12
+
 Just wanted to push this up before I start on other stuff.
 
 Tetris.java:

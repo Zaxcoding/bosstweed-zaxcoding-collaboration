@@ -21,13 +21,12 @@ public class Tetris
 	Container thePane,menuPane;
 	MyPanel gamePanel,menuPanel;
 	MyPanel array [][];
-	MyPanel buttonPanel, leftPanel, rightPanel, nextPanel, timePanel;
+	MyPanel buttonPanel, leftPanel, rightPanel, nextPanel, scorePanel;
 	MyPanel linesPanel, totalPanel, nextLinePanel, levelPanel,buttonMenuPanel;
 	JButton newGame, pause, endGame,startGame,menuPref,exitGame;
 	MyListener theListener;
 	Timer timer;
 	Piece currPiece, nextPiece, ghost;
-	JLabel gameTime,picLabel,line1Text,line2Text,line4Text,currentLevel,menuLabel;
 	GameBoard board = new GameBoard(10,20);
 	BufferedImage [] myPicture = new BufferedImage[7];
 	
@@ -50,34 +49,41 @@ public class Tetris
 							// for the current settings and the temporary
 							// settings when changing.	
 	
-	boolean paused, game = true, newpiece = true;
+	boolean paused, game = true, newPiece = true, hardDropped;
 	static boolean start;
 	Random rng; 			// put this here so we can access it all over
 
 	int timerDelay = 1000;
 	
-	ActionListener timerListener;
-	double preCurrentTime = 0;
+	TimerListener timerListener;
+	double currentTime = 0;
+	JLabel gameScore, picLabel, line1Text, line2Text, line4Text, currentLevel, 
+			menuLabel;
+	
+	int score = 0, level = 1;
+	boolean stopTheMusic = false;
+	AudioStream backgroundMusic;
 	
 	public static void main(String [] args)
 	{
 		start = true;
 		new Tetris();
-		//menu();
 	}
 
 	public void menu()
-	{	
+	{
 		menuWindow = new JFrame("Menu");
+		menuWindow.setLocation(350, 200);
 		menuPane = menuWindow.getContentPane();
 		menuPane.setLayout(new GridLayout(2, 1));
+		
 		theListener = new MyListener();
 		menuPanel = new MyPanel(728,90,1,1);
 		buttonMenuPanel = new MyPanel(728,90,1,1);
 		
 		try 
 		{
-			BufferedImage banner = ImageIO.read(new File("Tetrominoes/banner.png"));
+			BufferedImage banner = ImageIO.read(new	File("img/banner.png"));
 			menuLabel = new JLabel("",JLabel.CENTER);
 			menuLabel.setIcon(new ImageIcon( banner ));	
 		
@@ -86,8 +92,7 @@ public class Tetris
 		catch(Exception a)
 		{
 			System.out.println("banner did not work :/");
-		}
-		
+		}	
 		
 		startGame = new JButton("New Game");
 		startGame.setFont(new Font("Serif", Font.ITALIC, 20));
@@ -98,7 +103,6 @@ public class Tetris
 		menuPref.setFont(new Font("Serif", Font.ITALIC, 20));
 		menuPanel.add(menuPref);
 		menuPref.addActionListener(theListener);
-		//startGame.addActionListener(theListener);
 		
 		endGame = new JButton("End Game");
 		endGame.setFont(new Font("Serif", Font.ITALIC, 20));
@@ -106,7 +110,7 @@ public class Tetris
 		endGame.addActionListener(theListener);
 		
 		
-		
+				
 		menuPane.add(buttonMenuPanel);
 		menuPane.add(menuPanel);
 		menuWindow.pack();
@@ -117,19 +121,12 @@ public class Tetris
 		menuPanel.addKeyListener(theListener);
 		
 	}
+	
 	public Tetris()
-	{	
-		keys = new int[6];
-		tempKeys = new int[6];
-
-		keys[0] = 65;
-		keys[1] = 68;
-		keys[2] = 75;
-		keys[3] = 76;
-		keys[4] = 32;
-		keys[5] = 83;
+	{
+		initKeys();
 		
-		if(start)
+		if (start)
 			menu();
 		else
 		{
@@ -140,62 +137,13 @@ public class Tetris
 			currPiece = nextPiece;
 			nextPiece = null;
 			ghost = new JPiece();
+		
 			// new timing structure with its own action listener
-			timerListener = new ActionListener() 
-        	{ 
-        		public void actionPerformed(ActionEvent evt) 
-        		{ 
-        			if (nextPiece == null)
-        			{
-        				int rand = rng.nextInt(7);
-        				nextPiece = selectPiece(rand); // and that piece
-        				picLabel.setIcon(new ImageIcon( myPicture[rand] )); 
-        			}
-        			double currentTime = Double.parseDouble(gameTime.getText());
-        			// everytime the timer goes off (every second) it will basically move the piece down, with all existing logic
-        			board.eraseTrail(currPiece);
-					board.eraseTrail(ghost);
-            		gameTime.setText(Double.parseDouble(gameTime.getText()) + timerDelay*.001 + "");
-            		if(currentTime %85 <=1)
-            		{	
-            			
-            			if(currentTime >= (preCurrentTime + 80))
-            			{
-            				preCurrentTime = currentTime;
-            				
-            				music();
-            				
-            			}
-            			else if(currentTime <=.5)
-            			{
-            				preCurrentTime = currentTime;
-            				
-            				music();
-            				
-            			}
-            		}
- 	
-					currPiece.moveDown(board);
-            	
-					if (!currPiece.canMoveDown(board))
-					{
-						board.fill(currPiece);
-						currPiece = nextPiece;
-						int rand = rng.nextInt(7);
-        				nextPiece = selectPiece(rand); // and that piece
-        				picLabel.setIcon(new ImageIcon( myPicture[rand] ));	
-					}
-					checkBoard();
-					board.fill(currPiece);
-					ghostPiece();
-					board.ghostFill(ghost);
-					colorPieces();
-					
-       			} 	
-        	};
+			timerListener = new TimerListener(); 
                 
         	timer = new Timer(timerDelay,timerListener);
 			timer.start();
+			music();
 		}
 	}
 	
@@ -243,9 +191,11 @@ public class Tetris
 	public void setup()
 	{
 		theWindow = new JFrame("Tetris- by bosscoding");
+		theWindow.setLocation(350, 200);
+		
 		thePane = theWindow.getContentPane();
 		thePane.setLayout(new GridLayout(1, 1));
-
+		
 		gamePanel = new MyPanel(500, 500, 1, 2);
 
 		leftPanel = new MyPanel(100, 500, 20, 5);
@@ -253,7 +203,7 @@ public class Tetris
 
 		rightPanel = new MyPanel(400,500, 5, 1);
 		nextPanel = new MyPanel(1,1, 2, 1);
-		timePanel = new MyPanel(100,100, 2, 1);
+		scorePanel = new MyPanel(100,100, 2, 1);
 		linesPanel = new MyPanel(100,100, 5, 1);
 		levelPanel = new MyPanel(100,100, 2, 1);
 		buttonPanel = new MyPanel(100,100, 3, 1);
@@ -306,14 +256,14 @@ public class Tetris
 		linesPanel.add(line3Text);
 		linesPanel.add(line4Text);
 
-		JLabel timeText = new JLabel("Time",SwingConstants.CENTER);
-		timeText.setFont(new Font("Serif", Font.ITALIC, 20));
-		timeText.setBorder(BorderFactory.createLineBorder(Color.gray));
-		gameTime = new JLabel("0.00",SwingConstants.CENTER); 
-		gameTime.setFont(new Font("Serif", Font.ITALIC, 20));
-		gameTime.setBorder(BorderFactory.createLineBorder(Color.gray));
-		timePanel.add(timeText);
-		timePanel.add(gameTime);
+		JLabel scoreText = new JLabel("Score",SwingConstants.CENTER);
+		scoreText.setFont(new Font("Serif", Font.ITALIC, 20));
+		scoreText.setBorder(BorderFactory.createLineBorder(Color.gray));
+		gameScore = new JLabel("0",SwingConstants.CENTER); 
+		gameScore.setFont(new Font("Serif", Font.ITALIC, 20));
+		gameScore.setBorder(BorderFactory.createLineBorder(Color.gray));
+		scorePanel.add(scoreText);
+		scorePanel.add(gameScore);
 
 		JLabel nextText = new JLabel("<html><center>Next</center></html>"
 										,SwingConstants.CENTER);
@@ -322,13 +272,13 @@ public class Tetris
 		
 		try
 		{
-			myPicture[0] = ImageIO.read(new File("Tetrominoes/L.png"));	
-			myPicture[1] = ImageIO.read(new File("Tetrominoes/J.png"));
-			myPicture[2] = ImageIO.read(new File("Tetrominoes/O.png"));
-			myPicture[3] = ImageIO.read(new File("Tetrominoes/Z.png"));
-			myPicture[4] = ImageIO.read(new File("Tetrominoes/S.png"));
-			myPicture[5] = ImageIO.read(new File("Tetrominoes/I.png"));
-			myPicture[6] = ImageIO.read(new File("Tetrominoes/T.png"));
+			myPicture[0] = ImageIO.read(new File("img/L.png"));	
+			myPicture[1] = ImageIO.read(new File("img/J.png"));
+			myPicture[2] = ImageIO.read(new File("img/O.png"));
+			myPicture[3] = ImageIO.read(new File("img/Z.png"));
+			myPicture[4] = ImageIO.read(new File("img/S.png"));
+			myPicture[5] = ImageIO.read(new File("img/I.png"));
+			myPicture[6] = ImageIO.read(new File("img/T.png"));
 			
 			picLabel = new JLabel("",JLabel.CENTER);
 			
@@ -344,7 +294,7 @@ public class Tetris
 		}
 	
 		rightPanel.add(nextPanel);
-		rightPanel.add(timePanel);
+		rightPanel.add(scorePanel);
 		rightPanel.add(linesPanel);
 		rightPanel.add(levelPanel);
 		rightPanel.add(buttonPanel);
@@ -385,45 +335,36 @@ public class Tetris
 		app = Application.getApplication();
 		appListener = new AppListener();
 		app.setPreferencesHandler(appListener);
-		
-		// hardcode in the default control settings
-		
+				
 		rng = new Random();		// init the random in setup
 	
 		initBoard();
 		colorPieces();
-	
-	//	currPiece = new JPiece();
-	//	nextPiece = new JPiece();
 	}
 
 	public void music() 
 	{
-
-            AudioStream backgroundMusic;
-            AudioData musicData;
-            AudioPlayer musicPlayer = AudioPlayer.player;
-            ContinuousAudioDataStream loop = null;
-            try 
-            {
-            	InputStream test = new FileInputStream("Tetrominoes/tetristheme.wav");
-                backgroundMusic = new AudioStream(test);
-                AudioPlayer.player.start(backgroundMusic);
-                //musicData = backgroundMusic.getData();
-                //loop = new ContinuousAudioDataStream(musicData);
-                musicPlayer.start(loop);
-            } 
-            catch (IOException error) 
-            { 
-            	System.out.println(error);
-            }
+			
+	    AudioData musicData;
+	    AudioPlayer musicPlayer = AudioPlayer.player;
+	    ContinuousAudioDataStream loop = null;
+	    try 
+	    {
+	    	InputStream test = new FileInputStream("sound/tetristheme.wav");
+	        backgroundMusic = new AudioStream(test);
+	        AudioPlayer.player.start(backgroundMusic);
+	        //musicData = backgroundMusic.getData();
+	        //loop = new ContinuousAudioDataStream(musicData);
+	        musicPlayer.start(loop);
+	    } 
+	    catch (IOException error) 
+	    { 
+	     	System.out.println(error);
+	    }
     }
-
-
 
 	public void pause()
 	{
-		
 		paused = !paused;
 		if (!paused)
 		{
@@ -444,6 +385,19 @@ public class Tetris
 			for (int j = 0; j < 10; j++)
 				if (board.grid[i][j] != 0)
 					array[i][j].setBackground(new Color(board.grid[i][j]));
+	}
+
+	public void initKeys()
+	{
+		keys = new int[6];
+		tempKeys = new int[6];
+
+		keys[0] = 65;
+		keys[1] = 68;
+		keys[2] = 76;
+		keys[3] = 75;
+		keys[4] = 32;
+		keys[5] = 83;	
 	}
 
 	// this simply makes all the labels initially black
@@ -472,6 +426,7 @@ public class Tetris
 	
 	public void checkBoard()
 	{
+		int linesCleared = 0;
 		boolean check=false;
 		for (int i = 0; i < 20; i++)
 			for (int j = 0; j < 10; j++)
@@ -489,10 +444,20 @@ public class Tetris
 				
 				if(check)
 				{
+					linesCleared++;
 					killLine(i);
 					check =false;
 				}
 			}
+		if (linesCleared == 1)
+			score += 100*level;
+		if (linesCleared == 2)
+			score += 300*level;
+		if (linesCleared == 3)
+			score += 500*level;
+		if (linesCleared == 4)
+			score += 800*level;
+		gameScore.setText(Integer.toString(score));
 	}
 	
 	public void ghostPiece()
@@ -507,7 +472,6 @@ public class Tetris
 	
 	public void killLine(int a)
 	{
-		
 		for(int i =a; i>1; i--)
 			for(int j =0;j<10;j++)
 				board.grid[i][j] = board.grid[i-1][j];
@@ -517,10 +481,10 @@ public class Tetris
 		if(Integer.parseInt(line4Text.getText()) == 1)
 		{
 			line4Text.setText("10");
-			currentLevel.setText(Integer.parseInt(currentLevel.getText()) + 1 + "");
+			level++;
+			currentLevel.setText(Integer.toString(level));
 			timerDelay *= .9;
 			timer.setDelay(timerDelay);
-	        
 		}
 		else
 			line4Text.setText(Integer.parseInt(line4Text.getText()) - 1 + "");
@@ -538,14 +502,14 @@ public class Tetris
 		MyPanel temp = new MyPanel(500, 116, 6, 2);
 		prefLeft 	 = new JButton("Move Left");
 		prefRight    = new JButton("Move Right");
-		prefRotateR  = new JButton("Rotate R");
 		prefRotateL  = new JButton("Rotate L");
+		prefRotateR  = new JButton("Rotate R");
 		prefHardDrop = new JButton("Hard Drop");
 		prefSoftDrop = new JButton("Soft Drop");
 		prefLeft.addActionListener(theListener);
 		prefRight.addActionListener(theListener);
-		prefRotateR.addActionListener(theListener);
 		prefRotateL.addActionListener(theListener);
+		prefRotateR.addActionListener(theListener);
 		prefHardDrop.addActionListener(theListener);
 		prefSoftDrop.addActionListener(theListener);
 		
@@ -553,10 +517,10 @@ public class Tetris
 		leftLabel.setText(KeyEvent.getKeyText(keys[0]));
 		rightLabel = new JLabel("", SwingConstants.CENTER);
 		rightLabel.setText(KeyEvent.getKeyText(keys[1]));
-		rotateRLabel = new JLabel("", SwingConstants.CENTER);
-		rotateRLabel.setText(KeyEvent.getKeyText(keys[2]));
 		rotateLLabel = new JLabel("", SwingConstants.CENTER);
-		rotateLLabel.setText(KeyEvent.getKeyText(keys[3]));
+		rotateLLabel.setText(KeyEvent.getKeyText(keys[2]));
+		rotateRLabel = new JLabel("", SwingConstants.CENTER);
+		rotateRLabel.setText(KeyEvent.getKeyText(keys[3]));
 		hardDropLabel = new JLabel("", SwingConstants.CENTER);
 		hardDropLabel.setText(KeyEvent.getKeyText(keys[4]));
 		softDropLabel = new JLabel("", SwingConstants.CENTER);
@@ -569,10 +533,10 @@ public class Tetris
 		temp.add(leftLabel);
 		temp.add(prefRight);
 		temp.add(rightLabel);
-		temp.add(prefRotateR);
-		temp.add(rotateRLabel);
 		temp.add(prefRotateL);
 		temp.add(rotateLLabel);
+		temp.add(prefRotateR);
+		temp.add(rotateRLabel);
 		temp.add(prefHardDrop);
 		temp.add(hardDropLabel);
 		temp.add(prefSoftDrop);
@@ -606,6 +570,66 @@ public class Tetris
 			tempKeys[i] = keys[i];
 	}
 
+	private class TimerListener implements ActionListener
+	{ 
+		public void actionPerformed(ActionEvent evt) 
+		{ 
+			currentTime += timerDelay*.001;
+			if (currentTime > 1.5 && currentTime % 85 <= 1.5 && !stopTheMusic)
+			{
+				stopTheMusic = true;		// prevents double music
+				music();
+			}
+			if (currentTime % 85 > 2)
+				stopTheMusic = false;
+			
+			if (nextPiece == null)
+			{
+				int rand = rng.nextInt(7);
+				nextPiece = selectPiece(rand); // and that piece
+				picLabel.setIcon(new ImageIcon( myPicture[rand] )); 
+			}
+			gameScore.setText(Integer.toString(score));
+
+			// everytime the timer goes off (every second) it will basically 
+			// move the piece down, with all existing logic
+			board.eraseTrail(currPiece);
+			board.eraseTrail(ghost);
+    	
+			currPiece.moveDown(board);
+    		
+			if (!currPiece.canMoveDown(board))
+			{
+				if (newPiece)
+				{
+					board.fill(currPiece);
+					currPiece = nextPiece;
+					int rand = rng.nextInt(7);
+    				nextPiece = selectPiece(rand); // and that piece
+    				picLabel.setIcon(new ImageIcon(myPicture[rand]));
+					newPiece = false;
+					hardDropped = false;
+					if (!currPiece.canMoveDown(board))
+					{
+						hardDropped = true;
+						paused = true;
+						System.out.println("GAME OVER");
+						timer.stop();
+					//	gamePanel.setVisible(false);
+					//	menu();
+					}
+				}
+				else
+					newPiece = true;
+			}
+			checkBoard();
+			board.fill(currPiece);
+			ghostPiece();
+			board.ghostFill(ghost);
+			colorPieces();
+		} 	
+	}
+
 	private class AppListener implements PreferencesHandler
 	{
 		public void handlePreferences(AppEvent.PreferencesEvent e)
@@ -614,13 +638,14 @@ public class Tetris
 		}
 	}
 	
-	class MyListener extends KeyAdapter implements ActionListener
+	private class MyListener extends KeyAdapter implements ActionListener
 	{
 		public void actionPerformed(ActionEvent e)
 		{
 			if (e.getSource() == startGame)
 			{
 				start = false;
+				menuWindow.setVisible(false);
 				new Tetris();
 			}
 				
@@ -639,7 +664,14 @@ public class Tetris
 			if (e.getSource() == endGame)
 				System.exit(0);
 			if (e.getSource() == exitGame)
+			{
 				theWindow.setVisible(false);
+				try{
+				backgroundMusic.close();
+				} catch (IOException f)	
+				{	System.out.println("Oh no! Can't stop the music!");}	
+				menu();
+			}
 			if (e.getSource() == prefClose)
 			{
 				boolean same = true;
@@ -757,30 +789,46 @@ public class Tetris
 			}    
 			else
 			{
-				board.eraseTrail(currPiece);
-				board.eraseTrail(ghost);
-				gamePanel.grabFocus();
+				if (!hardDropped)
+				{
+					board.eraseTrail(currPiece);
+					board.eraseTrail(ghost);
+					gamePanel.grabFocus();
+			
+					if (e.getKeyCode() == keys[0])	// move left
+						currPiece.moveLeft(board);
+					if (e.getKeyCode() == keys[1])	// move right
+						currPiece.moveRight(board);
+					if (e.getKeyCode() == keys[2])	// rotateL
+						currPiece.rotateL(board);
+					if (e.getKeyCode() == keys[3])	// rotateR
+						currPiece.rotateR(board);
 				
-				if (e.getKeyCode() == keys[0])	// move left
-					currPiece.moveLeft(board);
-				if (e.getKeyCode() == keys[1])	// move right
-					currPiece.moveRight(board);
-				if (e.getKeyCode() == keys[2])	// rotateR
-					currPiece.rotateR(board);
-				if (e.getKeyCode() == keys[3])	// rotateL
-					currPiece.rotateL(board);
 
-				//** this works for hard drop, potential problem is that if you keep holding space, the piece basically spawns at the bottom
-				if (e.getKeyCode() == keys[4])
-					while(currPiece.canMoveDown(board))
+					//** this works for hard drop, potential problem is that if you keep holding space, the piece basically spawns at the bottom
+					if (e.getKeyCode() == keys[4])
+					{
+						while(currPiece.canMoveDown(board))
+						{
+							currPiece.moveDown(board);
+							score += 2;
+							gameScore.setText(Integer.toString(score));
+						}
+						newPiece = true;
+						hardDropped = true;
+					}
+					if (e.getKeyCode() == keys[5])
+					{	
+						score += 1;
 						currPiece.moveDown(board);
-				if (e.getKeyCode() == keys[5])
-					currPiece.moveDown(board);
+						gameScore.setText(Integer.toString(score));
+					}
 					
-				board.fill(currPiece);
-				ghostPiece();
-				board.ghostFill(ghost);
-				colorPieces();
+					board.fill(currPiece);
+					ghostPiece();
+					board.ghostFill(ghost);
+					colorPieces();
+				}
 			}
 		}
 	}
