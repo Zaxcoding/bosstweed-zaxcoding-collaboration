@@ -1,4 +1,22 @@
 {
+Andy - 6/7/12
+
+Actually second commit of the day ( first was just a change on the timerDelay using mutators instead of creating more timers)
+
+now for some cool stuff.
+
+new method menu(): 
+
+i have added a new window acting as a menu. it has a pretty decent banner right now but obviously something cooler can be done and I'm sure you have more artistic / photoshop experience than i do. there are 3 buttons new game, controls and end game. new game and end game are the same as they were in the old window, controls does not work right now because I'm not sure exactly how to access your preferences window, i feel like thats kind of hidden right now so throwing it in someones face would be better i think, its probably an easy hook up for you to do but like i said i saw app listener and shy d away a little. i redid the pause so it works and where end game was its exit to menu so the game window just closes out and your back at the menu. new game at the menu just opens a game, new game in the game itself asks if you are sure you want to start a new game, then closes the old game and starts a new one up.
+
+new method music():
+
+we have tetris music!!! this was my little surprise i wanted to do, there are probably some little bugs because i had to get a little creative with the looping, but it works, the only thing is if you create new games it'll keep starting new music and be madness and since all the variables are local right now, id have to add a new parameter to make it nice and i just wanted to upload this, so i can easily do that by tomorrow.
+
+check it out!!!
+}
+
+{
 Zach - 6/6/12
 
 Sorry, I don't feel like doing a proper changelog.
