@@ -48,8 +48,7 @@ public class Tetris
 							// 3 = rotateL, 4 = hard drop
 	int [] keys, tempKeys;	// since KeyCodes are just ints, make an array
 							// for the current settings and the temporary
-							// settings when changing.
-	
+							// settings when changing.	
 	
 	boolean paused, game = true, newpiece = true;
 	static boolean start;
@@ -58,7 +57,7 @@ public class Tetris
 	int timerDelay = 1000;
 	
 	ActionListener timerListener;
-	double preCurrentTime =0;
+	double preCurrentTime = 0;
 	
 	public static void main(String [] args)
 	{
@@ -68,7 +67,7 @@ public class Tetris
 	}
 
 	public void menu()
-	{
+	{	
 		menuWindow = new JFrame("Menu");
 		menuPane = menuWindow.getContentPane();
 		menuPane.setLayout(new GridLayout(2, 1));
@@ -98,6 +97,7 @@ public class Tetris
 		menuPref  = new JButton("Controls");
 		menuPref.setFont(new Font("Serif", Font.ITALIC, 20));
 		menuPanel.add(menuPref);
+		menuPref.addActionListener(theListener);
 		//startGame.addActionListener(theListener);
 		
 		endGame = new JButton("End Game");
@@ -119,6 +119,16 @@ public class Tetris
 	}
 	public Tetris()
 	{	
+		keys = new int[6];
+		tempKeys = new int[6];
+
+		keys[0] = 65;
+		keys[1] = 68;
+		keys[2] = 75;
+		keys[3] = 76;
+		keys[4] = 32;
+		keys[5] = 83;
+		
 		if(start)
 			menu();
 		else
@@ -378,16 +388,6 @@ public class Tetris
 		
 		// hardcode in the default control settings
 		
-		keys = new int[6];
-		tempKeys = new int[6];
-				
-		keys[0] = 65;
-		keys[1] = 68;
-		keys[2] = 75;
-		keys[3] = 76;
-		keys[4] = 32;
-		keys[5] = 83;
-		
 		rng = new Random();		// init the random in setup
 	
 		initBoard();
@@ -527,85 +527,90 @@ public class Tetris
 				
 	}
 
+	public void makePreferences()
+	{
+		preferences = new JFrame("Preferences");
+		preferences.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		preferences.setLocation(350, 200);
+		prefPanel = new MyPanel(300, 400, 4, 1);
+		
+		prefPanel.add(new JLabel("<html><p>Change the control scheme! <br>Just click a button and then press the key you'd like to use.</p><html>"));
+		MyPanel temp = new MyPanel(500, 116, 6, 2);
+		prefLeft 	 = new JButton("Move Left");
+		prefRight    = new JButton("Move Right");
+		prefRotateR  = new JButton("Rotate R");
+		prefRotateL  = new JButton("Rotate L");
+		prefHardDrop = new JButton("Hard Drop");
+		prefSoftDrop = new JButton("Soft Drop");
+		prefLeft.addActionListener(theListener);
+		prefRight.addActionListener(theListener);
+		prefRotateR.addActionListener(theListener);
+		prefRotateL.addActionListener(theListener);
+		prefHardDrop.addActionListener(theListener);
+		prefSoftDrop.addActionListener(theListener);
+		
+		leftLabel = new JLabel("", SwingConstants.CENTER);
+		leftLabel.setText(KeyEvent.getKeyText(keys[0]));
+		rightLabel = new JLabel("", SwingConstants.CENTER);
+		rightLabel.setText(KeyEvent.getKeyText(keys[1]));
+		rotateRLabel = new JLabel("", SwingConstants.CENTER);
+		rotateRLabel.setText(KeyEvent.getKeyText(keys[2]));
+		rotateLLabel = new JLabel("", SwingConstants.CENTER);
+		rotateLLabel.setText(KeyEvent.getKeyText(keys[3]));
+		hardDropLabel = new JLabel("", SwingConstants.CENTER);
+		hardDropLabel.setText(KeyEvent.getKeyText(keys[4]));
+		softDropLabel = new JLabel("", SwingConstants.CENTER);
+		softDropLabel.setText(KeyEvent.getKeyText(keys[5]));
+		
+		if (keys[4] == 32)
+			hardDropLabel.setText("SPACE");
+
+		temp.add(prefLeft);
+		temp.add(leftLabel);
+		temp.add(prefRight);
+		temp.add(rightLabel);
+		temp.add(prefRotateR);
+		temp.add(rotateRLabel);
+		temp.add(prefRotateL);
+		temp.add(rotateLLabel);
+		temp.add(prefHardDrop);
+		temp.add(hardDropLabel);
+		temp.add(prefSoftDrop);
+		temp.add(softDropLabel);
+		
+		prefPanel.add(temp);
+		
+		prefFeedback = new JLabel("No changes have been made yet.",
+											SwingConstants.CENTER);
+		prefPanel.add(prefFeedback);
+					
+		temp = new MyPanel(500, 116, 1, 2);
+		prefSave		 = new JButton("Save changes");
+		prefClose 		 = new JButton("Close");
+		prefSave.addActionListener(theListener);
+		prefClose.addActionListener(theListener);
+		temp.add(prefSave);
+		temp.add(prefClose);			
+		prefPanel.add(temp);
+		
+		prefPanel.addKeyListener(theListener);
+		prefPanel.setFocusable(true);
+		prefPanel.grabFocus();
+		
+		preferences.add(prefPanel);
+        preferences.pack();
+        preferences.setVisible(true);
+		
+		// copy in the key values to tempKeys
+		for (int i = 0; i < 6; i++)
+			tempKeys[i] = keys[i];
+	}
+
 	private class AppListener implements PreferencesHandler
 	{
 		public void handlePreferences(AppEvent.PreferencesEvent e)
 		{
-			preferences = new JFrame("Preferences");
-			preferences.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-			preferences.setLocation(350, 200);
-			prefPanel = new MyPanel(300, 400, 4, 1);
-			
-			prefPanel.add(new JLabel("<html><p>Change the control scheme! <br>Just click a button and then press the key you'd like to use.</p><html>"));
-			MyPanel temp = new MyPanel(500, 116, 6, 2);
-			prefLeft 	 = new JButton("Move Left");
-			prefRight    = new JButton("Move Right");
-			prefRotateR  = new JButton("Rotate R");
-			prefRotateL  = new JButton("Rotate L");
-			prefHardDrop = new JButton("Hard Drop");
-			prefSoftDrop = new JButton("Soft Drop");
-			prefLeft.addActionListener(theListener);
-			prefRight.addActionListener(theListener);
-			prefRotateR.addActionListener(theListener);
-			prefRotateL.addActionListener(theListener);
-			prefHardDrop.addActionListener(theListener);
-			prefSoftDrop.addActionListener(theListener);
-			
-			leftLabel = new JLabel("", SwingConstants.CENTER);
-			leftLabel.setText(KeyEvent.getKeyText(keys[0]));
-			rightLabel = new JLabel("", SwingConstants.CENTER);
-			rightLabel.setText(KeyEvent.getKeyText(keys[1]));
-			rotateRLabel = new JLabel("", SwingConstants.CENTER);
-			rotateRLabel.setText(KeyEvent.getKeyText(keys[2]));
-			rotateLLabel = new JLabel("", SwingConstants.CENTER);
-			rotateLLabel.setText(KeyEvent.getKeyText(keys[3]));
-			hardDropLabel = new JLabel("", SwingConstants.CENTER);
-			hardDropLabel.setText(KeyEvent.getKeyText(keys[4]));
-			softDropLabel = new JLabel("", SwingConstants.CENTER);
-			softDropLabel.setText(KeyEvent.getKeyText(keys[5]));
-			
-			if (keys[4] == 32)
-				hardDropLabel.setText("SPACE");
-
-			temp.add(prefLeft);
-			temp.add(leftLabel);
-			temp.add(prefRight);
-			temp.add(rightLabel);
-			temp.add(prefRotateR);
-			temp.add(rotateRLabel);
-			temp.add(prefRotateL);
-			temp.add(rotateLLabel);
-			temp.add(prefHardDrop);
-			temp.add(hardDropLabel);
-			temp.add(prefSoftDrop);
-			temp.add(softDropLabel);
-			
-			prefPanel.add(temp);
-			
-			prefFeedback = new JLabel("No changes have been made yet.",
-												SwingConstants.CENTER);
-			prefPanel.add(prefFeedback);
-						
-			temp = new MyPanel(500, 116, 1, 2);
-			prefSave		 = new JButton("Save changes");
-			prefClose 		 = new JButton("Close");
-			prefSave.addActionListener(theListener);
-			prefClose.addActionListener(theListener);
-			temp.add(prefSave);
-			temp.add(prefClose);			
-			prefPanel.add(temp);
-			
-			prefPanel.addKeyListener(theListener);
-			prefPanel.setFocusable(true);
-			prefPanel.grabFocus();
-			
-			preferences.add(prefPanel);
-	        preferences.pack();
-	        preferences.setVisible(true);
-			
-			// copy in the key values to tempKeys
-			for (int i = 0; i < 6; i++)
-				tempKeys[i] = keys[i];
+			makePreferences();
 		}
 	}
 	
@@ -625,6 +630,9 @@ public class Tetris
 					theWindow.setVisible(false);
 					new Tetris();
 				}
+				
+			if (e.getSource() == menuPref)
+				makePreferences();
 					
 			if (e.getSource() == pause)
 				pause();
@@ -652,7 +660,8 @@ public class Tetris
 				else
 				{
 					preferences.setVisible(false);	
-					gamePanel.grabFocus();
+					if (gamePanel != null)
+						gamePanel.grabFocus();
 					changingKeys = false;
 				}
 			}		
@@ -703,8 +712,8 @@ public class Tetris
 			if (e.getSource() == prefSave)
 			{	
 				boolean dupes = false;
-				for (int i = 0; i < 5; i++)
-					for (int j = i+1; j < 5; j++)
+				for (int i = 0; i < 6; i++)
+					for (int j = i+1; j < 6; j++)
 						if (tempKeys[i] == tempKeys[j])
 							dupes = true;
 				if (dupes)
@@ -713,7 +722,7 @@ public class Tetris
 					"Duplicates", JOptionPane.INFORMATION_MESSAGE);	
 				else
 				{
-					for (int i = 0; i < 5; i++)
+					for (int i = 0; i < 6; i++)
 						keys[i] = tempKeys[i];
 					changingKeys = false;
 					prefFeedback.setText("Changes saved!");
@@ -726,7 +735,6 @@ public class Tetris
 		{
 			if (changingKeys)
 			{
-				System.out.println(e.getKeyCode());
 				tempKeys[changingWhich] = e.getKeyCode();
 
 				if (changingWhich == 0)
@@ -742,7 +750,7 @@ public class Tetris
 				if (changingWhich == 4 && e.getKeyCode() == 32)
 					hardDropLabel.setText("SPACE");
 				if (changingWhich == 5)
-				hardDropLabel.setText(KeyEvent.getKeyText(e.getKeyCode()));
+				softDropLabel.setText(KeyEvent.getKeyText(e.getKeyCode()));
 				
 				prefFeedback.setText("Key changed! Save"
 											+ " changes before closing.");
@@ -752,6 +760,7 @@ public class Tetris
 				board.eraseTrail(currPiece);
 				board.eraseTrail(ghost);
 				gamePanel.grabFocus();
+				
 				if (e.getKeyCode() == keys[0])	// move left
 					currPiece.moveLeft(board);
 				if (e.getKeyCode() == keys[1])	// move right

@@ -1,4 +1,15 @@
 {
+Zach - 6/8/12
+
+Just wanted to push this up before I start on other stuff.
+
+Tetris.java:
+Moved a bunch of code into a new method makePreferences, which is called either when you go to the preference menu, or by clicking 'controls'. Had to re-link some stuff and adjust a few things to get it working, but not much.
+
+Now I'm going to start on some other things.
+}
+
+{
 Andy - 6/7/12
 
 Actually second commit of the day ( first was just a change on the timerDelay using mutators instead of creating more timers)
