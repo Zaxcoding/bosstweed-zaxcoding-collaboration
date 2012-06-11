@@ -1,69 +1,75 @@
-//Tetris by bosscoding
+// Tetris by BossCoding
+// Version 1.0.0
+// Released June 11, 2012
 
-//imports and functionality of swing stolen from Yahtzee.java(Zaxcoding) skeleton
-
-import java.util.*;
-import java.io.*;
-import javax.swing.*;
-import javax.swing.border.*;
 import com.apple.eawt.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.TimerTask;
-import javax.swing.Timer;
 import java.awt.image.BufferedImage;
+import java.io.*;
+import java.util.*;
+import java.util.TimerTask;
 import javax.imageio.ImageIO;
+import javax.swing.*;
+import javax.swing.border.*;
+import javax.swing.Timer;
 import sun.audio.*;
 
 public class Tetris
 {
-	JFrame theWindow,menuWindow,exitWindow;
-	Container thePane,menuPane,exitPane;
-	MyPanel gamePanel,menuPanel,exitPanel;
-	MyPanel array [][];
-	MyPanel buttonPanel, leftPanel, rightPanel, nextPanel, scorePanel;
-	MyPanel linesPanel, totalPanel, nextLinePanel, levelPanel,buttonMenuPanel,exitMenuPanel;
-	JButton newGame, pause, endGame,startGame,menuPref,exitGame;
-	MyListener theListener;
-	Timer timer;
-	Piece currPiece, nextPiece, ghost;
-	GameBoard board = new GameBoard(10,20);
-	BufferedImage [] myPicture = new BufferedImage[7];
-	JLabel scoreText,finalScore,exitLabel;
-	// all stuff for preferences menu
 	Application app;
 	AppListener appListener;
-	JButton prefLeft, prefRight, prefRotateR, prefRotateL, prefSoftDrop, 
-			prefHardDrop;
-	JButton prefSave, prefClose;
-	JLabel leftLabel, rightLabel, rotateRLabel, rotateLLabel, hardDropLabel, 	
-			softDropLabel;
-	JLabel prefFeedback;
-	JFrame preferences;
-	MyPanel prefPanel;
-	boolean changingKeys;	// are you changing the key?
-	int changingWhich;		// which control are you changing?
-							// 0 = move left, 1 = move right, 2 = rotateR
-							// 3 = rotateL, 4 = hard drop
-	int [] keys, tempKeys;	// since KeyCodes are just ints, make an array
-							// for the current settings and the temporary
-							// settings when changing.	
-	
-	boolean paused, game = true, newPiece = true, hardDropped;
-	static boolean start;
-	Random rng; 			// put this here so we can access it all over
 
-	int timerDelay = 1000;
+	AudioStream backgroundMusic;
+
+	boolean game = true, newPiece = true, stopTheMusic = false;
+	boolean paused, hardDropped, changingKeys;	
+
+	BufferedImage [] myPicture = new BufferedImage[7];
+
+	Container thePane, menuPane, exitPane;
+
+	double currentTime = 0;
+
+	GameBoard board = new GameBoard(10,20);
+
+	int timerDelay = 1000, score = 0, level = 1;	
+	int changingWhich;
+				
+	int [] keys, tempKeys;	
+
+	JButton newGame, pause, endGame,startGame,menuPref,exitGame;
+	JButton prefLeft, prefRight, prefRotateR, prefRotateL, prefSoftDrop, 
+			prefHardDrop, prefSave, prefClose;
+	
+	JFrame theWindow, menuWindow, exitWindow, preferences;
+
+	JLabel scoreText,finalScore,exitLabel;
+	JLabel leftLabel, rightLabel, rotateRLabel, rotateLLabel, hardDropLabel, 	
+			softDropLabel, prefFeedback;
+	JLabel gameScore, picLabel, line1Text, line2Text, line4Text, currentLevel, 
+			menuLabel, picLabel2, picLabel3;
+
+	MyListener theListener;
+
+	MyPanel gamePanel, menuPanel, exitPanel;
+	MyPanel buttonPanel, leftPanel, rightPanel, nextPanel, scorePanel, prefPanel;
+	MyPanel linesPanel, totalPanel, nextLinePanel, levelPanel, buttonMenuPanel, exitMenuPanel;
+	MyPanel array [][];
+
+	Piece currPiece, nextPiece, nextNextPiece, nextNextNextPiece, ghost;
+
+	Random rng; 
+
+	Timer timer;
 	
 	TimerListener timerListener;
-	double currentTime = 0;
-	JLabel gameScore, picLabel, line1Text, line2Text, line4Text, currentLevel, 
-			menuLabel;
-	
-	int score = 0, level = 1;
-	boolean stopTheMusic = false;
-	AudioStream backgroundMusic;
-	
+
+	static boolean start;
+
+	//-----End of huge declaration----//
+
+
 	public static void main(String [] args)
 	{
 		start = true;
@@ -118,8 +124,7 @@ public class Tetris
 		
 		menuPanel.setFocusable(true);
 		menuPanel.grabFocus();
-		menuPanel.addKeyListener(theListener);
-		
+		menuPanel.addKeyListener(theListener);		
 	}
 	
 	
@@ -161,10 +166,9 @@ public class Tetris
 		exitWindow.setVisible(true);
 		
 		exitPanel.setFocusable(true);
-		exitPanel.grabFocus();
-		
-		
+		exitPanel.grabFocus();	
 	}
+
 	public Tetris()
 	{
 		initKeys();
@@ -179,6 +183,8 @@ public class Tetris
 			nextPiece = selectPiece(pieceDigit); 	// and that piece
 			currPiece = nextPiece;
 			nextPiece = null;
+			nextNextPiece = null;
+			nextNextNextPiece = null;
 			ghost = new JPiece();
 		
 			// new timing structure with its own action listener
@@ -190,10 +196,6 @@ public class Tetris
 		}
 	}
 	
-	/* I changed this method to return a Piece, since we may want to use
-	 * it for more than just generating the current piece. We could use it
-	 * for previewing the next pieces or other areas where we just want a
-	 * particular piece */
 	public Piece selectPiece(int a)
 	{
 		// temp variable, just make it J, then change to what it needs to be
@@ -323,12 +325,17 @@ public class Tetris
 			myPicture[5] = ImageIO.read(new File("img/I.png"));
 			myPicture[6] = ImageIO.read(new File("img/T.png"));
 			
-			picLabel = new JLabel("",JLabel.CENTER);
 			
+			MyPanel nextsPanel = new MyPanel(1,1, 1, 3);
+			picLabel = new JLabel("",JLabel.CENTER);
+			picLabel2 = new JLabel("", JLabel.CENTER);
+			picLabel3 = new JLabel("", JLabel.CENTER);
+			nextsPanel.add(picLabel);
+			nextsPanel.add(picLabel2);
+			nextsPanel.add(picLabel3);
+
 			nextPanel.add(nextText);
-		    nextPanel.add(picLabel);
-		    nextPanel.add(nextText);
-		    nextPanel.add(picLabel);
+		    nextPanel.add(nextsPanel);
 		}
 		catch(Exception a)
 		{
@@ -419,9 +426,9 @@ public class Tetris
 			pause.setText("Pause");
 			timer.start();
 		}
+		gamePanel.grabFocus();
 	}
 	
-	// this method colors all the pieces on the GameBoard
 	public void colorPieces()
 	{
 		for (int i = 0; i < 20; i++)
@@ -443,7 +450,6 @@ public class Tetris
 		keys[5] = 83;	
 	}
 
-	// this simply makes all the labels initially black
 	public void initBoard()
 	{
 		for (int i = 0; i < 20; i++)
@@ -452,20 +458,7 @@ public class Tetris
 				array[i][j].setBackground(new Color(Color.TRANSLUCENT));
 				board.grid[i][j] = Color.TRANSLUCENT;
 			}
-	}
-	
-	// this method is more of a hard wipe and is now basically
-	// obsolete thanks to GameBoard.eraseTrail()
-	public void clearBoard()
-	{
-		for (int i = 0; i < 20; i++)
-			for (int j = 0; j < 10; j++)
-				if (board.grid[i][j] != 0)
-				{
-					board.grid[i][j] = 0;
-					array[i][j].setBackground(new Color(Color.TRANSLUCENT));
-				}
-	}			
+	}		
 	
 	public void checkBoard()
 	{
@@ -511,7 +504,6 @@ public class Tetris
 			ghost.moveDown(board);
 		board.fill(currPiece);
 	}
-		
 	
 	public void killLine(int a)
 	{
@@ -530,8 +522,7 @@ public class Tetris
 			timer.setDelay(timerDelay);
 		}
 		else
-			line4Text.setText(Integer.parseInt(line4Text.getText()) - 1 + "");
-				
+			line4Text.setText(Integer.parseInt(line4Text.getText()) - 1 + "");			
 	}
 
 	public void makePreferences()
@@ -614,7 +605,7 @@ public class Tetris
 	}
 
 	private class TimerListener implements ActionListener
-	{ 
+	{
 		public void actionPerformed(ActionEvent evt) 
 		{ 
 			currentTime += timerDelay*.001;
@@ -626,6 +617,20 @@ public class Tetris
 			if (currentTime % 85 > 2)
 				stopTheMusic = false;
 			
+			if (nextNextPiece == null)
+			{
+				int rand = rng.nextInt(7);
+				nextNextPiece = selectPiece(rand); // and that piece
+				picLabel2.setIcon(new ImageIcon( myPicture[rand] )); 
+			}
+
+			if (nextNextNextPiece == null)
+			{
+				int rand = rng.nextInt(7);
+				nextNextNextPiece = selectPiece(rand); // and that piece
+				picLabel3.setIcon(new ImageIcon( myPicture[rand] )); 
+			}
+
 			if (nextPiece == null)
 			{
 				int rand = rng.nextInt(7);
@@ -647,9 +652,15 @@ public class Tetris
 				{
 					board.fill(currPiece);
 					currPiece = nextPiece;
+					nextPiece = nextNextPiece;
+					nextNextPiece = nextNextNextPiece;
 					int rand = rng.nextInt(7);
-    				nextPiece = selectPiece(rand); // and that piece
-    				picLabel.setIcon(new ImageIcon(myPicture[rand]));
+    				nextNextNextPiece = selectPiece(rand); // and that piece
+    				
+    				picLabel.setIcon(picLabel2.getIcon());
+    				picLabel2.setIcon(picLabel3.getIcon());
+    				picLabel3.setIcon(new ImageIcon(myPicture[rand]));
+
 					newPiece = false;
 					hardDropped = false;
 					if (!currPiece.canMoveDown(board))
