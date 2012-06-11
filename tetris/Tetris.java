@@ -17,19 +17,19 @@ import sun.audio.*;
 
 public class Tetris
 {
-	JFrame theWindow,menuWindow;
-	Container thePane,menuPane;
-	MyPanel gamePanel,menuPanel;
+	JFrame theWindow,menuWindow,exitWindow;
+	Container thePane,menuPane,exitPane;
+	MyPanel gamePanel,menuPanel,exitPanel;
 	MyPanel array [][];
 	MyPanel buttonPanel, leftPanel, rightPanel, nextPanel, scorePanel;
-	MyPanel linesPanel, totalPanel, nextLinePanel, levelPanel,buttonMenuPanel;
+	MyPanel linesPanel, totalPanel, nextLinePanel, levelPanel,buttonMenuPanel,exitMenuPanel;
 	JButton newGame, pause, endGame,startGame,menuPref,exitGame;
 	MyListener theListener;
 	Timer timer;
 	Piece currPiece, nextPiece, ghost;
 	GameBoard board = new GameBoard(10,20);
 	BufferedImage [] myPicture = new BufferedImage[7];
-	
+	JLabel scoreText,finalScore,exitLabel;
 	// all stuff for preferences menu
 	Application app;
 	AppListener appListener;
@@ -122,6 +122,49 @@ public class Tetris
 		
 	}
 	
+	
+	public void gameover()
+	{
+		
+		exitWindow = new JFrame("Game Over");
+		exitWindow.setLocation(350, 200);
+		exitPane = exitWindow.getContentPane();
+		exitPane.setLayout(new GridLayout(2, 1));
+		
+	
+		exitPanel = new MyPanel(728,90,1,1);
+		exitMenuPanel = new MyPanel(728,90,1,1);
+		
+		try 
+		{
+			BufferedImage banner = ImageIO.read(new	File("img/gameover.png"));
+			exitLabel = new JLabel("",JLabel.CENTER);
+			exitLabel.setIcon(new ImageIcon( banner ));	
+		
+		 	exitMenuPanel.add(exitLabel);
+		}
+		catch(Exception a)
+		{
+			System.out.println("banner did not work :/");
+		}	
+		
+		finalScore = new JLabel("",JLabel.CENTER);
+		finalScore.setText(gameScore.getText());
+		finalScore.setFont(new Font("Serif", Font.ITALIC, 20));
+		exitPanel.add(finalScore);
+		
+		
+				
+		exitPane.add(exitMenuPanel);
+		exitPane.add(exitPanel);
+		exitWindow.pack();
+		exitWindow.setVisible(true);
+		
+		exitPanel.setFocusable(true);
+		exitPanel.grabFocus();
+		
+		
+	}
 	public Tetris()
 	{
 		initKeys();
@@ -256,7 +299,7 @@ public class Tetris
 		linesPanel.add(line3Text);
 		linesPanel.add(line4Text);
 
-		JLabel scoreText = new JLabel("Score",SwingConstants.CENTER);
+		scoreText = new JLabel("Score",SwingConstants.CENTER);
 		scoreText.setFont(new Font("Serif", Font.ITALIC, 20));
 		scoreText.setBorder(BorderFactory.createLineBorder(Color.gray));
 		gameScore = new JLabel("0",SwingConstants.CENTER); 
@@ -614,9 +657,21 @@ public class Tetris
 						hardDropped = true;
 						paused = true;
 						System.out.println("GAME OVER");
+						try
+						{
+							backgroundMusic.close();
+						} 
+						catch (IOException f)	
+						{	
+							System.out.println("Oh no! Can't stop the music!");
+						}
 						timer.stop();
+						theWindow.setVisible(false);
+						menu();
+						gameover();
+						
 					//	gamePanel.setVisible(false);
-					//	menu();
+						
 					}
 				}
 				else
@@ -651,7 +706,16 @@ public class Tetris
 				
 			if(e.getSource() == newGame)
 				if (JOptionPane.showConfirmDialog(null, "Are you sure you"+ " want to start a new game?",	"New Game", JOptionPane.YES_NO_OPTION) == 0)
-				{
+				{	
+					try
+					{
+						backgroundMusic.close();
+					} 
+					catch (IOException f)	
+					{	
+						System.out.println("Oh no! Can't stop the music!");
+					}
+				
 					theWindow.setVisible(false);
 					new Tetris();
 				}

@@ -1,4 +1,20 @@
 {
+Andy - 6/10/12
+
+two small changes.
+
+1.) music now stops when a new game is created ( as in the music from the first game)
+2.) added an exiting game over window very similar to the menu window, it displays the final score and returns back to the menu as well
+
+
+I think its mostly done, i think the only real thing to do is be able to slide pieces
+}
+
+
+
+
+
+{
 Zach - 6/8/12
 
 A few small changes, and some not so small.
