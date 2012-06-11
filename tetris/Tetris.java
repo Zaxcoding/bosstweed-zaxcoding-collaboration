@@ -84,8 +84,8 @@ public class Tetris
 		menuPane.setLayout(new GridLayout(2, 1));
 		
 		theListener = new MyListener();
-		menuPanel = new MyPanel(728,90,1,1);
-		buttonMenuPanel = new MyPanel(728,90,1,1);
+		menuPanel = new MyPanel(450,158,1,1);
+		buttonMenuPanel = new MyPanel(450,90,1,1);
 		
 		try 
 		{
@@ -890,7 +890,6 @@ public class Tetris
 							gameScore.setText(Integer.toString(score));
 						}
 						newPiece = true;
-						hardDropped = true;
 					}
 					if (e.getKeyCode() == keys[5])
 					{	
