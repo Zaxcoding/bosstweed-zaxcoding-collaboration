@@ -1,0 +1,149 @@
+{
+// Zach - Initial Brainstorm - 6/13/12
+// Formatted to be read with 78 line word wrap.
+
+INSPIRATION:
+	
+	Games I've played:
+		Super Mario RPG
+		Chrono Trigger
+		Final Fantasy 4/6
+		Pokemon Red/Blue
+		Dragon Warrior Monsters
+		Superbrothers: Swords & Sworcery EP
+
+	Games I want to play:
+		On the Rainslick Precipice of Darkness 3
+		Superbrothers: Swords & Sworcery EP (haven't beaten it)
+		Earthbound
+		Newer RPGs
+
+	Dungeons and Dragons
+
+
+
+COMBAT:
+	
+	Commander (probably human, although I guess it could be a monster)
+	Is your main character the commander?
+	One main guy that is more powerful than the rest- although not necessarily stats.
+		- He can attack more often/use more abilities/something of the sort.
+		- Instead of just having higher base stats, doing it this way allows you to have *anyone* as the commander and activate their own special commander skills instead of only wanting your best character as the big guy.
+	If we do your main character is the commander, can he die? This could be like a hardcore version of the game where if your main dies, game over.
+	Is game over necessarily the end? In Final Fantasy games when your party wipes you just re-load from the last save. In Pokemon you respawn at the last pokemon center.
+
+
+QUESTIONS:
+
+	How do you make death meaningful in the game? 
+		- Can only the commander die permanently?
+			- If this is the case then you'll benefit from putting your best guy at commander and it'll also matter more if he dies. So you can balance it out by putting like a mid-range guy there but then you're getting like the middle of the road benefit and potential loss. I like this.
+
+	Hard saves (Final Fantasy style) or Checkpoints (pokemon center style) or both?
+		- Definitely need hard saves. So I guess it's just really whether or not we want to include checkpoints. If we have checkpoints then it kinda defeats the death penalty for your main character. You'll just re-load and switch him out or avoid that path or whatever.
+
+
+
+	I guess the question I keep asking is how do you make death matter enough that you grieve the loss of your character and strive to keep him alive, yet simultaneously not important enough that you restart from a much earlier save in order to get him back?
+		- The game won't be fun if you have to repeat a long section of what you just did  only to avoid the death of your party member, but it won't be interesting if death is trivial/a minor setback.
+
+	In Final Fantasy games you can grind for a long time and then just go out and kick ass for 10 hours without ever dying.
+	In Pokemon games you can wipe every thirty minutes and just pick yourself up, lose some cash, and keep going.
+	In Diablo/WoW (the kings of addiction), you take a slight durability hit and then keep going.
+
+
+HOLY SHIT!
+
+	LOOT!
+
+	Torchlight/Diablo/WoW/MMO style dungeon crawlers are so much fun because you keep grinding away and delving through floors of enemies for the hope of some sweet gear that'll pump up your character. 
+	Pokemon had no loot. No gear. Items were kinda cheap (Max Revive/Full Heal cost too little to really matter).
+
+	We need loot. Lots of it. Head, torso, shoulders, arms, rings, necklace/trinket, legs, feet.
+
+	You put it on your main/commander. He dies, your loot is gone. Or maybe not. Maybe it stays where it is and you have to go back to get it, but it turns into enemies that you have to defeat to get it back. Like your overpowered Sword of Inifinite destruction comes back to bite you in the ass if you want to get it back.
+
+
+ALIGNMENTS:
+	
+	D&D Style alignment table:
+		
+		Lawful Good			Lawful Neutral		Lawful Evil
+		
+		Neutral Good		True Neutral		Neutral Evil
+		
+		Chaotic Good		Chaotic Neutral		Chaotic Evil
+
+
+	Monsters and characters all have these alignments. Good can't party with Evil. Lawful and Chaotic don't get along.
+
+
+CHARACTER CLASSES:
+
+	Diplomat/Charmer: Chaotic Good/Neutral Good.
+	Easier time recruiting people to fight for him. Completely useless in combat. Great at trading. Better at trying to talk his way out of combat.
+
+	Thief/Rogue: Chaotic Good or Chaotic Evil.
+	Backstabbing, theiving. Can kill enemy trainers without even initiating a battle, or at least poision/weaken them. Can't recruit other people.
+
+	Beast Master/Trainer: Must be Lawful.
+	Amazing at capturing and training monsters. Boosts their stats/able to heal them. Can attempt to save them from dying.
+
+	Wizard/Mage: Must be Chaotic.
+	The only class that can use magic, other than the monsters (?). Or maybe he's more of a blue mage and can use any spell that he's been hit with by a monster? Not sure how much/if I want true magic in the game world.
+
+
+COMBAT SYSTEM:
+	
+	Turn based team v team?
+	Action RPG?
+	Mix it up? Sometimes you duel just person v person, other times just monsters v monsters, other times monsters and people?
+	Turn based for your monsters but action for your main?
+
+
+Maybe you can actually grind up your team/main by going to a gym and just button mashing/playing mini-games. Definitely not as effective as combat but perfectly safe.
+
+
+GOOD V EVIL:
+
+	If you kill people, what happens? The Skyrim/Fable style of guards coming after you is just stupid and fucking annoying. Especially because it can be so glitchy and dumb if you just crouch behind a little barrel and then steal all the shit you want/kill whoever.
+
+	There needs to be consequences for your actions. Or maybe not? I guess the question is, "Why not just be evil and kill (permanently) everything you can?"
+
+	Maybe you can recruit opponents onto your team after fighting them. You gain their respect through the battle and rather than murder them you can have them join you.
+		- If we did this then wouldn't you just have a huge surplus of people by the end? Like a veritable army and then no consequences, just throwing them out to be slaughtered one by one?
+
+	I guess the alignment system kinda helps with this because you can't just murder people if you are/want to party with people that are Good. 
+
+
+RANDOM BATTLES OR VISIBLE OPPONENTS?:
+
+	In Pokemon the trainers are visible and the pokemon invisible. Obviously the people need to be visible. Do we have random monster encounters or can you see them? What about screen-filling v miniscule monsters. How could you see an ant monster, or get around a dragon?
+
+	I guess this also goes back to the Action RPG v Turn based question because an Action RPG requires visible opponents (unless you are like 'teleported' to a battle arena where you move around).
+
+	How common are battles? If you're going for loot, they need to be very common.
+
+
+POKEMON CENTERS SHOULD BE TAVERNS/BARS:
+	
+	That's that. I think a bar is the perfect setting for a resting area/recovery place/quest board. 
+
+
+ROCK PAPER SCISSORS:
+	
+	Elemental attacks? Swords poke through soft flesh but suck against scales?
+
+
+
+
+
+I want this game to have feeling. I don't want you to run through a building and slaughter every last person, stripping them of their armor and killing their monsters, and reach the top with a feeling of pure happiness. You've got to really have motivation for killing them. Or be a Evil character who just wants to destroy.
+
+I want you to roleplay and care deeply about your character and your companions and the impact you're having on the world.
+
+I think the biggest thing I want for ths game is to give the player the ability to kill and die. I want death to be permanent, no respawn timer.
+
+Maybe not everything dies. But when something does, it matters.
+
+}

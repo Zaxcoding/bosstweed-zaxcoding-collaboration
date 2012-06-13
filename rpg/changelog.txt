@@ -1,0 +1,10 @@
+{
+	Zach - 6/13/12
+
+	Added brainstorm.txt, just a bunch of thinking out loud.
+	
+	Downloaded Pixen, a pixel art editor, and tried to make a grass tile, based on a tutorial: petesqbsite.com/sections/tutorials/tuts/tsugumo/
+	This shit is going to be ridiculously tough.
+
+	I'm going to shower and then come back and brainstorm some more. 
+}
