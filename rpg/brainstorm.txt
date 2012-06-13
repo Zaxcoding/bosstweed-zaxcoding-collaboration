@@ -1,4 +1,87 @@
 {
+	// Zach - Initial Brainstorm (round 2) - 6/13/12
+
+STATS:
+	
+	Do monsters and people have seperate stats? The same? How do you compare a man to a dragon?
+
+	I love the stats in Dark Souls, and also D&D, the original RPG.
+
+	HP -			Health. At <= 10% you're bloodied, at 0% you're dead.
+	MP - 			I actually don't want an MP system at all. I love 
+					playing as spellcasters in games but I hate that you have to lug around dozens of potions or just be limited. I think we can balance it so it's not necessary to have MP, especially with only one or two magic classes.
+
+
+	Core ability scores: These don't go up when you level up (except very infrequently). They're pretty much locked in when you roll your character
+
+	Strength -		Physical attacks, ability to lift certain weapons.
+					This is your typical fighter's best stat.
+	Dexterity -		Allows you to use skill-based weapons, critical hit dmg.
+					Theif's best stat.
+	Charisma -		Recruiting people, bartering, talking your way out of
+					fights. Diplomat's best stat.
+	Intelligence -	Magic damage and defense, potentially learning languages.
+					The wizard's best stat.
+	Wisdom - 		Allows a greater range of spells you can cast. 
+					The sorcerer's best stat.
+	Constitution - 	Defense, hit points, resistance to diseases.
+	Luck - 			Better drop rates, better critical hit chance.
+
+
+
+	Stats: More traditional stats that go up when you level up.
+
+	Speed - 		Determines when/how often you attack.
+	Weapon skills - Maybe you can gain proficiencies with certain types of 
+					weapons to get perks when you use them?
+
+	Not really thinking of a lot of stats. Maybe you gain +1 Ability score every three levels, and otherwise just gain more health, better loot, and the like?
+
+	Hmm...
+
+
+PERKS:
+
+	A la Skyrim.
+
+	We could do something akin to this for leveling up. You gain X perk points to put into various trees and unlock new abilities/proficiencies/etc.
+
+	We could also do something closer to WoW/Diablo/Torchlight/MMO type games where it's fewer strict tech trees (specific to character types) and you choose among those. I actually think this is more appropriate if we choose to do specialized classes, but if we have a build-your-own-class type thing then the Skyrim perks sound better.
+
+
+
+Lets talk character progression.
+
+I really love the Dark Souls style of levelling up. I know it's very atypical for an RPG, but it could work out really well actually. Here's the idea: you kill enemies and take their souls (or whatever other currency we want- even XP). Then at designated points (bonfires/save points) you can choose to spend those points to upgrade your stats. In Dark Souls when you die all of the souls you have on you (that you haven't spent) are dropped in a puddle where you died, and you have to go back and touch them before dying again or they're gone forever.
+
+I'm not sure if I want the sort of punishing difficulty level of Dark Souls, so I don't know if I like the idea of having to race back to get your souls (and I'm still not sure if you'll still be alive (the whole death thing)). I think what we can take from Dark Souls is the idea of just getting a big pool of experience and then divvying it out how you choose. 
+	- If you want to put 50,000 experience into your commander and never buff up anyone else then go for it. Just hope he doesn't die, or you're a chump again.
+	- This can also let you kinda choose your style. You can try to solo the game with just a single character or have a full team of mid-range guys.
+	- Maybe there's some way to recover all or a portion of your character's xp when he dies? So that you don't feel horrible about sinking a ton of time into a guy and then wasting it all.
+	- In Dark Souls the idea is that you can only lose the souls you haven't spent. Once you upgrade your chracater those changes are saved and your safe. You only feel danger when you are carrying a lot on you - not in every single battle.
+
+Hmm...
+
+In Pokemon/RPGs the characters you use in battle succesfully gain experience from it. This makes levelling up a Magikarp really annoying and you have to do the 'show your face then get switched out for an actual fighter' technique. I also did that but I just didn't enjoy it. It's tedious and not fun. I think that if we're doing a commander + allies style fight then there should definitely be a pool of exp/whatever that gets divided up amongst the people as you see fit. Maybe there are some abilities/statuses like 'greedy' and 'altruistic' that determine if certain characters get more/less of the xp.
+
+
+CHARACTER CLASSES:
+	
+	Monk: 	Must be good.
+			A spiritual warrior that fights with his fists.
+			Mix of the Monk in Diablo and a Paladin. Resistant to most diseases, high defense and health stats. A physical fighter who can't equip weapons (or at least a very limited selection) and only very light armor. Instead of just throwing on sick gear to make him powerful, you need to level him up. His perk tree is better than the other character classes because as he gains experience his inner powers grow. Primary stat: constitution.
+
+
+I'm still not completely sure if we want to be able to gain people almost like we do pokemon, or if it'll just be your main character that is the commander. But if we can gain people then maybe you have to talk them into joining you. Either intimidate them and keep them with you via fear, or persuade them/charm them to follow you because they love you. 
+
+I'm trying to figure out what kind of world this is, if it's true that you'll be able to get people to fight for you (sometimes against their will).
+Hmm..
+
+Lots and lots of thinking to do. On theme, setting, story, mechanics. Hmm..
+
+}
+
+{
 // Zach - Initial Brainstorm - 6/13/12
 // Formatted to be read with 78 line word wrap.
 
@@ -11,6 +94,7 @@ INSPIRATION:
 		Pokemon Red/Blue
 		Dragon Warrior Monsters
 		Superbrothers: Swords & Sworcery EP
+		DARK SOULS
 
 	Games I want to play:
 		On the Rainslick Precipice of Darkness 3
