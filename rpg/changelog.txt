@@ -2,9 +2,22 @@
 	Zach - 6/13/12
 
 	Added brainstorm.txt, just a bunch of thinking out loud.
-	
+
 	Downloaded Pixen, a pixel art editor, and tried to make a grass tile, based on a tutorial: petesqbsite.com/sections/tutorials/tuts/tsugumo/
 	This shit is going to be ridiculously tough.
 
 	I'm going to shower and then come back and brainstorm some more. 
+
+	Also, some links:
+	http://spriters-resource.com/snes/smariorpg/index.html
+		- this is the Super Mario RPG sprite sheet page and also just an 
+		awesome website with tons of sprite sheets/pixel art to check out.
+	http://spriters-resource.com/gameboy_advance/pokefrlg/sheet/3713
+		- this is from Pokemon FireRed/LeafGreen. A great example of why a 
+		tool like Pixen is so useful. Just open it up in Pixen and turn on 
+		the grid, then you can see the exact pixels making up each pokemon.
+
+	Also, I want us to build our own or find a cool tile map editor that we can use with our tiles we make. Much easier than piecing together the maps ourselves.
+
+	Okay, now I'm really going to shower.
 }
