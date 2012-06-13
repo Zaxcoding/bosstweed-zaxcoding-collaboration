@@ -1,4 +1,88 @@
 {
+	//Andy- Brainstorm (round 1(or 3?)) - 6/13/12
+
+
+INITIAL THOUGHTS: holy crap tetris -> rpg how did this progression happen… loving it though. This will be difficult and considering we are both noobs with graphics animations c++ opengl pixen and everything else involved we should not, as discussed before, have a global timeline for fear of becoming discouraged, if done right this should not be completed for a long time, but I am so pumped up to get started and see where the road takes us, one thing is for sure, it will not make us worse programmers so I'm definitely in.
+
+Also, I think this brainstorming process is currently a hurricane. as in woah we have stats and worlds and dying characteristics and everything moshed together which is great to start off but with some working together and collaborating on this i think it would be really great to get some core features down, some absolutely fundamental properties done first. My list for this is:
+
+FUNDAMENTALS:
+
+1.) Setting: where are we? i feel like setting adds so much to games, i.e Bastion/ Limbo, setting is nearly everything. This will probably help us out with character design like "would a dragon live here?" " would a wizard live here?" " would a 3 headed fire breathing giant snake live here?" 
+
+2.) Leveling: RPG to me is where are you and how are you making your character awesome, we've covered where, now how to progress. The pooling idea is cool, it made me think of fable 2 with the colored orbs of skill and such. which i think is a really cool idea. I also immediately love the idea of greedy and altruistic characters. but ill get to that.
+So initially we fight a battle (turn based or action, doesn't matter) and afterwards we get rewarded with XP or something with a cooler name, could be based off of the setting (i.e. souls). My initial vote is for you NOT to take other characters armor when they die. I think stores are a really sweet thing. I know when i game i see a store and i immediately want the coolest thing in the store, so i will save for it. This is in leveling because I'm not sure yet if the XP should also be the currency, it would be a weird tie in like would you like to make your character better OR get really sweet weapons. 
+
+3.) Hero/Villian..Character: Who am I?, honestly i don't think this is as important as the setting or leveling because in fallout or skyrim yes its cool to initially make a character but I've forgotten that I've put a ridiculous mustache on my fallout guy until now, it doesn't effect the game a whole lot. It seems like we are in some sort of agreement that we have a master ( main character) with some slaves ( monsters that were obtained in some way) so are we a character whom you can customize(fable, fallout) or just "the main character" (pokemon). I think is somewhat customizable for you now with all the different character descriptions (monk, thief, etc) but again is this a general thief , or me as a thief. I don't see how the character really matters if they don't fight, so Im going to assume they fight in some way, or do they pass their skills or abilities to their monsters? A lot to go over here. 
+		Basic Questions:
+			1.) custom or general character?(my vote general, i don't need red hair and purple shoes to feel cool, give me a thief or a mage and let me start playing)
+			2.) Do they fight? no opinion right now
+			3.) Can they die? I'm going to initially say no, because thats game over, right? is that good?
+
+4.) Monsters: i don't think specific monsters are too important, especially right now. They'll come as we go and think of cool abilities. We do need to know.. how many monsters can i have? infinite? 1? 2? 6? if many we need a way of containing or holding them. if a few we can have them follow. I think monsters should level fairly fast, if you want of course, i think the pooling idea is great, monster A wins a fight, give it all to monster B if you want to make him better. This is where greedy would come in, say monster A is greedy, either he cannot give to and altruistic character or he can't give at all, i say not at all but that might have issues. Altruistic characters can't keep X% of winnings (50%, 100%, 0%?!) probably 50 but again detail that is not yet important. 
+
+So we have a setting, we have a leveling system, we have a main character, and we have monsters. the main character goes throughout the setting, leveling up the monsters in the specific way. we have an rpg? eh kind of i mean obviously we need tasks and enemies yet, but that, in my opinion is under the leveling category. gear is under the monsters, or main character? not sure about that yet either. and currency potentially IS leveling juice or material, whatever it may be. that also probably has drawbacks, but would be a neat thing to experiment with.
+
+
+Thats my thoughts right away for HOW to start programming an rpg, if we can both get a solid mindset of how those 4 things work with each other we can really get off to a nice start. Im just kind of spitting anything that comes to mind and I'm sure i missed something fundamental, so let me know and we can add it or subtract something you don't deem fundamental that i have included.
+
+
+As for what you currently have:
+
+STATS:
+	Health points are a must, easy way to program life and easy to tell how in danger of dying you are.
+	Magic points, eh I'm kind of in your school of thought here, maybe each character has 5 skill points and can use them. so a mage will shoot a fire ball and a lightning bolt, while a thief will attack twice in a row because of speed, and each of these events uses a skill point so its all kind of in one, and changes depending on what character you have, this way ..like in skyrim, if your a big brute then magic isn't very important.
+
+	Abilities in general- monsters level quickly, main character slowly, don't need to have the same stats, the core abilities you have a good for now, as far as speed though i think that should be monster dependent and weapon ability again is that a weapon your character uses or monster uses, if monster than thats his ability in attack or whatever, if main then its a combo of strength and dexterity. WE NEED TO KNOW IF CHARACTERS ATTACK.
+
+PERKS: 
+	To me this is pretty simple. I mean we could reprogram skyrim and get all complex but i don't see the need, put the perks in weapons, and we are done, we have gear that has its own special features that helps the monsters, that way when gear is lost(with a dead character) more sadness and despair mwahahahaha.
+
+I think i covered my progression in leveling up top. as of now just a general pool of points gained from winning battles, used for buying and leveling, its so valuable like adam in bioshock. not the use of it but how it is wanted and coveted in the world.
+
+Slave people adds a very complex part to the game, and maybe all monsters are people ???? like a global fight club haha. definitely something to discuss. like you have a clan and you pick the commander( he gets extra skill points) and we can go on and on…. this is something to discuss i like it right now.
+
+INSPIRATION:
+	bioshock
+	fallout
+	bastion
+	skyrim
+	mario
+	pokemon
+
+	bioshock- story is so cool and so wow
+	fallout - what would you do in that world/setting
+	bastion - immediately fun and intriguing environment, very original
+	skyrim - mega world, mega items, just so much going on, hard not to be impressed
+	mario - fun,rewarding and addicting, simplicity, definitely something we will have to focus on
+	pokemon- seems to be the main driver of this game right now.
+
+COMBAT:
+	does main character fight? in clan of people idea YES. in pokemon idea probably not.
+
+DEATH:
+	I think you got my idea of this in the Skype chat. basically save monsters/people separately and save before player knows they died.
+
+CHARACTER CLASSES:
+	Not terribly concerned with this yet, what you have is great for now
+COMBAT SYSTEM:
+	turn based: easy to code
+		    not as crazy fun? maybe
+		    obvious how to do monsters people, pokemon
+	action:	animations and more code
+		cooler appeal, might be more fun
+		harder to do the death save
+		how do we have a clan here? or other monsters?
+GOOD EVIL:
+	its probably a good idea to have morality be a part of the game, but again not immediately important to me this moment.
+
+pushing this now so we can talk about it. this is gigantic. FUNDAMENTALS, we will go crazy over details, we must start a foundation first.
+
+
+
+	
+
+{
 	// Zach - Initial Brainstorm (round 2) - 6/13/12
 
 STATS:
