@@ -1,9 +1,0 @@
-{
-Andy- 6/14/12
-
-Texturedemo.java - just creates a big black screen with a tiny tiny wood jpg as a texture square, the wood.jpg was the image file used.
-
-helloworld.java - this one is cooler, you can drag the squares around with left click and let go with right click and the color changes with left click
-
-for these to work you need the lwjgl set up, I don't know how to do it any other way than by following the youtube videos that i did so i definitely suggest that! follow the link, it will take about a half hour to get everything up and running to a point where you are comfortable, maybe even shorter. many many future commits for this as there are 29 videos and i am only through 5. episode 9 is pong!!! so pumped for that. 
-}
