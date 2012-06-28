@@ -39,7 +39,7 @@ public class SideScrollerDemo {
 	public static final int width = 640;
 	public static final int height = 480;
 	private Bat bat,bat3,bat4,bat5,bat6;
-
+	int lives =5;
 	private Bat end1,end2,end3,end4,end5,end6,end7,end8,end9,end10,end11;
 	private boolean jump=false,fall = true,onGround=false,fallPoint = true,bounce =false,bounce2=false,go=false;
 	private boolean notMoved=true,blueFound = false,blueFound2=false,goldFound=false,goldFound2=false,goldFound3=false,goldFound4=false,goldFound6=true;
@@ -57,7 +57,7 @@ public class SideScrollerDemo {
 	private Gem gem;
 	
 	private static enum State {
-		INTRO, MAIN_MENU,LEVEL1,LEVEL_SELECT,ABOUT,EXIT,GAMEOVER;
+		INTRO, MAIN_MENU,LEVEL1,LEVEL_SELECT,ABOUT,EXIT,GAMEOVER,WIN;
 		
 	}
 	private State state = State.INTRO ;
@@ -244,11 +244,11 @@ private void drawAbout(){
 	glColor3f(0f,0f,0f);
 	glRectf(160,50,480,430);
 	glEnable(GL_BLEND);
-    
-	uniFont2.drawString(170, 60, "This game was developed by Andrew Beers.");
-	uniFont2.drawString(170, 120, "It is meant for anyone who would like to play.");
-	uniFont2.drawString(170, 180, "A Special Thanks to Zach Sadler.");
-	uniFont.drawString(170,250,"M-Main Menu");
+	uniFont.drawString(170,60,"ABOUT");
+	uniFont2.drawString(170, 120, "This game was developed by Andrew Beers.");
+	uniFont2.drawString(170, 180, "It is meant for anyone who would like to play.");
+	uniFont2.drawString(170, 240, "A Special Thanks to Zach Sadler.");
+	uniFont.drawString(170,310,"M-Main Menu");
 	GL11.glDisable(GL11.GL_TEXTURE_2D);
 	//EDIT.. glDisable texture is required here.
 	        
@@ -615,32 +615,32 @@ private void draw() {
 	{
 		translate_y-=delta*dy*.55;
 	}
-	if(box.intersects(key))
+	if(box.contains(key)||key.intersects(box)||box.contains(key))
 	{
 		blueFound = true;
 	}
 	
-	if(box.intersects(key2))
+	if(box.intersects(key2)||key2.intersects(box)||box.contains(key2))
 	{
 		blueFound2 = true;
 		
 	}
-	if(box.intersects(gold)&&!goldFound)
+	if((box.intersects(gold)||box.contains(gold))&&!goldFound)
 	{
 		goldFound = true;
 		goldCount++;
 	}
-	if(box.intersects(gold2)&&!goldFound2)
+	if((box.intersects(gold2)||box.contains(gold2))&&!goldFound2)
 	{
 		goldFound2 = true;
 		goldCount++;
 	}
-	if(box.intersects(gold3)&&!goldFound3)
+	if((box.intersects(gold3)||box.contains(gold3))&&!goldFound3)
 	{
 		goldFound3 = true;
 		goldCount++;
 	}
-	if(box.intersects(gold4)&&!goldFound4)
+	if((box.intersects(gold4)||box.contains(gold4))&&!goldFound4)
 	{
 		goldFound4 = true;
 		goldCount++;
@@ -667,7 +667,8 @@ private void draw() {
 		gem.setY(0);
 		dead[21].setY(0);
 		dead[21].setX(0);
-		translate_x-=6400;
+		state = State.WIN;
+		
 	}
 	
 	if(newWorld)
@@ -684,7 +685,11 @@ private void draw() {
 	for(int i=1;i<23;i++){
 		if(box.intersects(dead[i]))
 		{
-			state = State.GAMEOVER;
+			lives--;
+			initialize();
+			if(lives==0){
+				state = State.GAMEOVER;
+			}
 		}
 		dead[i].draw();
 	}
@@ -840,6 +845,37 @@ glEnable(GL_BLEND);
 glDisable(GL_BLEND);
 }
 
+private void drawWin(){
+	glColor3f(.8f,0.8f,0.3f);
+	glRectf(0,0,640,480);
+	
+	glColor3f(0f,0f,0f);
+	glRectf(160,50,480,430);
+	
+glEnable(GL_BLEND);
+    
+	uniFont.drawString(260, 50, "You WON!");
+	uniFont.drawString(250, 150, "Try Level 2?");
+	uniFont.drawString(250, 210, "Y-Yes");
+	uniFont.drawString(250, 270, "M-Main Menu");
+	uniFont.drawString(250, 330, "E-Exit");
+	GL11.glDisable(GL11.GL_TEXTURE_2D);
+	//EDIT.. glDisable texture is required here.
+	        
+glDisable(GL_BLEND);
+}
+
+private void drawLives(){
+glEnable(GL_BLEND);
+    
+	uniFont2.drawString(0, 0, "Lives :"+ lives);
+	uniFont2.drawString(100,0,"Gold : "+(goldCount));
+	GL11.glDisable(GL11.GL_TEXTURE_2D);
+	//EDIT.. glDisable texture is required here.
+	        
+glDisable(GL_BLEND);
+}
+
 
 private void drawLevel(){
 	glColor3f(.7f,0.1f,0.3f);
@@ -850,7 +886,7 @@ private void drawLevel(){
 	
 glEnable(GL_BLEND);
     
-	uniFont.drawString(260, 50, "Level Select");
+	uniFont.drawString(260, 50, "LEVEL SELECT");
 	uniFont2.drawString(200, 90, "Press the key next to the item to select");
 	uniFont.drawString(200, 150, "1-Level 1");
 	uniFont.drawString(200, 210, "2-Level 2(in progress)");
@@ -969,11 +1005,30 @@ private void checkInput(){
 			state = State.EXIT;
 			
 		}
+	case WIN:
+		if(Keyboard.isKeyDown(Keyboard.KEY_Y))
+		{
+			state = State.LEVEL1;
+			lastFrame = getTime();
+			oldFrame = getTime();
+			initialize();
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_M)){
+			state = State.MAIN_MENU;
+		}
+		if(Keyboard.isKeyDown(Keyboard.KEY_E)){
+			state = State.EXIT;
+			
+		}
 		
 	}
 	
 }
 private void initialize(){
+	jump=false;fall = true;onGround=false;fallPoint = true;bounce =false;bounce2=false;go=false;
+	notMoved=true;blueFound = false;blueFound2=false;goldFound=false;goldFound2=false;goldFound3=false;goldFound4=false;goldFound6=true;
+	onGold7=false;onGold8=false;onGold9=false;onGold10=false;onGold11=false;newWorld=false;
+	gravity = true;
 	translate_x=0;
 	translate_y=0;
 	bat = new Bat(0, 475, 400, 480);
@@ -1083,6 +1138,9 @@ private void initialize(){
 	gold11 = new Gold(8900,1200,1000,15);
 	gem = new Gem(9800,1120,60,100);
 }
+
+
+
 private void render(){
 	switch(state){
 	case INTRO:
@@ -1096,6 +1154,8 @@ private void render(){
 		break;
 	case LEVEL1:
 		draw();
+		drawLives();
+		//drawGold();
 		break;
 	case ABOUT:
 		drawAbout();
@@ -1107,6 +1167,10 @@ private void render(){
 		break;
 	case GAMEOVER:
 		drawGameOver();
+		break;
+	case WIN:
+		drawWin();
+		break;
 			
 	}
 	
@@ -1229,7 +1293,31 @@ class Grav extends AbstractMoveableEntity{
 			glRectd(x,y, x+width, y+height);
 		
 	}
-	
+	public boolean intersects(Entity other)
+	{
+		boolean intersect = false;
+		if((this.getX()+this.getWidth())>= other.getX()&&(this.getX()+this.getWidth())<=(other.getX()+other.getWidth())&&(this.getY()+this.getHeight())>=other.getY()&&(this.getY()+this.getHeight())<=(other.getY()+other.getHeight()))
+		{
+			intersect = true;
+			
+		}
+		else if((this.getX()+this.getWidth())>= other.getX()&&(this.getX()+this.getWidth())<=(other.getX()+other.getWidth())&&this.getY()>=other.getY()&&this.getY()<=(other.getY()+other.getHeight()))
+		{
+			intersect = true;
+			
+		}
+		else if(this.getX()>= other.getX()&&this.getX()<=(other.getX()+other.getWidth())&&(this.getY()+this.getHeight())>=other.getY()&&(this.getY()+this.getHeight())<=(other.getY()+other.getHeight()))
+		{
+			intersect = true;
+			
+		}
+		else if(this.getX()>= other.getX()&&this.getX()<=other.getX()+other.getWidth()&&this.getY()>=other.getY()&&this.getY()<=(other.getY()+other.getHeight()))
+		{
+			intersect = true;
+			
+		}	
+		return intersect;
+	}
 	
 }
 class Gem extends AbstractMoveableEntity{
