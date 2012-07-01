@@ -51,7 +51,7 @@ public class DEMO2 {
 	private Gold[] gold,light;
 	private Gold ledge;
 	private Ice wall;
-	private Box[] lights;
+	private Bat[] lights;
 	private Gem gem;
 	int cliffnum=7,lastDIR,icenum=9,deadnum=48,gravnum=17;
 	int count;
@@ -81,7 +81,7 @@ public class DEMO2 {
 		initMain();
 		initGL();
 		initFonts();
-		mainc = loadTexture("air");
+		mainc = loadTexture("bag");
 		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -91,7 +91,7 @@ public class DEMO2 {
 		while(!Display.isCloseRequested()){
 			
 			glClear(GL_COLOR_BUFFER_BIT);
-			
+		
 			checkInput();
 			//render();
 			renderer();
@@ -336,7 +336,7 @@ public class DEMO2 {
 		bat[14] = new Bat(550,200,150,5);
 		bat[15] = new Bat(635,0,5,200);
 		batnum=16;
-		box = new Box(20,20,16,16);
+		box = new Box(20,20,26,26);
 		
 	}
 	
@@ -642,6 +642,11 @@ public class DEMO2 {
 			if(box.intersects(dead[i])){
 				//translate_x=0;
 				//translate_y=0;
+				if(jump){
+					fall = true;
+					jump = false;
+					jumpvar =false;
+				}
 				state = State.GAMEOVER;
 				initVars();
 			}
@@ -722,7 +727,7 @@ public class DEMO2 {
 			grav[i].draw();
 		}
 		
-		if(box.intersects(bit[0])||box.contains(bit[1])){
+		if(box.intersects(bit[0])||box.contains(bit[0])){
 			blueFound = true;
 		}
 		if(box.intersects(bit[1])||box.contains(bit[1])){
@@ -908,10 +913,11 @@ public class DEMO2 {
 			
 		}
 		wall.draw();
-		box.draw();
+		
 		ledge.draw();
 		gem.draw();
 		
+		box.draw();
 		glPopMatrix();
 		
 	}
@@ -1064,17 +1070,17 @@ public class DEMO2 {
 		appear = new Grav[10];
 		gold = new Gold[5];
 		light = new Gold[5];
-		lights = new Box[5];
+		lights = new Bat[5];
 		
 		gem = new Gem(20,270,80,80);
 		ledge = new Gold(225,300,30,5);
 		
 		
-		lights[0] = new Box(20,230,10,20);
-		lights[1] = new Box(60,230,10,20);
-		lights[2] = new Box(100,230,10,20);
-		lights[3] = new Box(140,230,10,20);
-		lights[4] = new Box(180,230,10,20);
+		lights[0] = new Bat(20,230,10,20);
+		lights[1] = new Bat(60,230,10,20);
+		lights[2] = new Bat(100,230,10,20);
+		lights[3] = new Bat(140,230,10,20);
+		lights[4] = new Bat(180,230,10,20);
 		
 		light[0] = new Gold(22,225,6,15);
 		light[1] = new Gold(62,225,6,15);
@@ -1105,7 +1111,7 @@ public class DEMO2 {
 		dead[1] = new Dead(700,350,900,5);
 		dead[2] = new Dead(0,170,3000,5);
 		dead[3] = new Dead(1000,205,5,20);
-		dead[4] = new Dead(1200,205,5,40);
+		dead[4] = new Dead(1200,205,5,30);
 		dead[5] = new Dead(1805,200,5,300);
 		dead[6] = new Dead(1805,650,5,50);
 		dead[7] = new Dead(1805,700,1245,5);
@@ -1186,7 +1192,7 @@ public class DEMO2 {
 		
 		
 		
-		box = new Box(320,250,16,16);
+		box = new Box(320,250,24,24);
 	}
 	private int getDelta(){
 		long currentTime = getTime();
@@ -1202,9 +1208,9 @@ public class DEMO2 {
 	}
 	public void boxDraw(double x, double y , double width, double height){
 		
-		
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
 		mainc.bind();
-		
+		//GL11.glDisable(GL11.GL_TEXTURE_2D);
 		glBegin(GL_QUADS);
 			glTexCoord2f(0,0);
 			glVertex2d(x,y);
@@ -1215,7 +1221,7 @@ public class DEMO2 {
 			glTexCoord2f(0,1);
 			glVertex2d(x,y+height);
 		glEnd();
-		
+		GL11.glDisable(GL11.GL_TEXTURE_2D);
 	}
 	Texture loadTexture(String key){
 		try {
@@ -1246,6 +1252,7 @@ public class DEMO2 {
 		}
 		@Override
 		public void draw(){
+			glColor3d(1.0,1,1);
 			boxDraw(this.x,this.y,this.width,this.height);
 			
 			//glColor3d(.7,.7,.7);
@@ -1293,7 +1300,7 @@ public class DEMO2 {
 		
 		boolean under(Entity other)
 		{
-			return((this.getX()+this.getWidth()) >= other.getX() && this.getX() <= (other.getX() + other.getWidth()) && (this.getY()-this.getHeight()) <= other.getY() && (this.getY()) >= other.getY());
+			return((this.getX()+this.getWidth()) >= other.getX() && this.getX() <= (other.getX() + other.getWidth()) && (this.getY()-this.getHeight()) <= other.getY()-other.getHeight() && (this.getY()) >= other.getY());
 		}
 		boolean contains(Entity other)
 		{
@@ -1321,7 +1328,7 @@ public class DEMO2 {
 //classes
 
 class Bat extends AbstractMoveableEntity{
-	
+	boolean on=false;
 	public Bat(double x, double y , double width, double height){
 		super(x,y,width,height);
 	}
