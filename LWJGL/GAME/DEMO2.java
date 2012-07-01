@@ -37,6 +37,8 @@ public class DEMO2 {
 	private long lastFrame,oldFrame;
 	
 	//variables for level 1
+	private Texture mainc;
+	
 	int x = 10,goldCount=0;
 	int y =440;
 	int dx =1;
@@ -79,7 +81,7 @@ public class DEMO2 {
 		initMain();
 		initGL();
 		initFonts();
-		
+		mainc = loadTexture("air");
 		
 		glMatrixMode(GL_PROJECTION);
 		glLoadIdentity();
@@ -89,7 +91,7 @@ public class DEMO2 {
 		while(!Display.isCloseRequested()){
 			
 			glClear(GL_COLOR_BUFFER_BIT);
-		
+			
 			checkInput();
 			//render();
 			renderer();
@@ -1198,71 +1200,126 @@ public class DEMO2 {
 		return(Sys.getTime() *1000/ Sys.getTimerResolution());
 		
 	}
+	public void boxDraw(double x, double y , double width, double height){
+		
+		
+		mainc.bind();
+		
+		glBegin(GL_QUADS);
+			glTexCoord2f(0,0);
+			glVertex2d(x,y);
+			glTexCoord2f(1,0);
+			glVertex2d(x+width,y);
+			glTexCoord2f(1,1);
+			glVertex2d(x+width,y+height);
+			glTexCoord2f(0,1);
+			glVertex2d(x,y+height);
+		glEnd();
+		
+	}
+	Texture loadTexture(String key){
+		try {
+			return TextureLoader.getTexture("png",new FileInputStream(new File("res/" + key + ".png")));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+		
+	}
 	
+	
+	
+	
+	
+	
+	class Box extends AbstractMoveableEntity{
+		boolean on=false;
+		//Texture main;
+		
+		public Box(double x, double y , double width, double height){
+			super(x,y,width,height);
+			
+		}
+		@Override
+		public void draw(){
+			boxDraw(this.x,this.y,this.width,this.height);
+			
+			//glColor3d(.7,.7,.7);
+				//glRectd(x,y, x+width, y+height);
+			
+		}
+		public boolean intersects(Entity other)
+		{
+			boolean intersect = false;
+			if((this.getX()+this.getWidth())>= other.getX()&&(this.getX()+this.getWidth())<=(other.getX()+other.getWidth())&&(this.getY()+this.getHeight())>=other.getY()&&(this.getY()+this.getHeight())<=(other.getY()+other.getHeight()))
+			{
+				intersect = true;
+				
+			}
+			else if((this.getX()+this.getWidth())>= other.getX()&&(this.getX()+this.getWidth())<=(other.getX()+other.getWidth())&&this.getY()>=other.getY()&&this.getY()<=(other.getY()+other.getHeight()))
+			{
+				intersect = true;
+				
+			}
+			else if(this.getX()>= other.getX()&&this.getX()<=(other.getX()+other.getWidth())&&(this.getY()+this.getHeight())>=other.getY()&&(this.getY()+this.getHeight())<=(other.getY()+other.getHeight()))
+			{
+				intersect = true;
+				
+			}
+			else if(this.getX()>= other.getX()&&this.getX()<=other.getX()+other.getWidth()&&this.getY()>=other.getY()&&this.getY()<=(other.getY()+other.getHeight()))
+			{
+				intersect = true;
+				
+			}	
+			return intersect;
+		}
+
+		boolean on(Entity other)
+		{
+			return(((this.getX() <= (other.getX() + other.getWidth()) || (this.getX() + this.getWidth())<=(other.getX() + other.getWidth())))&& ((this.getX() >=other.getX())||((this.getX()+this.getWidth()) >=other.getX()) ) && ((this.getY()+this.getHeight()) >=other.getY()) && ((this.getY()+this.getHeight()) <= (other.getY() + other.getHeight())));
+		}
+		boolean leftOf(Entity other)
+		{
+			return((this.getX()+this.getWidth()+10)>=other.getX() &&this.getX()<=other.getX()&& this.getY()>other.getY() && this.getY()<( other.getY()+other.getHeight()));
+		}
+		boolean rightOf(Entity other)
+		{
+			return(this.getX()>=other.getX() &&this.getX()<=(other.getX()+other.getWidth()+10)&& this.getY()>other.getY() && this.getY()<( other.getY()+other.getHeight()));
+		}
+		
+		boolean under(Entity other)
+		{
+			return((this.getX()+this.getWidth()) >= other.getX() && this.getX() <= (other.getX() + other.getWidth()) && (this.getY()-this.getHeight()) <= other.getY() && (this.getY()) >= other.getY());
+		}
+		boolean contains(Entity other)
+		{
+			return((this.getX()<other.getX()) && ((this.getX()+this.getWidth())>(other.getX()+other.getWidth())) && this.getY()<other.getY() && (this.getY() + this.getHeight())>(other.getY()+other.getHeight()));
+		}
+		
+		Texture loadTexture(String key){
+			try {
+				return TextureLoader.getTexture("png",new FileInputStream(new File("res/" + key + ".png")));
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return null;
+			
+		}
+		
+	}
 }
 
 
 //classes
-class Box extends AbstractMoveableEntity{
-	boolean on=false;
-	public Box(double x, double y , double width, double height){
-		super(x,y,width,height);
-	}
-	@Override
-	public void draw(){
-		glColor3d(.7,.7,.7);
-			glRectd(x,y, x+width, y+height);
-		
-	}
-	public boolean intersects(Entity other)
-	{
-		boolean intersect = false;
-		if((this.getX()+this.getWidth())>= other.getX()&&(this.getX()+this.getWidth())<=(other.getX()+other.getWidth())&&(this.getY()+this.getHeight())>=other.getY()&&(this.getY()+this.getHeight())<=(other.getY()+other.getHeight()))
-		{
-			intersect = true;
-			
-		}
-		else if((this.getX()+this.getWidth())>= other.getX()&&(this.getX()+this.getWidth())<=(other.getX()+other.getWidth())&&this.getY()>=other.getY()&&this.getY()<=(other.getY()+other.getHeight()))
-		{
-			intersect = true;
-			
-		}
-		else if(this.getX()>= other.getX()&&this.getX()<=(other.getX()+other.getWidth())&&(this.getY()+this.getHeight())>=other.getY()&&(this.getY()+this.getHeight())<=(other.getY()+other.getHeight()))
-		{
-			intersect = true;
-			
-		}
-		else if(this.getX()>= other.getX()&&this.getX()<=other.getX()+other.getWidth()&&this.getY()>=other.getY()&&this.getY()<=(other.getY()+other.getHeight()))
-		{
-			intersect = true;
-			
-		}	
-		return intersect;
-	}
 
-	boolean on(Entity other)
-	{
-		return(((this.getX() <= (other.getX() + other.getWidth()) || (this.getX() + this.getWidth())<=(other.getX() + other.getWidth())))&& ((this.getX() >=other.getX())||((this.getX()+this.getWidth()) >=other.getX()) ) && ((this.getY()+this.getHeight()) >=other.getY()) && ((this.getY()+this.getHeight()) <= (other.getY() + other.getHeight())));
-	}
-	boolean leftOf(Entity other)
-	{
-		return((this.getX()+this.getWidth()+10)>=other.getX() &&this.getX()<=other.getX()&& this.getY()>other.getY() && this.getY()<( other.getY()+other.getHeight()));
-	}
-	boolean rightOf(Entity other)
-	{
-		return(this.getX()>=other.getX() &&this.getX()<=(other.getX()+other.getWidth()+10)&& this.getY()>other.getY() && this.getY()<( other.getY()+other.getHeight()));
-	}
-	
-	boolean under(Entity other)
-	{
-		return((this.getX()+this.getWidth()) >= other.getX() && this.getX() <= (other.getX() + other.getWidth()) && (this.getY()-this.getHeight()) <= other.getY() && (this.getY()) >= other.getY());
-	}
-	boolean contains(Entity other)
-	{
-		return((this.getX()<other.getX()) && ((this.getX()+this.getWidth())>(other.getX()+other.getWidth())) && this.getY()<other.getY() && (this.getY() + this.getHeight())>(other.getY()+other.getHeight()));
-	}
-	
-}
 class Bat extends AbstractMoveableEntity{
 	
 	public Bat(double x, double y , double width, double height){
