@@ -1,20 +1,17 @@
 package entities;
 
 import java.io.ObjectInputStream;
+import game.Game;
 import java.io.ObjectOutputStream;
-import org.newdawn.slick.opengl.Texture;
 
 public class Wheel extends Shape
 {
 
 	public boolean switch1 = true;
-	Texture wheeli, wheeli2;
 	
 	public Wheel(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
-		wheeli = loadTexture("wheeli");
-		wheeli2 = loadTexture("wheeli2");
 	}
 
 	@Override
@@ -60,10 +57,10 @@ public class Wheel extends Shape
 		}
 	*/
 		if(switch1){
-			wheeli.bind();
+			Game.wheeli.bind();
 		}
 		else{
-			wheeli2.bind();
+			Game.wheeli2.bind();
 		}
 		
 		textureVertices();

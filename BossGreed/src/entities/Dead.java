@@ -2,7 +2,7 @@ package entities;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import org.newdawn.slick.opengl.Texture;
+import game.Game;
 
 public class Dead extends Shape
 {
@@ -10,21 +10,9 @@ public class Dead extends Shape
 		
 	public int i = 0, j = 0;
 	
-	public Texture deadi, deadi1, deadi2, deadi3, deadi4, deadv, deadv1, deadv2, deadv3, deadv4;
-
 	public Dead(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
-		deadi = loadTexture("deadi");
-		deadi1 = loadTexture("deadi1");
-		deadi2 = loadTexture("deadi2");
-		deadi3 = loadTexture("deadi3");
-		deadi4 = loadTexture("deadi4");
-		deadv = loadTexture("deadv");
-		deadv1 = loadTexture("deadv1");
-		deadv2 = loadTexture("deadv2");
-		deadv3 = loadTexture("deadv3");
-		deadv4 = loadTexture("deadv4");
 	}
 
 	@Override
@@ -34,19 +22,19 @@ public class Dead extends Shape
 		
 		if(this.vert){
 			if(this.j<=10){
-				deadv.bind();
+				Game.deadv.bind();
 			}
 			else if(this.j<=20){
-				deadv1.bind();
+				Game.deadv1.bind();
 			}
 			else if(this.j<=30){
-				deadv2.bind();
+				Game.deadv2.bind();
 			}
 			else if(this.j<=40){
-				deadv3.bind();
+				Game.deadv3.bind();
 			}
 			else if(this.j<=50){
-				deadv4.bind();
+				Game.deadv4.bind();
 				if(this.j==50)
 					this.j=0;
 			}
@@ -57,19 +45,19 @@ public class Dead extends Shape
 		}
 		else{
 			if(this.i<=10){
-				deadi.bind();
+				Game.deadi.bind();
 			}
 			else if(this.i<=20){
-				deadi1.bind();
+				Game.deadi1.bind();
 			}
 			else if(this.i<=30){
-				deadi2.bind();
+				Game.deadi2.bind();
 			}
 			else if(this.i<=40){
-				deadi3.bind();
+				Game.deadi3.bind();
 			}
 			else if(this.i<=50){
-				deadi4.bind();
+				Game.deadi4.bind();
 				if(i==50)
 					this.i=0;
 			}

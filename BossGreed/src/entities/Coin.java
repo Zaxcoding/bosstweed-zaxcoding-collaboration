@@ -2,16 +2,13 @@ package entities;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import org.newdawn.slick.opengl.Texture;
+import game.Game;
 
 public class Coin extends Shape
-{
-	Texture coini;
-	
+{	
 	public Coin(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
-		coini = loadTexture("coini");
 	}
 
 	@Override
@@ -19,7 +16,7 @@ public class Coin extends Shape
 	{
 		textureStart();
 		
-		coini.bind();
+		Game.coini.bind();
 		
 		textureVertices();
 	}

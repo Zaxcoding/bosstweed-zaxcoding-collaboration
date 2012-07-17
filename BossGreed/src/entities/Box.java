@@ -2,32 +2,27 @@ package entities;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import org.newdawn.slick.opengl.Texture;
+import game.Game;
+
+import static org.lwjgl.opengl.GL11.*;
 
 public class Box extends Shape
 {
 	public boolean on = false;		// on what?
-	public boolean gravity;			// moved this here
 	public int type = 0;			// not too clear on what this is
 	
-	public int i = 0, lastDIR = 0;
-	
-	public Texture left, right, gright, gleft;
-	
+	public int i = 0;
 	
 	public Box(double x, double y , double width, double height)
 	{
 		super(x,y,width,height);
-		left = loadTexture("left");
-		gleft = loadTexture("gleft");
-		right = loadTexture("right");
-		gright = loadTexture("gright");
-		
 	}
 	
 	@Override
-	public void draw(){
+	public void draw()
+	{
 		textureStart();
+		
 		/*
 		if(goldCount==0){
 			if(gravity){
@@ -161,26 +156,26 @@ public class Box extends Shape
 		*/
 		
 		if (this.type == 0){		// isn't this always the case?
-			if(gravity){
-				if(lastDIR==1){
-					left.bind();
+			if(Game.gravity){
+				if(Game.lastDIR==1){
+					Game.left.bind();
 				}
-				else if(lastDIR==2){
-					right.bind();
+				else if(Game.lastDIR==2){
+					Game.right.bind();
 				}	
 			}
 			else{
-				if(lastDIR==1){
-					gleft.bind();
+				if(Game.lastDIR==1){
+					Game.gleft.bind();
 				}
-				else if(lastDIR==2){
-					gright.bind();
+				else if(Game.lastDIR==2){
+					Game.gright.bind();
 				}
 			}
 		}
 		else{
-			// glColor4d(1,1,1,1);
-			gright.bind();
+			glColor4d(1,1,1,1);
+			Game.gright.bind();
 		}
 		
 		textureVertices();

@@ -2,19 +2,15 @@ package entities;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import org.newdawn.slick.opengl.Texture;
+import game.Game;
 
 public class Brick extends Shape
 {
 	public boolean up,on;
 
-	Texture brick, brickv;
-
 	public Brick(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
-		brick = loadTexture("brick");
-		brickv = loadTexture("brickv");
 	}
 
 	@Override
@@ -23,10 +19,10 @@ public class Brick extends Shape
 		textureStart();
 		
 		if(this.up){
-			brickv.bind();
+			Game.brickv.bind();
 		}
 		else{
-			brick.bind();
+			Game.brick.bind();
 		}	
 		
 		textureVertices();

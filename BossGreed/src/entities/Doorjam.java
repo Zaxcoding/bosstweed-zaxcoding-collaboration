@@ -2,19 +2,15 @@ package entities;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import org.newdawn.slick.opengl.Texture;
+import game.Game;
 
 public class Doorjam extends Shape
 {
 	public boolean pause, upp = false, vert = false;
-	
-	Texture doorjam, doorjamv;
-	
+		
 	public Doorjam(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
-		doorjam = loadTexture("doorjam");
-		doorjamv = loadTexture("doorjamv");
 	}
 
 	@Override
@@ -23,10 +19,10 @@ public class Doorjam extends Shape
 		textureStart();
 		
 		if(!this.vert){
-			doorjam.bind();
+			Game.doorjam.bind();
 		}
 		else{
-			doorjamv.bind();
+			Game.doorjamv.bind();
 		}
 		textureVertices();
 	}

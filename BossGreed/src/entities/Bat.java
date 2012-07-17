@@ -2,20 +2,15 @@ package entities;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import org.newdawn.slick.opengl.Texture;
+import game.Game;
 
 public class Bat extends Shape
 {
 	public boolean on = false, up = false, vert = false;
 	
-	Texture cliffv, cliffi;
-
 	public Bat(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
-		cliffv = loadTexture("cliffv");
-		cliffi = loadTexture("cliffi");
-
 	}
 
 	@Override
@@ -24,9 +19,9 @@ public class Bat extends Shape
 		textureStart();
 		
 		if (this.vert)
-			cliffv.bind();
+			Game.cliffv.bind();
 		else
-			cliffi.bind();
+			Game.cliffi.bind();
 
 		textureVertices();
 	}

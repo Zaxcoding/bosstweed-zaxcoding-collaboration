@@ -2,20 +2,15 @@ package entities;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import org.newdawn.slick.opengl.Texture;
+import game.Game;
 
 public class Hang extends Shape
 {
-	
 	public boolean upp = false;
 	
-	Texture hangi, hangv;
-
 	public Hang(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
-		hangi = loadTexture("hangi");
-		hangv = loadTexture("hangv");
 	}
 
 	@Override
@@ -24,10 +19,10 @@ public class Hang extends Shape
 		textureStart();
 		
 		if(!this.upp){
-			hangi.bind();
+			Game.hangi.bind();
 		}
 		else{
-			hangv.bind();
+			Game.hangv.bind();
 		}
 		
 		textureVertices();

@@ -1,8 +1,8 @@
 package entities;
 
+import game.Game;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import org.newdawn.slick.opengl.Texture;
 
 public class Arrow extends Shape
 {
@@ -10,14 +10,10 @@ public class Arrow extends Shape
 	public boolean pause = false;
 	
 	public int i;
-	
-	Texture a1, a2;
-	
+		
 	public Arrow(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
-		a1 = loadTexture("arrow");
-		a2 = loadTexture("arrow1");
 	}
 
 	@Override
@@ -27,11 +23,11 @@ public class Arrow extends Shape
 		
 		if (this.i < 10)
 		{
-			a1.bind();
+			Game.a1.bind();
 		}
 		else if (this.i >= 10 && this.i <= 20)
 		{
-			a2.bind();
+			Game.a2.bind();
 			if (this.i == 20)
 			{
 				this.i = 0;

@@ -1,14 +1,8 @@
 package entities;
 
 import static org.lwjgl.opengl.GL11.*;
-
-
 import java.io.*;
-
 import org.lwjgl.opengl.GL11;
-import org.newdawn.slick.opengl.Texture;
-import org.newdawn.slick.opengl.TextureLoader;
-
 import entities.Shape;
 
 public abstract class Shape
@@ -103,19 +97,6 @@ public abstract class Shape
 		return temp;
 	}
 */
-	Texture loadTexture(String key){
-		try {
-			return TextureLoader.getTexture("png",new FileInputStream(new File("res/" + key + ".png")));
-		} catch (FileNotFoundException e) {
-			
-			e.printStackTrace();
-		} catch (IOException e) {
-			
-			e.printStackTrace();
-		}
-		return null;
-		
-	}
 	
 	public void textureVertices()
 	{

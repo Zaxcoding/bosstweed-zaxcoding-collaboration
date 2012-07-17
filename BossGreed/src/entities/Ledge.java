@@ -2,18 +2,15 @@ package entities;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import org.newdawn.slick.opengl.Texture;
+import game.Game;
 
 public class Ledge extends Shape
 {
 	public boolean upp = false;
 	
-	Texture ledgei;
-
 	public Ledge(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
-		ledgei = loadTexture("ledgei");
 	}
 
 	@Override
@@ -21,10 +18,9 @@ public class Ledge extends Shape
 	{
 		textureStart();
 		
-		ledgei.bind();
+		Game.ledgei.bind();
 		
 		textureVertices();
-		
 	}
 
 	@Override

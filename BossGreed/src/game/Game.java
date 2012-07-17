@@ -37,9 +37,9 @@ public class Game {
 	private long lastFrame,oldFrame;
 	
 	// ******Variables for LEVEL1 and LEVEL2************
-	private Texture left,right,gright,gleft,icel,cliffi,cliffv,icev,deadi,deadi1,deadi2,deadi3,deadi4,deadv,deadv1,deadv2,deadv3,deadv4,coini,door,doorv,gravflip,gravflip2,gravflip3,gravflip4,gravflip5,gravflip6,gravflip7,gravflip8,gravflip9,gravflip10,gravflip11,gravflip12,gravflip13,gravflip14,gravflip15,gravflip16,gravflip17,gravflip18,Lon,Loff,brick,brickv,wallpaper;
-	private Texture cloud1,cloud2,cloud3,cloud4,cloud5,cloud6,cloud7,cloud8,cloud9,cloud10,lboxi,doorjam,doorjamv,woodi,ledgei,ropei,hangi,hangv,wheeli,wheeli2,sky1,sky2,sky3,sky4,sky5,sky6,a1,a2,a3,a4,a5,esc,space,words,words2,words3,words4,words5,words6,words7,words8,words9,words10,words11,words12,words13,words14,words15,words16,words17,words18,words19,words20,words21,words22;
-	private Texture p,pr,pre,pres,press,news;
+	public static Texture left,right,gright,gleft,icel,cliffi,cliffv,icev,deadi,deadi1,deadi2,deadi3,deadi4,deadv,deadv1,deadv2,deadv3,deadv4,coini,door,doorv,gravflip,gravflip2,gravflip3,gravflip4,gravflip5,gravflip6,gravflip7,gravflip8,gravflip9,gravflip10,gravflip11,gravflip12,gravflip13,gravflip14,gravflip15,gravflip16,gravflip17,gravflip18,Lon,Loff,brick,brickv,wallpaper;
+	public static Texture cloud1,cloud2,cloud3,cloud4,cloud5,cloud6,cloud7,cloud8,cloud9,cloud10,lboxi,doorjam,doorjamv,woodi,ledgei,ropei,hangi,hangv,wheeli,wheeli2,sky1,sky2,sky3,sky4,sky5,sky6,a1,a2,a3,a4,a5,esc,space,words,words2,words3,words4,words5,words6,words7,words8,words9,words10,words11,words12,words13,words14,words15,words16,words17,words18,words19,words20,words21,words22;
+	public static Texture p,pr,pre,pres,press,news;
 	//private Texture left1,right1,gright1,gleft1,left2,right2,gleft2,gright2,left3,right3,gleft3,gright3,left4,right4,gleft4,gright4,left5,right5,gleft5,gright5,ski;
 	int x = 10,goldCount=0;
 	int y =440;
@@ -70,14 +70,16 @@ public class Game {
 	private Ledge ledge,ledge1;
 	private Wall wallp;
 	private News [] newspaper;
-	int cliffnum=8,lastDIR,icenum=10,deadnum=46,gravnum=17;
+	int cliffnum=8,icenum=10,deadnum=46,gravnum=17;
 	int count;
 	int delta = getDelta();
 	int cliffWidth =12,iceWidth =12,deadWidth =18,gravWidth=12,lightWidth =16,brickWidth =80,coinWidth=16,coinHeight=2*coinWidth,bitSize=10;
-	boolean jump=false,fall=true,gravity=true,onGround=false,DIRlock = false,jumpvar,blueFound=false,onCliff=false;
-	boolean blueFound2 = false,goldFound=false,up=false,goldFound2=false,goldFound3=false,goldFound4=false,blueFound3=false;
-	boolean goldFound5 = false,win=false,win1=false,ledgeFall=false,ledgeFall1=false;
-	boolean wallhit=false,spaceDraw=false;
+	public static boolean jump=false,fall=true,onGround=false,DIRlock = false,jumpvar,blueFound=false,onCliff=false;
+	public static boolean blueFound2 = false,goldFound=false,up=false,goldFound2=false,goldFound3=false,goldFound4=false,blueFound3=false;
+	public static boolean goldFound5 = false,win=false,win1=false,ledgeFall=false,ledgeFall1=false;
+	public static boolean wallhit=false;
+	public static boolean gravity=true,spaceDraw=false;
+	public static int lastDIR;
 	
 	
 	
@@ -118,11 +120,6 @@ public class Game {
 		
 		
 		//******** initialize all textures********
-		left = loadTexture("bag");
-		right = loadTexture("bagi1");
-		gleft = loadTexture("bagv1");
-		gright = loadTexture("bagv2");
-		
 		
 		
 		/*
@@ -163,6 +160,11 @@ public class Game {
 		gleft5 =loadTexture("bagsv5");
 		gright5 =loadTexture("bagsv5_2");
 		*/
+	
+		left = loadTexture("bag");
+		right = loadTexture("bagi1");
+		gleft = loadTexture("bagv1");
+		gright = loadTexture("bagv2");
 		
 		sky1 = loadTexture("skyline1");
 		sky2 = loadTexture("skyline2");
@@ -269,6 +271,7 @@ public class Game {
 		ledgei = loadTexture("ledge");
 		wheeli = loadTexture("wheel");
 		wheeli2 = loadTexture("wheel1");
+		
 		
 		
 		skyi = new Sky(-10000,-10000,20000,20000);

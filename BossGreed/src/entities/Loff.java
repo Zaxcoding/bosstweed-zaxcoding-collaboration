@@ -2,19 +2,15 @@ package entities;
 
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import org.newdawn.slick.opengl.Texture;
+import game.Game;
 
 public class Loff extends Shape
 {
 	public boolean on = false;
-	
-	Texture Loff, Lon;
-	
+		
 	public Loff(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
-		Loff = loadTexture("Loff");
-		Lon = loadTexture("Lon");
 	}
 
 	@Override
@@ -23,9 +19,9 @@ public class Loff extends Shape
 		textureStart();
 		
 		if(!on)
-			Loff.bind();
+			Game.Loff.bind();
 		else
-			Lon.bind();
+			Game.Lon.bind();
 		
 		textureVertices();
 	}
