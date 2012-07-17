@@ -1,33 +1,22 @@
 package game;
 
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
-
 
 import org.lwjgl.*;
 import org.lwjgl.opengl.*;
 
 import static org.lwjgl.opengl.GL11.*;
 
-
 import org.lwjgl.input.Keyboard;
-
 import org.lwjgl.opengl.Display; 
-
 
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
-
-
 import entities.*;
-
-
-
 
 public class Game {
 	public static final int width = 640;
@@ -95,20 +84,16 @@ public class Game {
 	// ********declare states of the game ********
 	private static enum State {
 		INTRO, MAIN_MENU,LEVEL1,LEVEL_SELECT,ABOUT,CONTROLS,EXIT,GAMEOVER,WIN,LEVEL2,WELCOME,WALLPAPER;
-		
 	}
 	
 	State state = State.WALLPAPER;
-	
-	
-	
 	
 	//********main********
 	public static void main(String [] args){
 		
 		new Game();
 	}
-	
+
 	
 	//********actual game********
 	public Game(){
@@ -118,10 +103,34 @@ public class Game {
 		//initialize window and opengl stuff
 		initGL();
 		
+		//initialize all textures
+		initTextures();
 		
-		//******** initialize all textures********
+		//$$$$ I took out a redundant gl setup here
 		
+		skyi = new Sky(-10000,-10000,20000,20000);
 		
+		//main loop
+		while(!Display.isCloseRequested()){
+			
+			glClear(GL_COLOR_BUFFER_BIT);
+			
+			checkInput();
+			renderer();
+			
+			Display.update();
+			Display.sync(60);
+			
+			
+		}
+		
+		Display.destroy();
+		System.exit(0);
+		
+	}
+	
+	private void initTextures()
+	{
 		/*
 		 * these top 4 are an attempt at a new boss greed but he is too small for it to be useful
 		left = loadTexture("newbagleft");
@@ -271,34 +280,8 @@ public class Game {
 		ledgei = loadTexture("ledge");
 		wheeli = loadTexture("wheel");
 		wheeli2 = loadTexture("wheel1");
-		
-		
-		
-		skyi = new Sky(-10000,-10000,20000,20000);
-		
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0,width,height,0,1,-1);
-		glMatrixMode(GL_MODELVIEW);
-
-		
-		//main loop
-		while(!Display.isCloseRequested()){
-			
-			glClear(GL_COLOR_BUFFER_BIT);
-			
-			checkInput();
-			renderer();
-			
-			Display.update();
-			Display.sync(60);
-			
-		}
-		
-		Display.destroy();
-		System.exit(0);
-		
 	}
+	
 	
 	//check input of whatever state you may be in
 	private void checkInput(){
@@ -326,7 +309,6 @@ public class Game {
 		case INTRO:
 			if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)&&!DIRlock)
 			{
-				
 					box.setX(box.getX() +3);
 					box1.setX(box1.getX() +3);
 					translate_x -= 3;
@@ -457,46 +439,7 @@ public class Game {
 				translate_x-=4;
 			}
 			break;
-		case LEVEL1:
-			if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)&&!DIRlock)
-			{
-				
-					box.setX(box.getX() +3);
-					box1.setX(box1.getX() +3);
-					translate_x -= 3;
-					lastDIR = 2;
-				
-				
-			}
-			else if(Keyboard.isKeyDown(Keyboard.KEY_LEFT)&&!DIRlock){
-				
-				box.setX(box.getX() -3);
-				box1.setX(box1.getX() -3);
-				translate_x += 3;
-				lastDIR = 1;
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_UP)&&onGround){
-				
-				jump = true;
-				fall = false;
-				onGround=false;
-				jumpvar = true;
-				//DIRlock = false;
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_W)){
-				translate_y+=4;
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_A)){
-				translate_x+=4;
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_S)){
-				translate_y-=4;
-			}
-			if(Keyboard.isKeyDown(Keyboard.KEY_D)){
-				translate_x-=4;
-			}
-
-			break;
+		case LEVEL1:	// same as level2
 		case LEVEL2:
 			if(Keyboard.isKeyDown(Keyboard.KEY_RIGHT)&&!DIRlock)
 			{
@@ -3373,6 +3316,4 @@ public class Game {
 		return null;
 		
 	}
-	
-	
 }
