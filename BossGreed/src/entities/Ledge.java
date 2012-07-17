@@ -11,6 +11,8 @@ public class Ledge extends Shape
 	public Ledge(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
+		code = 15;
+		name = "Ledge";
 	}
 
 	@Override

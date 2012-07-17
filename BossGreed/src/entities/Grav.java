@@ -11,6 +11,8 @@ public class Grav extends Shape
 	public Grav(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
+		code = 11;
+		name = "Grav";
 	}
 
 	@Override

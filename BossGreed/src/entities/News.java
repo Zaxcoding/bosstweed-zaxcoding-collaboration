@@ -12,6 +12,8 @@ public class News extends Shape
 	public News(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
+		code = 17;
+		name = "News";
 	}
 
 	@Override

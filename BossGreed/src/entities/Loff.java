@@ -11,6 +11,8 @@ public class Loff extends Shape
 	public Loff(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
+		code = 16;
+		name = "Loff";
 	}
 
 	@Override

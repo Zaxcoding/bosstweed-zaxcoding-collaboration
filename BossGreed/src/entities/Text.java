@@ -13,6 +13,8 @@ public class Text extends Shape
 	public Text(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
+		code = 21;
+		name = "Text";
 	}
 
 	@Override

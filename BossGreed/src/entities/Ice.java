@@ -11,6 +11,8 @@ public class Ice extends Shape
 	public Ice(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
+		code = 13;
+		name = "Ice";
 	}		
 	
 	@Override

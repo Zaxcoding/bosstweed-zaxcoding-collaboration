@@ -11,6 +11,8 @@ public class ArrowKey extends Shape
 	public ArrowKey(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
+		code = 2;
+		name = "ArrowKey";
 	}
 
 	@Override

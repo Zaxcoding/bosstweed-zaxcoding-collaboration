@@ -11,6 +11,8 @@ public class Hang extends Shape
 	public Hang(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
+		code = 12;
+		name = "Hang";
 	}
 
 	@Override

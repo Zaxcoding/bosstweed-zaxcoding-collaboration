@@ -1,7 +1,6 @@
 package entities;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import game.Game;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -16,6 +15,8 @@ public class Box extends Shape
 	public Box(double x, double y , double width, double height)
 	{
 		super(x,y,width,height);
+		code = 4;
+		name = "Box";
 	}
 	
 	@Override
@@ -253,14 +254,41 @@ public class Box extends Shape
 	}
 	
 	
-	@Override
 	public void save(ObjectOutputStream OS)
 	{
+		try
+		{
+			OS.writeInt(code);			
+			OS.writeDouble(x);
+			OS.writeDouble(y);
+			OS.writeDouble(width);
+			OS.writeDouble(height);
+		} 
+		catch (FileNotFoundException e)	{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		} 
+		catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}
 	}
+	
 	@Override
 	public Shape load(ObjectInputStream IS)
 	{
-		return null;
+		Shape temp = new Box(0,0,0,0);
+		try
+		{
+			temp = new Box(IS.readDouble(), IS.readDouble(), IS.readDouble(), IS.readDouble());
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return temp;
 	}
+
+
 	
 }

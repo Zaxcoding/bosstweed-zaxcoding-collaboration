@@ -9,6 +9,8 @@ public class Lbox extends Shape
 	public Lbox(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
+		code = 14;
+		name = "Lbox";
 	}
 
 	@Override

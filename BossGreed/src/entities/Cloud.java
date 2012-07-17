@@ -14,6 +14,8 @@ public class Cloud extends Shape
 	{
 		super(x, y, width, height);
 		this.startx = (int) x;
+		code = 6;
+		name = "Cloud";
 	}
 
 	@Override

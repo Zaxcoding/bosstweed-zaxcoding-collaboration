@@ -3,14 +3,18 @@ package entities;
 import static org.lwjgl.opengl.GL11.*;
 import java.io.*;
 import org.lwjgl.opengl.GL11;
+import org.newdawn.slick.opengl.Texture;
+
 import entities.Shape;
 
 public abstract class Shape
 {
-	protected boolean visible, touched, selected, user, removeMe = false;
+	public boolean visible, touched, selected, user, removeMe = false;
 	protected double dx, dy, x, y, width, height;
 	protected int code;
-	protected String name;
+	public String name;
+	
+	public Texture pic;
 	
 	public static int BORDER = 7;
 
@@ -70,33 +74,72 @@ public abstract class Shape
 	}
 */
 	
-/*	public static Shape load(ObjectInputStream IS, int shapeCode)
+	public void editorDraw()
 	{
-		Shape temp = new Box(0,0,0,0);		
+		textureStart();
+		pic.bind();
+		textureVertices();
+	}
+	
+	public void setPic(Texture tex)
+	{
+		pic = tex;
+	}
+	
+	public static Shape load(ObjectInputStream IS, int shapeCode)
+	{
+		Shape temp = new Arrow(0,0,0,0);		
 		if (shapeCode == 1)
-			temp = new Box(0,0,0,0);
+			temp = new Arrow(0,0,0,0);
 		else if (shapeCode == 2)
-			temp = new DisappearingBox(0,0,0,0);
+			temp = new ArrowKey(0,0,0,0);
+		else if (shapeCode == 3)
+			temp = new Bat(0,0,0,0);
 		else if (shapeCode == 4)
-			temp = new MovingPlatform(0,0,0,0);
+			temp = new Box(0,0,0,0);
 		else if (shapeCode == 5)
-			temp = new Teleporter(0,0,0,0);
+			temp = new Brick(0,0,0,0);
 		else if (shapeCode == 6)
-			temp = new Checkpoint(0,0,0,0);
+			temp = new Cloud(0,0,0,0);
 		else if (shapeCode == 7)
-			temp = new Trampoline(0,0,0,0);
-		else if (shapeCode == 8)
-			temp = new DeathStick(0,0,0,0);
-		else if (shapeCode == 9)
-			temp = new Ice(0,0,0,0);
-		else if (shapeCode == 10)
 			temp = new Coin(0,0,0,0);
-		
+		else if (shapeCode == 8)
+			temp = new Dead(0,0,0,0);
+		else if (shapeCode == 9)
+			temp = new Doorjam(0,0,0,0);
+		else if (shapeCode == 10)
+			temp = new Gem(0,0,0,0);
+		else if (shapeCode == 11)
+			temp = new Grav(0,0,0,0);
+		else if (shapeCode == 12)
+			temp = new Hang(0,0,0,0);
+		else if (shapeCode == 13)
+			temp = new Ice(0,0,0,0);
+		else if (shapeCode == 14)
+			temp = new Lbox(0,0,0,0);
+		else if (shapeCode == 15)
+			temp = new Ledge(0,0,0,0);
+		else if (shapeCode == 16)
+			temp = new Loff(0,0,0,0);
+		else if (shapeCode == 17)
+			temp = new News(0,0,0,0);
+		else if (shapeCode == 18)
+			temp = new Rope(0,0,0,0);
+		else if (shapeCode == 19)
+			temp = new Sky(0,0,0,0);
+		else if (shapeCode == 20)
+			temp = new Skyline(0,0,0,0);
+		else if (shapeCode == 21)
+			temp = new Text(0,0,0,0);
+		else if (shapeCode == 22)
+			temp = new Wall(0,0,0,0);
+		else if (shapeCode == 23)
+			temp = new Wheel(0,0,0,0);
 		
 		temp = temp.load(IS);
 		return temp;
 	}
-*/
+
 	
 	public void textureVertices()
 	{

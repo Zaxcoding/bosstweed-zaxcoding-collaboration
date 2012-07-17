@@ -12,6 +12,8 @@ public class Skyline extends Shape
 	public Skyline(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
+		code = 20;
+		name = "Skyline";
 	}
 
 	@Override

@@ -129,7 +129,7 @@ public class Game {
 		
 	}
 	
-	private void initTextures()
+	public static void initTextures()
 	{
 		/*
 		 * these top 4 are an attempt at a new boss greed but he is too small for it to be useful
@@ -3303,7 +3303,7 @@ public class Game {
 	
 	
 	//loading textures
-	public Texture loadTexture(String key){
+	public static Texture loadTexture(String key){
 		try {
 			return TextureLoader.getTexture("png",new FileInputStream(new File("res/" + key + ".png")));
 		} catch (FileNotFoundException e) {

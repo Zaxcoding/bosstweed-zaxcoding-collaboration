@@ -14,6 +14,8 @@ public class Arrow extends Shape
 	public Arrow(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
+		code = 1;
+		name = "Arrow";
 	}
 
 	@Override

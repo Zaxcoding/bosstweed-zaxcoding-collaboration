@@ -13,6 +13,8 @@ public class Dead extends Shape
 	public Dead(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
+		code = 8;
+		name = "Dead";
 	}
 
 	@Override

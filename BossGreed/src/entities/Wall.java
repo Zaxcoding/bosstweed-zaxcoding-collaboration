@@ -9,6 +9,8 @@ public class Wall extends Shape
 	public Wall(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
+		code = 22;
+		name = "Wall";
 	}
 
 	@Override

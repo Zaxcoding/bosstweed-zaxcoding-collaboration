@@ -12,6 +12,8 @@ public class Wheel extends Shape
 	public Wheel(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
+		code = 23;
+		name = "Wheel";
 	}
 
 	@Override

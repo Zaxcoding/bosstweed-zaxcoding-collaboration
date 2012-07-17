@@ -11,6 +11,8 @@ public class Bat extends Shape
 	public Bat(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
+		code = 3;
+		name = "Bat";
 	}
 
 	@Override
