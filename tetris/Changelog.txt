@@ -1,0 +1,555 @@
+{
+Andy - 6/10/12
+
+two small changes.
+
+1.) music now stops when a new game is created ( as in the music from the first game)
+2.) added an exiting game over window very similar to the menu window, it displays the final score and returns back to the menu as well
+
+
+I think its mostly done, i think the only real thing to do is be able to slide pieces
+}
+
+
+
+
+
+{
+Zach - 6/8/12
+
+A few small changes, and some not so small.
+First, I reorganized the folders so the code is on the main level, then img 
+and sound for the images and sound. No more Tetrominoes folder.
+
+Tetris.java:
+I changed the default spawn location of the windows to all start at 350, 200. 
+It's a nice spot and that way they're not up in the top left corner all the 
+time.
+Made TimerListener into its own private class.
+Changed time to score and added the necessary stuff. Used the TETRIS DS 
+scoring system on the tetris wiki (didn't include spins or bonus points 
+really, just 1pt soft, 2pt hard, 100*level single, etc).
+Switched the order of rotateL and rotateR all over the place, especially in 
+the controls/preference panel.
+Fixed exit to menu (including trying to kill off the sound- not sure if it 
+works).
+You can no longer move after a hard drop, but you can move if you haven't 
+(soft or normal time drop).
+The music should still loop, had to change some conditionals because I took 
+out the timeLabel that was getting parsed for the current time. Instead I keep 
+track of the time with a double currentTime.
+
+Sorry I can't do a more complete changelog, I forgot I have to be at work 
+early today.
+}
+
+{
+Zach - 6/8/12
+
+Just wanted to push this up before I start on other stuff.
+
+Tetris.java:
+Moved a bunch of code into a new method makePreferences, which is called either when you go to the preference menu, or by clicking 'controls'. Had to re-link some stuff and adjust a few things to get it working, but not much.
+
+Now I'm going to start on some other things.
+}
+
+{
+Andy - 6/7/12
+
+Actually second commit of the day ( first was just a change on the timerDelay using mutators instead of creating more timers)
+
+now for some cool stuff.
+
+new method menu(): 
+
+i have added a new window acting as a menu. it has a pretty decent banner right now but obviously something cooler can be done and I'm sure you have more artistic / photoshop experience than i do. there are 3 buttons new game, controls and end game. new game and end game are the same as they were in the old window, controls does not work right now because I'm not sure exactly how to access your preferences window, i feel like thats kind of hidden right now so throwing it in someones face would be better i think, its probably an easy hook up for you to do but like i said i saw app listener and shy d away a little. i redid the pause so it works and where end game was its exit to menu so the game window just closes out and your back at the menu. new game at the menu just opens a game, new game in the game itself asks if you are sure you want to start a new game, then closes the old game and starts a new one up.
+
+new method music():
+
+we have tetris music!!! this was my little surprise i wanted to do, there are probably some little bugs because i had to get a little creative with the looping, but it works, the only thing is if you create new games it'll keep starting new music and be madness and since all the variables are local right now, id have to add a new parameter to make it nice and i just wanted to upload this, so i can easily do that by tomorrow.
+
+check it out!!!
+}
+
+{
+Zach - 6/6/12
+
+Sorry, I don't feel like doing a proper changelog.
+
+GameBoard.java:
+Now doesn't fill if the piece is above the board (-1 or lower).
+
+*_Piece.java:
+Changed the spawn gridY to -2 for each piece, and changed their rotations 
+(they were all off by one) so that they come out as they should (for some 
+reason they're coming out in rotation 2. Not sure why.
+
+Tetris.java:
+Added label, button, and such for Soft Drop in the preferences. It just 
+movesDown one space.
+}
+
+{
+Zach - 6/6/12
+
+Wall-kicking and ghost piece! Woohoo! There's still a slight bug with letting 
+a piece just fall down over its ghost, because the ghost will appear over it, 
+but I think we can fix that later.
+
+GameBoard.java:
+Added ghostFill, which just fills with gray or whatever other color we want.
+Note that if we change the color here we also have to change it also in 
+Piece.pieceCollision.
+
+*_Piece.java:
+Added a clone() method that makes a new *_Piece and gives it the same stats as
+the piece it's called from. I use it to clone the currPiece and then drop it 
+down as the ghost piece.
+
+Piece.java:
+Added the abstract method clone(), discussed above. Added a line in 
+pieceCollision() to allow pieces to flow through their ghost. For canRotateL 
+and canRotateR, I first just try to rotate, then try one spot to the right, 
+two spots to the right, one spot to the left, two spots to the left. This 
+effectively allows you to wallkick and spin into tight spots.
+
+Tetris.java:
+Added Piece ghost. Adjusted the timerDelay. Added method ghostPiece(). What it 
+does is temporarily eraseTrail(currPiece) (so that you don't pieceCollision),
+then clone the currPiece, then hardDrop it, then restore the currPiece to the 
+board. I also added eraseTrail(ghost) and board.fill(ghost) when the same 
+methods are called for currPiece.
+
+
+And that's really it. It didn't take a whole lot of code to implement things. 
+Pretty neat.
+}
+
+{
+Zach - 6/4/12
+
+Only two real changes-
+
+Tetris.java:
+Added int timerDelay, which is decreased by 10% each time to implement speed-up as you work through the levels.
+
+*_Piece.java:
+Adjusted some of the positions to make the rotation more natural.
+
+Not big changes. Also, I found that changing the array border color (or removing it) dramatically changes the look of the game board. It's pretty cool. Try it out.
+}
+
+{
+Andy - 6/4/12
+
+ok here we go with another big functional push.
+
+Tetris.java- new methods checkBoard and killLine implemented. checkBoard scans 
+the board when the last piece was placed to see if any of the rows on the 
+board are filled, if so i call killLine to move all the lines above this line 
+down one. it seems to work pretty well as its individually called for each 
+row, i.e if the line gets 4, it'll call kill line 4 times, so this seems 
+pretty good at least for debugging in the future if there are issues. 
+also in killLine, i increment the total lines column, decrement the lines 
+until next level value, and if its 1 away from the level reset lines until 
+next level and increment the level. there is a potential issue with the 
+leveling, i tried to use the timer time setting as a variable and cut it in 
+half every level so it speeds up but it seems like that can't be dynamically 
+changed, once the timer is created thats what we got so we'll have to look 
+into leveling yet. 
+
+*_Piece.java - messed around with these more than i thought i had to with 
+colors and the rng with selecting a piece i had to do some switching but they 
+match the pictures now so I'm happy with it.
+
+lastly changed that rng to go to 7 so the T tetromino spawns.
+
+}
+
+
+{
+Zach - 6/4/12
+
+OH GOD YES THIS IS AWESOME!
+
+Haha, so the big change is piece to piece collision detection. I'll get to it.
+
+Piece.java:
+Added pieceCollision(GameBoard board), a method used to check piece-piece 
+collision detection. It's actually really simple. It just looks where the 
+piece is (going to be, since you call it in the middle of a temporary gridX++
+or gridY++ call, etc) and see if there are any non translucent-pieces there.
+The tricky part was figuring out that you can't have the piece filled- you 
+have to eraseTrail before checking or else you pick up your own piece. Once
+I rearranged the order of some stuff in Tetris, it worked perfectly!
+
+I also added a cool way to visualize the board for debugging, kinda based off
+of Ramirez's MyRectangle visualization.
+
+Tetris.java:
+I did some reordering as I mentioned above. I really didn't write any new code 
+except I fill in the board.grid with translucent when I call initBoard() and I 
+also set the hardcoded filepath to a relative one ("Tetronimoes/J.png" etc).
+
+And that's really it! Again it was a case of having all the pieces (pun) there
+and just figuring out how to use them together (and in the right order) to
+make the finished product.
+}
+
+{
+Andy - 6/4/12
+
+Next piece images are functional
+
+Tetris.java- so the rng is basically using next piece now instead of 
+currpiece, so that we can keep track of the image to be displayed. when we 
+need a new piece, currpiece = next piece, and we pick a next piece. pretty 
+sweet. only problem right now that i can think of is that i have hardcoded the 
+image locations to my local desktop, you are probably more experienced than me 
+about how to define the path so that we can both use it without hardcoding the 
+path every time, but for now i just have them on my desktop and I'm assuming 
+you can put them there as well, and just change /beersandrew/ in the path to 
+whatever your macbook is registered under. 
+
+Tetrominoes Folder - holds all the .png images for the pieces.
+
+
+
+If piece -piece collision gets done today we are seriously on a roll! good luck :)
+}
+
+{
+Zach - 6/3/12
+
+Not going to do as big of a push, but I've done a little work so I'll put it
+up. I added canRotateL() and canRotateR(). With this it won't let you rotate
+out of the left side of the screen. If we want we can change this to add wall
+kicking or whatever it's called so that it pushes you out if you rotate too
+close to the wall.
+
+Now there's really nothing standing in the way of trying to implement piece to
+piece collision detection. I'm going to start on it tomorrow because my quick
+try didn't work and I want to remain positive with today.
+
+Oh, I also cut the timing in half to speed it up a bit for debugging.
+
+}
+
+{
+Andy - 6/3/12
+
+Big day for boss coding today, just got some timing down.
+
+Tetris.java - The timing starts initially with the starting of the program, 
+and every full second the piece is moved down one spot. I couldn't get 
+stability in the timing using tenths or hundreds of a second the time would go 
+like 12.9999999999985 and it looked really dumb so, full seconds is what we 
+got right now. Also fixed the hard drop so that it does hard drop, potential 
+problem of if you keep holding down the spacebar it kind of spawns the piece 
+at the bottom. it looks really sweet right now though!
+
+}
+
+{
+Zach - 6/3/12
+
+GameBoard.java:
+Added eraseTrail, which just colors over the current Piece's position with 
+the same black as the background. Then, if it the user hits a movement key 
+then the piece's position will be redrawn. This way we don't have to clear the
+board completely each time, so multiple pieces can now be spawned without
+issues! Woohoo! It's pretty cool!
+Ps, eraseTrail is nearly verbatim your fill method, with a different color.
+Inefficient to copy and paste, but much easier to read than adding an argument
+to fill() to choose the color to fill with, I think.
+
+_Piece.java:
+Erased the canMoveDown, canMoveLeft, and canMoveRight methods because...
+
+Piece.java:
+I added them here! I found a generic way to collision detect with the boundary 
+walls. I loop through the piece's grid until I find a filled in spot. First, I
+do the move (gridX--, gridX++, or gridY++), then I go through all of the 
+piece's filled in spots and test with that new grid coordinate to see if I'm
+out of bounds anywhere. If so, return false. It works really really well! The
+only issue I'm having is if you press up to the far left edge of the screen 
+and then rotate, instead of wall-kicking it can push you out of bounds. You
+can still come back in bounds- no exception occurs, because I don't test
+in the GameBoard fill and eraseTrails method to make sure I don't draw out
+of the array's bounds.
+
+It's pretty neat and a simple to add feature! Things are coming along well!
+
+Also, I think we can use the general idea I used here for canRotateR,
+canRotateL, and also adding collision detecting between pieces!
+}
+
+{
+Zach - 6/3/12
+
+So this is a pretty awesome step towards a working product, but it's limited
+in a few key areas. The main idea is that it only works for currPiece, and has
+no idea about how to store the pieces/display multiple pieces/etc. I do have a
+plan on how to implement multiple pieces, but for now I just want to document
+this so we have something easy to fall back on if we lose our place.
+
+An example of where it falls short is it resets the entire GameBoard when it 
+calls clearBoard(). We'll have to change this to just clearPiece() to get rid
+of the current piece's ghost trail.
+
+GameBoard.java:
+Really just did some formatting adjustments. The logic was all there. There 
+was a single 1-off error but otherwise you nailed it. That fill() method was
+really awesome to see work. Took out some of the debug info I had added.
+
+Tetris.java:
+Removed a lot of the stuff that I didn't use (mostly timing) and cleaned a few
+things up. From top to bottom:
+
+selectPiece(int a) - changed this to return a Piece instead of being void(), 
+so that we can hopefully use it for the preview pieces and maybe other things.
+
+Made the gamePanel focusable and set it to grabFocus most of the time a button
+is pushed. This should keep the user able to use the keyboard without having 
+to re-click the panel to select it. We'll have to adjust this for pausing.
+
+Initialize the Random rng in setup and make it a global variable in case we 
+want to get some randInt()s other places.
+
+colorPieces(), initBoard(), clearBoard() - these are really easy, just for
+loops that set the appropriate spots to the appropriate color.
+
+MyListener - this is where all of the keyboard controls went.
+
+I also went through and cleared out some old comments where we both know 
+what's going on, and I added some comments where I wrote new code.
+
+Good stuff! More features to come now!
+}
+
+{
+Andy - 6/2/12
+
+Yay for getting back in the swing of things.(get the swing pun?! ;) ) 
+
+Tetris.java - set up a timing loop, that works until i hit start game, I'm not 
+sure how to keep a loop going after the action listener occurs, maybe it ends 
+because theres an exception with the button? I'm not sure but I'm pretty happy 
+that the loop repeats
+
+-Secondly attempted to set the current piece as a randomly selected piece. I 
+did this with a new method in tetris called selectPiece, which is called when 
+the boolean new piece is true.(not sure what the conditions are for this yet, 
+we'll have to look into it and decide exactly 'when' we need to spawn a new 
+piece).
+
+.*Piece- apparently each individual piece class needs to import the color 
+package, i assumed it was ok with what you had, but when i created individual 
+pieces in tetris.java with selectPiece, none of the pieces compiled, so i 
+added them. 
+
+TPiece.java - PURPLE does not exist in the color package, so we'll have to 
+settle for MAGENTA.
+}
+
+{
+Zach - 5/31/12
+
+Been a little while since I've programmed at all. Whoops. Here's what I've
+done so far today.
+
+GameBoard.java:
+Just fixed a single line so that it would compile. Made a silly mistake.
+
+Tetris.java:
+Put in a lot of good work on the preferences panel. I added an array of keys,
+which are just ints (each filled with a KeyEvent.KeyCode), and tempKeys, and
+implemented a simple 'click-the-button-then-press-the-key' way to change the
+control scheme. It's simple but also pretty comprehensive since it checks for
+duplicates (and won't let you save if you have them), and also prompts you to
+save your changes before closing the menu if tempKeys differs from Keys.
+I like it, it works very well, but I'm going to go in next and add a feedback
+label so you can tell what's going on (if you aren't a dev on this game).
+}
+
+{
+Zach - 5/22/12
+
+Tetris.java:
+Changed the functionality of the pause button to start at 'Start Game', then
+change to 'Pause' or 'Resume' according to what it should be. 
+Added a colorPieces method that should loop through and display the pieces
+with their correct colors.
+
+GameBoard.java:
+Adjusted the for loop on one because it said j<y<j++.
+Also, and this is pretty cool if it'll work, I changed the number we're
+filling with into the big grid from 1 (for all pieces) to piece.getRGB(). My
+reasoning is that once we do this we can just loop through and color all the
+non-zero values of the grid, with their values. I think this should work. 
+
+I have to go right now, I'll update this with more and also code some more 
+after I work out. See ya.
+}
+
+{
+Andy - 5/21/12
+
+ok lots to tell about, not a whole lot of new code though.
+
+Tetris.java- made the game initially paused, so that the player doesn't open 
+up the game to a falling piece, unease = start game..
+
+Piece.java, *Piece.java- put in a primitive version of canmoveleft and 
+canmoveright
+
+The big one…
+Gameboard.java- attempted to implement an idea of how i think fill should 
+work. I put in a 6 line comment or so above my weird for loop structure thing 
+to attempt to explain what i did. This is all off of your idea of the grid 
+over the game board, and the way i drew it out on my paper i think it works, 
+or does what you had in mind.Please feel free to check it out and even dismiss 
+it if its totally wrong
+
+My only concerns are when, in the case of the O piece, where there are 0's in 
+the piece grid itself, i think this means the canmoveleft and canmoveright 
+need much more logic than my initial attempt, and there is need for the 
+contact() method for both canmoveright and fill.
+
+it seems there is still the entire piece logic to go yet, as far as how the 
+pieces stay in the game board, and how pieces can freely fall and coexist on a 
+board with an arbitrary amount of pieces already on the game board.
+}
+
+{
+Zach - 5/20/12
+Okay, I like your ideas but I'm going to shift the direction a bit.
+
+I'm going to make the vast majority of the work be done in Piece.java. I want
+very little- mostly only spawn() and setPiece()- to be different in each
+_Piece file. That way we have less to type, less lines total, and more 
+importantly we can access all of the methods for the pieces just through 
+a Piece variable. Then our call to rotate() will choose the correct rotate()
+based on the type of the piece.
+Also, remember that you don't need to use the accessors when we're working in 
+_Piece files, since we have direct access to the instance variables. Those 
+kinds of getPosition() and getGridSize() calls will be done from the GameBoard
+or Tetris files. 
+
+Another big change:
+A lot of your pieces had an empty top row and column. From poking around the
+Tetris wiki I found that only the I and O pieces require gridSize = 4, the
+rest can be done with gridSize = 3. I fixed all but I and O to have gridSize 3
+and adjusted them so that they work in that space.
+Additionally, I subtracted 1 from each of the [3][2] combos because 2d arrays
+start at 0,0 not 1,1 (my Yahtzee arrays are a little funky if that's where you
+got that idea). We can change it back if you like but for now they're 
+consistent.
+
+So here's what I did:
+Tetris.java:
+Changed the JPiece j = new JPiece(), LPiece... to Piece j = new JPiece() etc
+just to test it out. I also did a test run of rotateL() through the Piece
+variable (not, for example, JPiece variable) and had no problems.
+
+Piece.java:
+Added a constructor that sets position = 1 and calls spawn().
+Moved all of the rotate() calls from the individual files to here. I trimmed 
+down the work that's done, all it does is clear the grid, set position to the
+new position, and then call setPiece(). I also added the modulo math thing
+that I had mentioned earlier so that we don't have to have four different
+if(d==1) setPiece(2,..) calls, we just call setPiece(). You'll also notice
+that setPiece no longer takes any arguments- I'll get to that in a bit.
+I adjusted clearGrid so it does so based on the gridSize, not just a fixed 
+number.
+(I tested the modulo math and it works perfectly).
+I moved position to here so we don't have to redeclare it in each _Piece file.
+
+_Piece.java:
+I trimmed out all the stuff I moved to Piece.java, significantly reducing the 
+size of each file.
+The big change is to setPiece(). All I do is if (position == 1) grid[0][0] = 1
+and so on. Just those four calls, and that's it. We've already cleared the 
+grid (back in rotate()) and we already updated the position (also in rotate) 
+so there's nothing else to be done. Also, you'll notice that I subtracted 1 
+from each of the array numbers since the first number is 0,0 not 1,1.
+I also adjusted spawn() slightly by setting position = 1 and calling setPiece.
+}
+
+{
+Andy - 5/19/12
+
+-as far as i can tell all coordinates for rotates are correct and completed
+}
+
+{
+Andy - 5/19/12
+
+-completed rotates(rechecking if all grid coordinates represent what i expect)
+- compiled all files successfully.
+
+- added all pieces
+-renamed SquarePiece.java - OPiece.java for consistency
+}
+
+{
+Andy - 5/19/12
+-made a bunch of changes to rotate functions
+
+Piece.java- added a clearGrid() function (I'm not sure if this is necessary, 
+i think we need to discuss how this movement is going to work with the square
+you are monitoring, as in how do you know if something is under it? And I'm
+not sure i understand the move down function)
+
+IPiece.java - added this file so we have the I piece now, i added a system of
+rotation based on changing the grid based on the current grid, the current
+grid is known from a new position variable. all pieces should have the get and
+set position functions( i should probably put this in Piece.java
+
+JPiece.java - this is the big file. this shows how the rotateL and rotateR
+really coexist together with the position variable. Really check this out and
+see if this makes sense and in your opinion if it will work or not. I'm going
+to now continue with this approach for the rest of the pieces. stop me on
+Facebook if you think this approach is not worth doing.
+}
+
+{
+Zach - 5/17/12
+Links- these should prove invaluable:
+http://tetris.wikia.com/wiki/Tetris_Guideline
+http://tetris.wikia.com/wiki/TGM_Rotation
+
+Okay, a whole bunch of changes. Tough to recall them all.
+
+MyPanel.java:
+Updated to the one I use with Yahtzee now, so that in the constructor you can 
+specify what gridLayout you want (and save a bunch of lines of code while 
+doing the panel setup).
+
+Tetris.java:
+Added functionality to the three buttons.
+	- New game just spawns a new Tetris()
+	- Pause calls pause(), which toggles the boolean 'paused' and sends the 
+	  current value to the terminal.
+	- Quit calls System.exit(0)
+	
+Piece.java:
+Created this class. It's just an idea and has lots of room for changes and 
+improvements. I want it to be abstract so that a lot of the same methods 
+(like moving right, left, returning instance variables) can be called through 
+a common interface.
+The general idea is to keep track of the grid size (4 for line and square, 3 
+for everything else), the lower x,y position, and then calculate everything 
+else based on that.
+The rest is very self explanatory and ready to be changed.
+
+SquarePiece.java:
+Definitely the easiest piece since it can't rotate.
+Spawn has my idea of how that will work, and a little picture above to 
+help visualize it.
+
+GameBoard.java:
+Not really sure what this should end up being, so I just threw some stuff 
+in for now.
+}
