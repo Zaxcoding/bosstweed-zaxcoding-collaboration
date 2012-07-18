@@ -5,9 +5,7 @@ import java.io.ObjectOutputStream;
 import game.Game;
 
 public class Ice extends Shape
-{
-	public boolean up=false;
-	
+{	
 	public Ice(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);

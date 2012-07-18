@@ -14,9 +14,15 @@ public abstract class Shape
 	protected int code;
 	public String name;
 	
-	public Texture pic;
+	public Texture pic;					// for drawing in the level editor
+	public static int BORDER = 5;		// for selecting in the level editor
 	
-	public static int BORDER = 7;
+	// -- these are only used in some classes, but I put them here so they can be 
+	// -- accessed through a common Shape variable. By default they're all 0 or false,
+	// -- so I only set them to true (or 5 or whatever) in the individual classes' constructor.
+	public int i, j, type, init, that;
+	public boolean pause, on, up, vert, upp, right, alive, switch1;
+	
 
 	public Shape(double x, double y, double width, double height) 
 	{

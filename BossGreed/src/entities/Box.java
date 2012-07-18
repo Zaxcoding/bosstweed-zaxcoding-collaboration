@@ -6,12 +6,7 @@ import game.Game;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Box extends Shape
-{
-	public boolean on = false;		// on what?
-	public int type = 0;			// not too clear on what this is
-	
-	public int i = 0;
-	
+{	
 	public Box(double x, double y , double width, double height)
 	{
 		super(x,y,width,height);

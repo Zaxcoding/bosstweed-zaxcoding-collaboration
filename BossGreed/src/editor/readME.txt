@@ -1,5 +1,34 @@
 ReadME for the Editor:
 
+// Wed July 18, 2012
+Well that changed quickly. Now it's feature rich, prettier, and pretty badass.
+
+Layout:
+Top bar has buttons (not currently active, but easy to implement).
+Center is the game screen, set to correct resolution.
+Over top the game screen there is a grid of adjustable size (constrained between MIN and MAX_GRID_SIZE).
+To the left of the game screen there's debug info, mostly on the current piece (including all instance ints and booleans).
+Below the game screen there are two rows of click-able icons (one for each of the classes) that will change the current shape to that kind.
+
+Controls:
+WASD - to translate the camera.
+IJKL - to adjust the thickness of the current shape.
+, - to decrease the grid thickness.
+. - to increase the grid thickness.
+T - to toggle the grid on or off.
+CTRL-S - Save the level.
+CTRL-O - Open a level.
+Left click within the game screen to place the current shape.
+	- For now, clicking outside does nothing to avoid accidentally placing shapes in an untranslated-to area.
+Right click one of the bottom icons to select that type of shape.
+
+Notes:
+Things should be very stable, except I haven't fully implemented saving and loading. So right now if you try to load any level with more than just boxes, it'll fail.
+I think my next plan is to be able to change the instance variables so you can get different types of clouds, words, etc.
+
+And that's it for now. Pretty goddamn awesome. I'm happy. Taking a lunch break and then some more work.
+
+// Tues July 17, 2012
 Right now it's not feature-rich at all. What you can do is use the mouse to click and place objects
 (by default the left-facing bag), translate the internal screen without messing up the outside frame (WASD),
 save (control-S), load (control-O), and switch to the arrow (hit X).

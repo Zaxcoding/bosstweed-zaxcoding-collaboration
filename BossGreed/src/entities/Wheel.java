@@ -5,15 +5,13 @@ import game.Game;
 import java.io.ObjectOutputStream;
 
 public class Wheel extends Shape
-{
-
-	public boolean switch1 = true;
-	
+{	
 	public Wheel(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
 		code = 23;
 		name = "Wheel";
+		switch1 = true;
 	}
 
 	@Override

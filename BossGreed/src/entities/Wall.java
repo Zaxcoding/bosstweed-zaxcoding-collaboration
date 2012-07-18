@@ -5,7 +5,6 @@ import java.io.ObjectOutputStream;
 import game.Game;
 public class Wall extends Shape
 {
-	
 	public Wall(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);

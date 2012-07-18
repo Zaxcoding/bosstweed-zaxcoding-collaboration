@@ -8,7 +8,7 @@ import java.io.ObjectOutputStream;
 public class Cloud extends Shape
 {
 	
-	public int type, startx;
+	public int startx;
 	
 	public Cloud(double x, double y, double width, double height)
 	{

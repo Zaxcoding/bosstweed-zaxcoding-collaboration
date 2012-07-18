@@ -22,6 +22,7 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
 import entities.*;
+import game.Game;
 
 public class LevelEditor
 {
@@ -29,10 +30,14 @@ public class LevelEditor
 	protected static final int EDITOR_RESOLUTION_Y = 800;			// height of the level editor screen
 	protected final static int GAME_RESOLUTION_X = 640;		// game dimensions
 	protected final static int GAME_RESOLUTION_Y = 480;		// of BossGreed
+	public static final int THICKNESS = 1;					// the thickness you adjust by
+	public static final int MAX_GRID_SIZE = 200;			// maximum size for the grid
+	public static final int MIN_GRID_SIZE = 10;				// minimum size for the grid
+	
 	
 	// for convenience, dependent on the above constants
-	int TOP = (EDITOR_RESOLUTION_Y - GAME_RESOLUTION_Y)/2 - 1;
-	int BOTTOM = (EDITOR_RESOLUTION_Y + GAME_RESOLUTION_Y)/2 + 1;
+	int TOP = (EDITOR_RESOLUTION_Y - GAME_RESOLUTION_Y)/2 - 1 - 70;
+	int BOTTOM = (EDITOR_RESOLUTION_Y + GAME_RESOLUTION_Y)/2 + 1 - 70;
 	int LEFT = (EDITOR_RESOLUTION_X - GAME_RESOLUTION_X)/2 - 1;
 	int RIGHT = (EDITOR_RESOLUTION_X + GAME_RESOLUTION_X)/2 - 1;
 
@@ -42,16 +47,20 @@ public class LevelEditor
 	int CAMERA_SCROLL_SPEED = 5;
 
 	
-	int transX, transY, mouseX, mouseY, width = 100, height = 100;
+	int transX, transY, mouseX, mouseY, width = 26, height = 26;
 	float startX, startY;
 	int [] Keys = new int[20];		// make an array to hold the keys for controls
+	
+	int picsX = 50, picsY = BOTTOM + 50, picsW = 50, picsH = 50;		// for the bottom pics grid
 	
 	boolean drawGrid = true;
 	
 	private String currShape = "Box", inputValue;
-	private Shape selected;
+	private Shape selected, current = new Box(0,0,0,0);
 	
 	private List<Shape> shapes = new ArrayList<Shape>(20);
+	private List<Shape> bottomShapes = new ArrayList<Shape>(20);
+	
 	
 	UnicodeFont uniFont;
 
@@ -60,16 +69,19 @@ public class LevelEditor
 	public static Texture p,pr,pre,pres,press,news;
 	
 	public LevelEditor() 
-	{	
+	{
 		initGL();
 		initFonts();
 		initKeys();
 		initTextures();
 		
+		assignPic(current);	
+		drawShapes();
+		
 		while (!Display.isCloseRequested()) 
 		{			
 			glClear(GL_COLOR_BUFFER_BIT);	// wipe the screen
-
+			
 			mouse();
 
 			input();
@@ -86,7 +98,7 @@ public class LevelEditor
 	
 	public void initTextures()
 	{
-		left = loadTexture("bag");
+		right = loadTexture("bagi1");
 		
 		sky1 = loadTexture("skyline1");
 		sky2 = loadTexture("skyline2");
@@ -199,24 +211,49 @@ public class LevelEditor
 	// for selecting a shape
 	public Shape getShape()
 	{
-		for (Shape shape: shapes)
+		if (mouseY >= TOP && mouseY <= BOTTOM)
 		{
-			if (mouseX >= shape.getX() && (mouseX <= shape.getX() + shape.getWidth())
-					&& mouseY >= shape.getY() && (mouseY <= shape.getY() + shape.getHeight()))
+			for (Shape shape: shapes)
 			{
-				selected = shape;
-				shape.selected = true;
+				if (mouseX >= shape.getX() && (mouseX <= shape.getX() + shape.getWidth())
+						&& mouseY >= shape.getY() && (mouseY <= shape.getY() + shape.getHeight()))
+				{
+					selected = shape;
+					shape.selected = true;
+				}
+				else
+				{
+					shape.selected = false;
+				}
 			}
-			else
+		}	
+		if (mouseY >= BOTTOM)
+		{
+			for (Shape shape: bottomShapes)
 			{
-				shape.selected = false;
+				if (mouseX >= shape.getX() && (mouseX <= shape.getX() + shape.getWidth())
+						&& mouseY >= shape.getY() && (mouseY <= shape.getY() + shape.getHeight()))
+				{
+					currShape = shape.name;
+					current = getCurrShape();
+					if (current.name.equals("Cloud"))
+						current.type = 1;
+					assignPic(current);
+					selected = current;
+				}
 			}
 		}
 		return selected;
 	}
 	
+	
 	private void render()
-	{	 			
+	{	 		
+		current.setPosition(mouseX, mouseY);
+		current.setWidth(width);
+		current.setHeight(height);
+		assignPic(current);
+		
 		// draw the game box
 		glBegin(GL_LINE_LOOP);
 			glVertex2f(LEFT, TOP);
@@ -232,12 +269,17 @@ public class LevelEditor
 		for (Shape shape : shapes)
 			shape.editorDraw();
 		
+		current.editorDraw();
+		
 		// end level
 
 		drawBoundary();
 		glPopMatrix();
 
-		drawButtons();
+		for (Shape shape : bottomShapes)
+			shape.editorDraw();
+		
+		drawButtons(); 
 		
 		if (drawGrid)
 			drawGrid();
@@ -246,28 +288,379 @@ public class LevelEditor
 	
 	private void assignPic(Shape temp)
 	{
-		if (temp.name.equals("Box"))
-			temp.setPic(left);
+		// this is where the heavy lifting is done to
+		// determine which picture to show
+		
 		if (temp.name.equals("Arrow"))
-			temp.setPic(a1);
+		{
+			if (temp.i < 10)
+				temp.setPic(a1);
+			else if (temp.i >= 10 && temp.i < 20)
+				temp.setPic(a2);
+			else
+				temp.i = 0;
+		}
+		
+		if (temp.name.equals("ArrowKey"))
+		{
+			if(temp.type == 0)
+				temp.setPic(a3);
+			else if(temp.type == 1)
+				temp.setPic(a4);
+			else if(temp.type == 2)
+				temp.setPic(a5);
+			else if(temp.type == 3)
+				temp.setPic(esc);
+			else if(temp.type == 4)
+				temp.setPic(space);
+		}
+		
+		if (temp.name.equals("Bat"))
+		{
+			if (temp.vert)
+				temp.setPic(cliffv);
+			else
+				temp.setPic(cliffi);
+		}
+		
+		if (temp.name.equals("Box"))
+			temp.setPic(right);
+		
+		if (temp.name.equals("Brick"))
+		{
+			if (temp.up)
+				temp.setPic(brickv);
+			else
+				temp.setPic(brick);
+		}
+		
+		if (temp.name.equals("Cloud"))
+		{
+			if (temp.type == 1)
+				temp.setPic(cloud1);
+			else if(temp.type == 2)
+				temp.setPic(cloud2);
+			else if(temp.type == 3)
+				temp.setPic(cloud3);
+			else if(temp.type == 4)
+				temp.setPic(cloud4);
+			else if(temp.type == 5)
+				temp.setPic(cloud5);
+			else if(temp.type == 6)
+				temp.setPic(cloud6);
+			else if(temp.type == 7)
+				temp.setPic(cloud7);
+			else if(temp.type == 8)
+				temp.setPic(cloud8);
+			else if(temp.type == 9)
+				temp.setPic(cloud9);
+			else if(temp.type == 10)
+				temp.setPic(cloud10);
+		}
+			
+		if (temp.name.equals("Coin"))
+			temp.setPic(coini);
+		
+		if (temp.name.equals("Dead"))
+		{
+			if (temp.vert)
+			{
+				if (temp.j <= 10)
+					temp.setPic(deadv);
+				else if (temp.j <= 20)
+					temp.setPic(deadv1);
+				else if (temp.j <= 30)
+					temp.setPic(deadv2);
+				else if (temp.j <= 40)
+					temp.setPic(deadv3);
+				else if (temp.j <= 50)
+					temp.setPic(deadv4);
+				if(temp.j == 50)
+						temp.j = 0;
+			}
+			else
+			{
+				if (temp.j <= 10)
+					temp.setPic(deadi);
+				else if (temp.j <= 20)
+					temp.setPic(deadi1);
+				else if (temp.j <= 30)
+					temp.setPic(deadi2);
+				else if (temp.j <= 40)
+					temp.setPic(deadi3);
+				else if (temp.j <= 50)
+					temp.setPic(deadi4);
+				if(temp.j == 50)
+						temp.j = 0;
+			}
+		}
+		
+		if (temp.name.equals("Doorjam"))
+		{
+			if (!temp.vert)
+				temp.setPic(doorjam);
+			else
+				temp.setPic(doorjamv);
+		}
+		
+		if (temp.name.equals("Gem"))
+		{
+			if (!temp.vert)
+				temp.setPic(door);
+			else
+				temp.setPic(doorv);
+		}
+		
+		if (temp.name.equals("Grav"))
+		{
+			temp.setPic(gravflip);
+		}
+		
+		if (temp.name.equals("Hang"))
+		{
+			if (!temp.upp)
+				temp.setPic(hangi);
+			else
+				temp.setPic(hangv);
+		}
+		
+		if (temp.name.equals("Ice"))
+		{
+			if (temp.up)
+				temp.setPic(icev);
+			else
+				temp.setPic(icel);
+		}
+		
+		if (temp.name.equals("Lbox"))
+			temp.setPic(lboxi);
+		
+		if (temp.name.equals("Ledge"))
+			temp.setPic(ledgei);
+		
+		if (temp.name.equals("Loff"))
+		{
+			if (!temp.on)
+				temp.setPic(Loff);
+			else
+				temp.setPic(Lon);
+		}
+		
+		if (temp.name.equals("News"))
+			temp.setPic(news);
+		
+		if (temp.name.equals("Rope"))
+			temp.setPic(ropei);
+		
+		if (temp.name.equals("Skyline"))
+		{
+			if (temp.that == 0)
+				temp.setPic(sky1);
+			else if (temp.that == 1)
+				temp.setPic(sky2);
+			else if (temp.that == 2)
+				temp.setPic(sky3);
+			else if (temp.that == 3)
+				temp.setPic(sky4);
+			else if (temp.that == 4)
+				temp.setPic(sky5);
+			else if (temp.that == 5)
+				temp.setPic(sky6);
+		}
+	
+		if (temp.name.equals("Text"))
+		{
+			if (temp.type == 0)
+				temp.setPic(words);
+			else if (temp.type == 1)
+				temp.setPic(words2);
+			else if (temp.type == 2)
+				temp.setPic(words3);
+			else if (temp.type == 3)
+				temp.setPic(words4);
+			else if (temp.type == 4)
+				temp.setPic(words5);
+			else if (temp.type == 5)
+				temp.setPic(words6);
+			else if (temp.type == 6)
+				temp.setPic(words7);
+			else if (temp.type == 7)
+				temp.setPic(words8);
+			else if (temp.type == 8)
+				temp.setPic(words9);
+			else if (temp.type == 9)
+				temp.setPic(words10);
+			else if (temp.type == 10)
+				temp.setPic(words11);
+			else if (temp.type == 11)
+				temp.setPic(words12);
+			else if (temp.type == 12)
+				temp.setPic(words13);
+			else if (temp.type == 13)
+				temp.setPic(words14);
+			else if (temp.type == 14)
+				temp.setPic(words15);
+			else if (temp.type == 15)
+				temp.setPic(words16);
+			else if (temp.type == 16)
+				temp.setPic(words17);
+			else if (temp.type == 17)
+				temp.setPic(words18);
+			else if (temp.type == 18)
+				temp.setPic(words19);
+			else if (temp.type == 19)
+				temp.setPic(words20);
+			else if (temp.type == 20)
+				temp.setPic(words21);
+			else if (temp.type == 21)
+				temp.setPic(words22);
+		}
+		
+		if (temp.name.equals("Wall"))
+			temp.setPic(wallpaper);
+		
+		if (temp.name.equals("Wheel"))
+		{
+			if (temp.switch1)
+				temp.setPic(wheeli);
+			else
+				temp.setPic(wheeli2);
+		}
+	}
+	
+	public Shape getCurrShape()
+	{
+		Shape temp = new Box(0,0,0,0);
+		
+		if (currShape == "Arrow")
+			temp = new Arrow(mouseX, mouseY, width, height);
+		if (currShape == "ArrowKey")
+			temp = new ArrowKey(mouseX, mouseY, width, height);
+		if (currShape == "Bat")
+			temp = new Bat(mouseX, mouseY, width, height);
+		if (currShape == "Box")
+			temp = new Box(mouseX, mouseY, width, height);
+		if (currShape == "Brick")
+			temp = new Brick(mouseX, mouseY, width, height);
+		if (currShape == "Cloud")
+			temp = new Cloud(mouseX, mouseY, width, height);
+		if (currShape == "Coin")
+			temp = new Coin(mouseX, mouseY, width, height);
+		if (currShape == "Dead")
+			temp = new Dead(mouseX, mouseY, width, height);
+		if (currShape == "Doorjam")
+			temp = new Doorjam(mouseX, mouseY, width, height);
+		if (currShape == "Gem")
+			temp = new Gem(mouseX, mouseY, width, height);
+		if (currShape == "Grav")
+			temp = new Grav(mouseX, mouseY, width, height);
+		if (currShape == "Hang")
+			temp = new Hang(mouseX, mouseY, width, height);
+		if (currShape == "Ice")
+			temp = new Ice(mouseX, mouseY, width, height);
+		if (currShape == "Lbox")
+			temp = new Lbox(mouseX, mouseY, width, height);
+		if (currShape == "Ledge")
+			temp = new Ledge(mouseX, mouseY, width, height);
+		if (currShape == "Loff")
+			temp = new Loff(mouseX, mouseY, width, height);
+		if (currShape == "News")
+			temp = new News(mouseX, mouseY, width, height);
+		if (currShape == "Rope")
+			temp = new Rope(mouseX, mouseY, width, height);
+		if (currShape == "Sky")
+			temp = new Sky(mouseX, mouseY, width, height);
+		if (currShape == "Skyline")
+			temp = new Skyline(mouseX, mouseY, width, height);
+		if (currShape == "Text")
+			temp = new Text(mouseX, mouseY, width, height);
+		if (currShape == "Wall")
+			temp = new Wall(mouseX, mouseY, width, height);
+		if (currShape == "Wheel")
+			temp = new Wheel(mouseX, mouseY, width, height);
+		
+		return temp;
+	}
+	
+	public void drawShapes()
+	{
+		Shape temp = new Arrow(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new ArrowKey(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Bat(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Box(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Brick(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Cloud(picsX, picsY, picsW, picsH);
+		temp.type = 1;
+		drawAndMove(temp);
+		temp = new Coin(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Dead(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Doorjam(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Gem(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Grav(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Hang(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Ice(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Lbox(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Ledge(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Loff(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new News(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Rope(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Skyline(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Text(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Wall(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);
+		temp = new Wheel(picsX, picsY, picsW, picsH);
+		drawAndMove(temp);	
+	}
+	
+	public void drawAndMove(Shape temp)
+	{
+		assignPic(temp);
+		bottomShapes.add(temp);
+		
+		picsX += picsW + 50;
+		if (picsX >= EDITOR_RESOLUTION_X - 50)
+		{
+			picsX = 50;
+			picsY += picsH + 50;
+		}
 	}
 	
 	private void input()
 	{
-		if (Mouse.isButtonDown(0))
-		{
-			Shape temp = new Box(mouseX, mouseY, width, height);	// just start it as a box, then change it
-			if (currShape == "Box")
-				temp = new Box(mouseX, mouseY, width, height);
-			if (currShape == "Arrow")
-				temp = new Arrow(mouseX, mouseY, width, height);
+		if (Mouse.isButtonDown(0) && mouseX >= LEFT && mouseX <= RIGHT && mouseY > TOP && mouseY < BOTTOM)
+		{	
+			shapes.add(current);
 			
-			
-			assignPic(temp);
-			shapes.add(temp);
+			current = getCurrShape();
+			if (current.name.equals("Cloud"))
+				current.type = 1;
+			assignPic(current);
 			
 			fixMouse();
-			
+		}
+		
+		if (Mouse.isButtonDown(1))
+		{
+			selected = getShape();
 		}
 		
 		
@@ -299,8 +692,29 @@ public class LevelEditor
 				transX += CAMERA_SCROLL_SPEED;
 			if (Keyboard.isKeyDown(Keyboard.KEY_D)) 
 				transX -= CAMERA_SCROLL_SPEED;
-			if (Keyboard.isKeyDown(Keyboard.KEY_X))
-				currShape = "Arrow";
+			
+			if (Keyboard.isKeyDown(Keyboard.KEY_I) && (height - THICKNESS) >= 1) 
+				height -= THICKNESS;
+			if (Keyboard.isKeyDown(Keyboard.KEY_K)) 
+				height += THICKNESS;
+			if (Keyboard.isKeyDown(Keyboard.KEY_L)) 
+				width += THICKNESS;
+			if (Keyboard.isKeyDown(Keyboard.KEY_J) && (width - THICKNESS) >= 3) 
+				width -= THICKNESS;
+			
+			if (Keyboard.isKeyDown(Keyboard.KEY_COMMA) && GRID_SIZE > MIN_GRID_SIZE)
+				GRID_SIZE--;
+			if (Keyboard.isKeyDown(Keyboard.KEY_PERIOD) && GRID_SIZE < MAX_GRID_SIZE)
+				GRID_SIZE++;
+			
+			
+			if (Keyboard.isKeyDown(Keyboard.KEY_T))
+			{
+				drawGrid = !drawGrid;
+				fixKeyboard();
+			}
+			
+
 		}
 	}
 	
@@ -337,27 +751,43 @@ public class LevelEditor
 
 	private void drawButtons()
 	{
-		int buttonLeft = 0;
-		int buttonBOTTOM = EDITOR_RESOLUTION_Y;
+		int buttonLeft = 40;
 		int buttonWidth = 200;
 		int buttonHeight = 50;
 		
 		glColor4f(1f, 1f, 1f, 1f);
-	
-		glBegin(GL_LINE_LOOP);
-			glVertex2f(buttonLeft, buttonBOTTOM - buttonHeight);
-			glVertex2f(buttonLeft + buttonWidth, buttonBOTTOM - buttonHeight);
-			glVertex2f(buttonLeft + buttonWidth, buttonBOTTOM);
-			glVertex2f(buttonLeft, buttonBOTTOM);
-		glEnd();
+		
+		makeButton(buttonLeft, buttonWidth, buttonHeight);
 		
 		buttonLeft += buttonWidth;
 		
+		makeButton(buttonLeft, buttonWidth, buttonHeight);
+		
+		buttonLeft += buttonWidth;
+		
+		makeButton(buttonLeft, buttonWidth, buttonHeight);
+		
+		buttonLeft += buttonWidth;
+		
+		makeButton(buttonLeft, buttonWidth, buttonHeight);
+		
+		buttonLeft += buttonWidth;
+		
+		makeButton(buttonLeft, buttonWidth, buttonHeight);
+		
+		buttonLeft += buttonWidth;
+		
+		makeButton(buttonLeft, buttonWidth, buttonHeight);
+
+	}
+	
+	public void makeButton(int buttonLeft, int buttonWidth, int buttonHeight)
+	{
 		glBegin(GL_LINE_LOOP);
-			glVertex2f(buttonLeft, buttonBOTTOM - buttonHeight);
-			glVertex2f(buttonLeft + buttonWidth, buttonBOTTOM - buttonHeight);
-			glVertex2f(buttonLeft + buttonWidth, buttonBOTTOM);
-			glVertex2f(buttonLeft, buttonBOTTOM);
+			glVertex2f(buttonLeft, 0);
+			glVertex2f(buttonLeft + buttonWidth, 0);
+			glVertex2f(buttonLeft + buttonWidth, buttonHeight);
+			glVertex2f(buttonLeft, buttonHeight);
 		glEnd();
 	}
 	
@@ -397,9 +827,24 @@ public class LevelEditor
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
 		
 		
-		uniFont.drawString(5, 5, "Mouse: " + (mouseX + transX) + "," + (mouseY + transY));
-		uniFont.drawString(5, 5 + FONT_SIZE, "Game x,y: " + (mouseX - LEFT - 1) + "," + (mouseY - TOP - 2));
-		uniFont.drawString(0, EDITOR_RESOLUTION_Y - 25, "Button!");
+		uniFont.drawString(5, TOP, "Mouse: " + (mouseX + transX) + "," + (mouseY + transY));
+		uniFont.drawString(5, TOP + FONT_SIZE, "Game x,y: " + (mouseX - LEFT - 1) + "," + (mouseY - TOP - 2));
+		uniFont.drawString(5, TOP + 2*FONT_SIZE, "CurrShape: " + currShape);
+		uniFont.drawString(5, TOP + 3*FONT_SIZE, "Width: " + width);
+		uniFont.drawString(5, TOP + 4*FONT_SIZE, "Height: " + height);
+		uniFont.drawString(5, TOP + 5*FONT_SIZE, "Grid size: " + GRID_SIZE);
+		
+		uniFont.drawString(5, TOP + 7*FONT_SIZE, "---Instance variables---");
+		uniFont.drawString(5, TOP + 8*FONT_SIZE, "i: " + current.i + "     j: " + current.j + "    that: " + current.that);
+		uniFont.drawString(5, TOP + 9*FONT_SIZE, "type: " + current.type + "      init: " + current.init);
+		
+		uniFont.drawString(5, TOP + 11*FONT_SIZE, "up: " + current.up + "   upp: " + current.upp);
+		uniFont.drawString(5, TOP + 12*FONT_SIZE, "pause: " + current.pause + "   on: " + current.on);
+		uniFont.drawString(5, TOP + 13*FONT_SIZE, "vert: " + current.vert + "   right: " + current.right);
+		uniFont.drawString(5, TOP + 14*FONT_SIZE, "alive: " + current.alive + "   switch1: " + current.switch1);
+		 
+		
+		uniFont.drawString(55, 10, "Button!");
 		// more text here
 		
 		

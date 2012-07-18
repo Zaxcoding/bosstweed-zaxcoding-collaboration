@@ -7,7 +7,6 @@ import java.io.ObjectOutputStream;
 
 public class Sky extends Shape
 {
-
 	public Sky(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);

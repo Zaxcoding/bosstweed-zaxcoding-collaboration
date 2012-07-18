@@ -5,9 +5,7 @@ import java.io.ObjectOutputStream;
 import game.Game;
 
 public class Rope extends Shape
-{
-	public boolean upp = false;
-	
+{	
 	public Rope(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);

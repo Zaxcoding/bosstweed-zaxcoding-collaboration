@@ -8,8 +8,6 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Text extends Shape
 {
-	public int type = 0, i = 0;
-
 	public Text(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);

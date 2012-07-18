@@ -5,12 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class Arrow extends Shape
-{
-
-	public boolean pause = false;
-	
-	public int i;
-		
+{		
 	public Arrow(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);

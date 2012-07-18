@@ -5,9 +5,7 @@ import java.io.ObjectOutputStream;
 import game.Game;
 
 public class Bat extends Shape
-{
-	public boolean on = false, up = false, vert = false;
-	
+{	
 	public Bat(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);

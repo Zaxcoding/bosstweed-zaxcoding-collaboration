@@ -5,15 +5,13 @@ import java.io.ObjectOutputStream;
 import game.Game;
 
 public class News extends Shape
-{
-
-	public boolean alive = true;
-		
+{		
 	public News(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
 		code = 17;
 		name = "News";
+		alive = true;
 	}
 
 	@Override

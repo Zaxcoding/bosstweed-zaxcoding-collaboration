@@ -6,8 +6,6 @@ import game.Game;
 
 public class Brick extends Shape
 {
-	public boolean up,on;
-
 	public Brick(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);

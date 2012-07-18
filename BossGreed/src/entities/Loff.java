@@ -5,9 +5,7 @@ import java.io.ObjectOutputStream;
 import game.Game;
 
 public class Loff extends Shape
-{
-	public boolean on = false;
-		
+{		
 	public Loff(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
