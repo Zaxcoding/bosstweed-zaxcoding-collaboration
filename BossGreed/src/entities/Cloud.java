@@ -2,8 +2,6 @@ package entities;
 
 import static org.lwjgl.opengl.GL11.glColor4d;
 import game.Game;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 public class Cloud extends Shape
 {
@@ -58,17 +56,6 @@ public class Cloud extends Shape
 		}
 		
 		textureVertices();
-	}
-
-	@Override
-	public void save(ObjectOutputStream OS)
-	{
-	}
-
-	@Override
-	public Shape load(ObjectInputStream IS)
-	{
-		return null;
 	}
 
 	@Override

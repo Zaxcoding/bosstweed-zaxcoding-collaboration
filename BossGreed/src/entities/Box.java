@@ -1,8 +1,6 @@
 package entities;
 
-import java.io.*;
 import game.Game;
-
 import static org.lwjgl.opengl.GL11.*;
 
 public class Box extends Shape
@@ -247,43 +245,5 @@ public class Box extends Shape
 	{
 		return((this.getX()<other.getX()) && ((this.getX()+this.getWidth())>(other.getX()+other.getWidth())) && this.getY()<other.getY() && (this.getY() + this.getHeight())>(other.getY()+other.getHeight()));
 	}
-	
-	
-	public void save(ObjectOutputStream OS)
-	{
-		try
-		{
-			OS.writeInt(code);			
-			OS.writeDouble(x);
-			OS.writeDouble(y);
-			OS.writeDouble(width);
-			OS.writeDouble(height);
-		} 
-		catch (FileNotFoundException e)	{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-		} 
-		catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-		}
-	}
-	
-	@Override
-	public Shape load(ObjectInputStream IS)
-	{
-		Shape temp = new Box(0,0,0,0);
-		try
-		{
-			temp = new Box(IS.readDouble(), IS.readDouble(), IS.readDouble(), IS.readDouble());
-		} catch (IOException e)
-		{
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return temp;
-	}
-
-
 	
 }

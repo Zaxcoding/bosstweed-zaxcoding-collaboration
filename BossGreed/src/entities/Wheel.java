@@ -1,8 +1,6 @@
 package entities;
 
-import java.io.ObjectInputStream;
 import game.Game;
-import java.io.ObjectOutputStream;
 
 public class Wheel extends Shape
 {	
@@ -64,17 +62,6 @@ public class Wheel extends Shape
 		}
 		
 		textureVertices();
-	}
-
-	@Override
-	public void save(ObjectOutputStream OS)
-	{
-	}
-
-	@Override
-	public Shape load(ObjectInputStream IS)
-	{
-		return null;
 	}
 
 	@Override

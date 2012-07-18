@@ -1,7 +1,5 @@
 package entities;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import game.Game;
 
 public class Coin extends Shape
@@ -21,17 +19,6 @@ public class Coin extends Shape
 		Game.coini.bind();
 		
 		textureVertices();
-	}
-
-	@Override
-	public void save(ObjectOutputStream OS)
-	{
-	}
-
-	@Override
-	public Shape load(ObjectInputStream IS)
-	{
-		return null;
 	}
 
 	@Override

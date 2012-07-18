@@ -1,8 +1,6 @@
 package entities;
 
 import game.Game;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 
 public class Arrow extends Shape
 {		
@@ -33,17 +31,6 @@ public class Arrow extends Shape
 		this.i++;
 		
 		textureVertices();
-	}
-
-	@Override
-	public void save(ObjectOutputStream OS)
-	{
-	}
-
-	@Override
-	public Shape load(ObjectInputStream IS)
-	{
-		return null;
 	}
 
 	@Override

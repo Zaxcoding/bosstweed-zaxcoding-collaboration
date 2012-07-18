@@ -1,7 +1,5 @@
 package entities;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import game.Game;
 
 public class Dead extends Shape
@@ -65,17 +63,6 @@ public class Dead extends Shape
 			this.i++;
 		}
 		textureVertices();
-	}
-
-	@Override
-	public void save(ObjectOutputStream OS)
-	{
-	}
-
-	@Override
-	public Shape load(ObjectInputStream IS)
-	{
-		return null;
 	}
 
 	@Override

@@ -1,7 +1,5 @@
 package entities;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import game.Game;
 
 public class Loff extends Shape
@@ -24,17 +22,6 @@ public class Loff extends Shape
 			Game.Lon.bind();
 		
 		textureVertices();
-	}
-
-	@Override
-	public void save(ObjectOutputStream OS)
-	{
-	}
-
-	@Override
-	public Shape load(ObjectInputStream IS)
-	{
-		return null;
 	}
 
 	@Override

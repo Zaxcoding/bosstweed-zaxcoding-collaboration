@@ -1,7 +1,5 @@
 package entities;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import game.Game;
 import static org.lwjgl.opengl.GL11.*;
 
@@ -115,17 +113,6 @@ public class Text extends Shape
 			i++;
 		}
 		textureVertices();
-	}
-
-	@Override
-	public void save(ObjectOutputStream OS)
-	{
-	}
-
-	@Override
-	public Shape load(ObjectInputStream IS)
-	{
-		return null;
 	}
 
 	@Override

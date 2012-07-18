@@ -2,6 +2,7 @@ package entities;
 
 import static org.lwjgl.opengl.GL11.*;
 import java.io.*;
+
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.opengl.Texture;
 
@@ -37,8 +38,6 @@ public abstract class Shape
 //	public abstract void interact(Player player);
 //	public abstract void doYourThing();
 	public abstract void draw();
-	public abstract void save(ObjectOutputStream OS);
-	public abstract Shape load(ObjectInputStream IS);
 	public abstract boolean intersects(Shape other);
 //	public abstract void touch(Player player);
 	
@@ -142,8 +141,75 @@ public abstract class Shape
 		else if (shapeCode == 23)
 			temp = new Wheel(0,0,0,0);
 		
-		temp = temp.load(IS);
+		loadInstanceVars(IS, temp);
 		return temp;
+	}
+	
+	public static void loadInstanceVars(ObjectInputStream IS, Shape temp)
+	{
+		try
+		{
+			temp.x = IS.readDouble();
+			temp.y = IS.readDouble();
+			temp.width = IS.readDouble();
+			temp.height = IS.readDouble();
+			
+			temp.visible = IS.readBoolean();
+			
+			temp.i = IS.readInt();
+			temp.j = IS.readInt();
+			temp.type = IS.readInt();
+			temp.init = IS.readInt();
+			temp.that = IS.readInt();
+			
+			temp.pause = IS.readBoolean();
+			temp.on = IS.readBoolean();
+			temp.up = IS.readBoolean();
+			temp.vert = IS.readBoolean();
+			temp.upp = IS.readBoolean();
+			temp.right = IS.readBoolean();
+			temp.alive = IS.readBoolean();
+			temp.switch1 = IS.readBoolean();
+			
+		} catch (IOException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static void save(ObjectOutputStream OS, Shape temp)
+	{	
+		try
+		{
+			OS.writeInt(temp.code);
+			
+			OS.writeDouble(temp.x);
+			OS.writeDouble(temp.y);
+			OS.writeDouble(temp.width);
+			OS.writeDouble(temp.height);
+	
+			OS.writeBoolean(temp.visible);
+	
+			OS.writeInt(temp.i);
+			OS.writeInt(temp.j);
+			OS.writeInt(temp.type);
+			OS.writeInt(temp.init);
+			OS.writeInt(temp.that);
+			
+			OS.writeBoolean(temp.pause);
+			OS.writeBoolean(temp.on);
+			OS.writeBoolean(temp.up);
+			OS.writeBoolean(temp.vert);
+			OS.writeBoolean(temp.upp);
+			OS.writeBoolean(temp.right);
+			OS.writeBoolean(temp.alive);
+			OS.writeBoolean(temp.switch1);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	

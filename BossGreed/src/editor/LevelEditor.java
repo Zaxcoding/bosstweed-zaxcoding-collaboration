@@ -22,7 +22,6 @@ import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
 
 import entities.*;
-import game.Game;
 
 public class LevelEditor
 {
@@ -52,6 +51,9 @@ public class LevelEditor
 	int [] Keys = new int[20];		// make an array to hold the keys for controls
 	
 	int picsX = 50, picsY = BOTTOM + 50, picsW = 50, picsH = 50;		// for the bottom pics grid
+	int buttonCode = 1;				// used to choose which instance int to change
+	int pointerX, pointerY;			// for the ^ used to show the current piece
+	
 	
 	boolean drawGrid = true;
 	
@@ -211,7 +213,7 @@ public class LevelEditor
 	// for selecting a shape
 	public Shape getShape()
 	{
-		if (mouseY >= TOP && mouseY <= BOTTOM)
+		if (mouseY + transY >= TOP && mouseY + transY <= BOTTOM)
 		{
 			for (Shape shape: shapes)
 			{
@@ -227,12 +229,12 @@ public class LevelEditor
 				}
 			}
 		}	
-		if (mouseY >= BOTTOM)
+		if (mouseY + transY >= BOTTOM)
 		{
 			for (Shape shape: bottomShapes)
 			{
-				if (mouseX >= shape.getX() && (mouseX <= shape.getX() + shape.getWidth())
-						&& mouseY >= shape.getY() && (mouseY <= shape.getY() + shape.getHeight()))
+				if (mouseX + transX >= shape.getX() && (mouseX + transX <= shape.getX() + shape.getWidth())
+						&& mouseY + transY >= shape.getY() && (mouseY + transY <= shape.getY() + shape.getHeight()))
 				{
 					currShape = shape.name;
 					current = getCurrShape();
@@ -240,6 +242,9 @@ public class LevelEditor
 						current.type = 1;
 					assignPic(current);
 					selected = current;
+					pointerX = (int) (shape.getX() + (shape.getWidth() - FONT_SIZE)/2) + 5;
+					pointerY = (int) (shape.getY() + (shape.getHeight() + FONT_SIZE)/2) + 5;
+					
 				}
 			}
 		}
@@ -644,9 +649,14 @@ public class LevelEditor
 		}
 	}
 	
+	private boolean mouseIn(int left, int right, int top, int bottom)
+	{
+		return mouseX + transX >= left && mouseX + transX <= right && mouseY + transY > top && mouseY + transY < bottom;
+	}
+	
 	private void input()
 	{
-		if (Mouse.isButtonDown(0) && mouseX >= LEFT && mouseX <= RIGHT && mouseY > TOP && mouseY < BOTTOM)
+		if (Mouse.isButtonDown(0) && mouseIn(LEFT, RIGHT, TOP, BOTTOM))
 		{	
 			shapes.add(current);
 			
@@ -658,7 +668,67 @@ public class LevelEditor
 			fixMouse();
 		}
 		
-		if (Mouse.isButtonDown(1))
+		// clicking the buttons. this is ugly because it can easily be screwed
+		// up if the interface shifts around, but at least it's very easy to change
+		// ----Start left side buttons
+		
+		// --- Ints
+		if (Mouse.isButtonDown(0) && mouseIn(0, 50, 290, 310))
+			buttonCode = 1;			// i
+		if (Mouse.isButtonDown(0) && mouseIn(75, 125, 290, 310))
+			buttonCode = 2;			// j
+		if (Mouse.isButtonDown(0) && mouseIn(145, 230, 290, 310))
+			buttonCode = 3;			// that
+		if (Mouse.isButtonDown(0) && mouseIn(0, 95, 315, 335))
+			buttonCode = 4;			// type
+		if (Mouse.isButtonDown(0) && mouseIn(130, 205, 315, 335))
+			buttonCode = 5;			// init
+		
+		// --- Booleans
+		if (Mouse.isButtonDown(0) && mouseIn(0, 105, 355, 380))
+		{
+			current.up = !current.up;
+			fixMouse();
+		}
+		if (Mouse.isButtonDown(0) && mouseIn(125, 245, 355, 380))
+		{
+			current.upp = !current.upp;
+			fixMouse();
+		}
+		if (Mouse.isButtonDown(0) && mouseIn(0, 145, 385, 405))
+		{
+			current.pause = !current.pause;
+			fixMouse();
+		}	
+		if (Mouse.isButtonDown(0) && mouseIn(160, 265, 385, 405))
+		{
+			current.on = !current.on;
+			fixMouse();
+		}
+		if (Mouse.isButtonDown(0) && mouseIn(0, 120, 410, 430))
+		{
+			current.vert = !current.vert;
+			fixMouse();
+		}	
+		if (Mouse.isButtonDown(0) && mouseIn(140, 265, 410, 430))
+		{
+			current.right = !current.right;
+			fixMouse();
+		}
+		if (Mouse.isButtonDown(0) && mouseIn(0, 130, 435, 455))
+		{
+			current.alive = !current.alive;
+			fixMouse();
+		}	
+		if (Mouse.isButtonDown(0) && mouseIn(145, 310, 435, 455))
+		{
+			current.switch1 = !current.switch1;
+			fixMouse();
+		}
+		
+		//-----End left side buttons
+			
+		if (Mouse.isButtonDown(0) && mouseY + transY >= BOTTOM + 40)
 		{
 			selected = getShape();
 		}
@@ -714,7 +784,37 @@ public class LevelEditor
 				fixKeyboard();
 			}
 			
-
+			
+			if (Keyboard.isKeyDown(Keyboard.KEY_RBRACKET))
+			{
+				if (buttonCode == 1)
+					current.i++;
+				if (buttonCode == 2)
+					current.j++;
+				if (buttonCode == 3)
+					current.that++;
+				if (buttonCode == 4)
+					current.type++;
+				if (buttonCode == 5)
+					current.init++;
+				
+				fixKeyboard();
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_LBRACKET))
+			{
+				if (buttonCode == 1)
+					current.i--;
+				if (buttonCode == 2)
+					current.j--;
+				if (buttonCode == 3)
+					current.that--;
+				if (buttonCode == 4)
+					current.type--;
+				if (buttonCode == 5)
+					current.init--;
+				
+				fixKeyboard();
+			}
 		}
 	}
 	
@@ -835,14 +935,30 @@ public class LevelEditor
 		uniFont.drawString(5, TOP + 5*FONT_SIZE, "Grid size: " + GRID_SIZE);
 		
 		uniFont.drawString(5, TOP + 7*FONT_SIZE, "---Instance variables---");
-		uniFont.drawString(5, TOP + 8*FONT_SIZE, "i: " + current.i + "     j: " + current.j + "    that: " + current.that);
-		uniFont.drawString(5, TOP + 9*FONT_SIZE, "type: " + current.type + "      init: " + current.init);
+		
+		String iString = "i: ", jString = "j: ", thatString = "that: ", typeString = "type: ", initString = "init: ";
+		
+		if (buttonCode == 1)
+			iString = "I= ";
+		if (buttonCode == 2)
+			jString = "J= ";
+		if (buttonCode == 3)
+			thatString = "THAT= ";
+		if (buttonCode == 4)
+			typeString = "TYPE= ";
+		if (buttonCode == 5)
+			initString = "INIT= ";
+		
+		uniFont.drawString(5, TOP + 8*FONT_SIZE, iString + current.i + "     " + jString + current.j + "    " + thatString + current.that);
+		uniFont.drawString(5, TOP + 9*FONT_SIZE, typeString + current.type + "      " + initString + current.init);
 		
 		uniFont.drawString(5, TOP + 11*FONT_SIZE, "up: " + current.up + "   upp: " + current.upp);
 		uniFont.drawString(5, TOP + 12*FONT_SIZE, "pause: " + current.pause + "   on: " + current.on);
 		uniFont.drawString(5, TOP + 13*FONT_SIZE, "vert: " + current.vert + "   right: " + current.right);
 		uniFont.drawString(5, TOP + 14*FONT_SIZE, "alive: " + current.alive + "   switch1: " + current.switch1);
 		 
+		if (pointerX > 0)
+			uniFont.drawString(pointerX, pointerY, "^");
 		
 		uniFont.drawString(55, 10, "Button!");
 		// more text here
@@ -896,7 +1012,7 @@ public class LevelEditor
 				OS.writeInt(shapes.size());
 				for (Shape shape : shapes)
 				{
-					shape.save(OS);
+					Shape.save(OS, shape);
 				}
 				OS.writeFloat(startX);
 				OS.writeFloat(startY);

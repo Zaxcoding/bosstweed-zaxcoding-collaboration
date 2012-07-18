@@ -1,6 +1,23 @@
 ReadME for the Editor:
 
 // Wed July 18, 2012
+More changes.
+
+Saving and loading works! No errors with it so far in my testing.
+
+Controls:
+Left click on the instance ints to select them (they capitalize and change to =), then
+[ to decrease currently selected int value.
+] to increase currently selected int value.
+Left click on any of the booleans to toggle them.
+Left click on the bottom icons (no longer right click).
+	- Additionally, the should be 'highlighted; with a small ^ beneath them.
+
+Notes:
+I need you to tell me the correct sizes to use for the 'locked' width/height shapes, then I'll add that. Should be very easy to do.
+Fixed a bug right before pushing that would screw buttons up after translation. This build should be totally solid.
+
+// Wed July 18, 2012
 Well that changed quickly. Now it's feature rich, prettier, and pretty badass.
 
 Layout:
