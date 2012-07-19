@@ -3,12 +3,14 @@ package entities;
 import game.Game;
 
 public class Skyline extends Shape
-{
+{	
 	public Skyline(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
 		code = 20;
 		name = "Skyline";
+		defaultWidth = 26;
+		defaultHeight = 26;
 	}
 
 	@Override

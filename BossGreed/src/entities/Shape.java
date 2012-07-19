@@ -22,6 +22,7 @@ public abstract class Shape
 	// -- accessed through a common Shape variable. By default they're all 0 or false,
 	// -- so I only set them to true (or 5 or whatever) in the individual classes' constructor.
 	public int i, j, type, init, that;
+	public int defaultWidth, defaultHeight;
 	public boolean pause, on, up, vert, upp, right, alive, switch1;
 	
 

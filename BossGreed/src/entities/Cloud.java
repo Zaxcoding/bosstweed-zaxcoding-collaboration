@@ -5,7 +5,6 @@ import game.Game;
 
 public class Cloud extends Shape
 {
-	
 	public int startx;
 	
 	public Cloud(double x, double y, double width, double height)
@@ -14,6 +13,8 @@ public class Cloud extends Shape
 		this.startx = (int) x;
 		code = 6;
 		name = "Cloud";
+		defaultWidth = 128;
+		defaultHeight = 128;
 	}
 
 	@Override

@@ -9,6 +9,8 @@ public class Gem extends Shape
 		super(x, y, width, height);
 		code = 10;
 		name = "Gem";
+		defaultWidth = 64;
+		defaultHeight = 64;
 	}
 
 	@Override

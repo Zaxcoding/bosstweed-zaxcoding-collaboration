@@ -10,6 +10,8 @@ public class Grav extends Shape
 		code = 11;
 		name = "Grav";
 		init = 5;
+		defaultWidth = 80;
+		defaultHeight = 12;
 	}
 
 	@Override

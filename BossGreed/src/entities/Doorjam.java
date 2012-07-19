@@ -9,6 +9,8 @@ public class Doorjam extends Shape
 		super(x, y, width, height);
 		code = 9;
 		name = "Doorjam";
+		defaultWidth = 32;
+		defaultHeight = 128;
 	}
 
 	@Override

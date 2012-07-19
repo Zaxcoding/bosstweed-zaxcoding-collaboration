@@ -9,6 +9,8 @@ public class Loff extends Shape
 		super(x, y, width, height);
 		code = 16;
 		name = "Loff";
+		defaultWidth = 16;
+		defaultHeight = 16;
 	}
 
 	@Override

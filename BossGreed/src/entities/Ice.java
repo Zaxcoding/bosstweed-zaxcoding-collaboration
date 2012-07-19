@@ -9,6 +9,8 @@ public class Ice extends Shape
 		super(x, y, width, height);
 		code = 13;
 		name = "Ice";
+		defaultWidth = 80;
+		defaultHeight = 12;
 	}		
 	
 	@Override

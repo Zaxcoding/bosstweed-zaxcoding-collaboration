@@ -9,6 +9,8 @@ public class Bat extends Shape
 		super(x, y, width, height);
 		code = 3;
 		name = "Bat";
+		defaultWidth = 80;
+		defaultHeight = 12;
 	}
 
 	@Override

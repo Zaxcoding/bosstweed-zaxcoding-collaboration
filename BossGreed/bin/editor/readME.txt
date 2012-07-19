@@ -1,11 +1,22 @@
 ReadME for the Editor:
 
+// Thur July 19, 2012
+
+Fixed the grav flip so that you can increase i (or decrease init) and it will cycle through the images.
+	- I guess this way you can create trippy patterns where they all start at different times?
+Added all of the dimensions for the shapes (as defaultWidth and defaultHeight in Shape).
+	- If unspecified, I have it set the height/width to 40x40.
+	- Also note that you can still change the width height as much as you want. I can disable this if you like, but I don't think it hurts since you can just re-click to reset it.
+Added a MAX and MIN_TYPE_SIZE (currently allows 0-25).
+Added a lowRes mode for 1024x600. To enable, just set the first two constants (EDITOR_RESOLUTION_X and EDITOR_RESOLUTION_Y).
+
+
 // Wed July 18, 2012
 More changes.
 
 Saving and loading works! No errors with it so far in my testing.
 
-Controls:
+Controls: (that were added/changed since last time)
 Left click on the instance ints to select them (they capitalize and change to =), then
 [ to decrease currently selected int value.
 ] to increase currently selected int value.

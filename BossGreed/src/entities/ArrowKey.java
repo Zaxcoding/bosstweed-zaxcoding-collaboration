@@ -9,6 +9,8 @@ public class ArrowKey extends Shape
 		super(x, y, width, height);
 		code = 2;
 		name = "ArrowKey";
+		defaultWidth = 64;
+		defaultHeight = 64;
 	}
 
 	@Override

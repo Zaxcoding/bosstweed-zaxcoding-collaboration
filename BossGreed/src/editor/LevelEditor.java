@@ -25,13 +25,16 @@ import entities.*;
 
 public class LevelEditor
 {
-	protected static final int EDITOR_RESOLUTION_X = 1280;			// width of the level editor screen
-	protected static final int EDITOR_RESOLUTION_Y = 800;			// height of the level editor screen
+	// 1280x800 for high res, 1024x600 for low res
+	protected static final int EDITOR_RESOLUTION_X = 1024;			// width of the level editor screen
+	protected static final int EDITOR_RESOLUTION_Y = 600;			// height of the level editor screen
 	protected final static int GAME_RESOLUTION_X = 640;		// game dimensions
 	protected final static int GAME_RESOLUTION_Y = 480;		// of BossGreed
 	public static final int THICKNESS = 1;					// the thickness you adjust by
 	public static final int MAX_GRID_SIZE = 200;			// maximum size for the grid
 	public static final int MIN_GRID_SIZE = 10;				// minimum size for the grid
+	public static final int MAX_TYPE_SIZE = 25;				// maximum size for the 'type' var
+	public static final int MIN_TYPE_SIZE = 0;				// minimum size for the 'type' var
 	
 	
 	// for convenience, dependent on the above constants
@@ -55,7 +58,7 @@ public class LevelEditor
 	int pointerX, pointerY;			// for the ^ used to show the current piece
 	
 	
-	boolean drawGrid = true;
+	boolean drawGrid = true, lowRes = EDITOR_RESOLUTION_X < 1280;
 	
 	private String currShape = "Box", inputValue;
 	private Shape selected, current = new Box(0,0,0,0);
@@ -73,6 +76,7 @@ public class LevelEditor
 	public LevelEditor() 
 	{
 		initGL();
+		adjustResolution();
 		initFonts();
 		initKeys();
 		initTextures();
@@ -96,6 +100,22 @@ public class LevelEditor
 
 		Display.destroy();
 		System.exit(0);
+	}
+	
+	public void adjustResolution()
+	{	
+		if (lowRes)
+		{
+			FONT_SIZE = 18;
+			GRID_SIZE = 40;
+			TOP += 30;
+			BOTTOM += 30;
+			LEFT += 50;
+			RIGHT += 50;
+			picsW = 35;
+			picsH = 35;
+			picsY -= 15;
+		}
 	}
 	
 	public void initTextures()
@@ -284,7 +304,7 @@ public class LevelEditor
 		for (Shape shape : bottomShapes)
 			shape.editorDraw();
 		
-		drawButtons(); 
+	//	drawButtons(); 
 		
 		if (drawGrid)
 			drawGrid();
@@ -418,7 +438,45 @@ public class LevelEditor
 		
 		if (temp.name.equals("Grav"))
 		{
-			temp.setPic(gravflip);
+			if (temp.i <=2*temp.init)
+				temp.setPic(gravflip);
+			else if (temp.i > 2*temp.init && temp.i <= 4*temp.init)
+				temp.setPic(gravflip2);
+			else if (temp.i > 4*temp.init && temp.i <= 6*temp.init)
+				temp.setPic(gravflip3);
+			else if (temp.i > 8*temp.init && temp.i <= 10*temp.init)
+				temp.setPic(gravflip4);
+			else if (temp.i > 10*temp.init && temp.i <= 12*temp.init)
+				temp.setPic(gravflip5);
+			else if (temp.i > 12*temp.init && temp.i <= 14*temp.init)
+				temp.setPic(gravflip6);
+			else if (temp.i > 14*temp.init && temp.i <= 16*temp.init)
+				temp.setPic(gravflip7);
+			else if (temp.i > 16*temp.init && temp.i <= 18*temp.init)
+				temp.setPic(gravflip8);
+			else if (temp.i > 18*temp.init && temp.i <= 20*temp.init)
+				temp.setPic(gravflip9);
+			else if (temp.i > 20*temp.init && temp.i <= 22*temp.init)
+				temp.setPic(gravflip10);
+			else if (temp.i > 22*temp.init && temp.i <= 24*temp.init)
+				temp.setPic(gravflip11);
+			else if (temp.i > 24*temp.init && temp.i <= 26*temp.init)
+				temp.setPic(gravflip12);
+			else if (temp.i > 26*temp.init && temp.i <= 28*temp.init)
+				temp.setPic(gravflip13);
+			else if (temp.i > 28*temp.init && temp.i <= 30*temp.init)
+				temp.setPic(gravflip14);
+			else if (temp.i > 30*temp.init && temp.i <= 32*temp.init)
+				temp.setPic(gravflip15);
+			else if (temp.i > 32*temp.init && temp.i <= 34*temp.init)
+				temp.setPic(gravflip16);
+			else if (temp.i > 34*temp.init && temp.i <= 36*temp.init)
+				temp.setPic(gravflip17);
+			else if (temp.i > 36*temp.init && temp.i <= 38*temp.init)
+				temp.setPic(gravflip18);
+			
+			if (temp.i == 36*temp.init)
+				temp.i=0;
 		}
 		
 		if (temp.name.equals("Hang"))
@@ -584,6 +642,16 @@ public class LevelEditor
 		if (currShape == "Wheel")
 			temp = new Wheel(mouseX, mouseY, width, height);
 		
+		if (temp.defaultWidth > 0)
+		{
+			width = temp.defaultWidth; 
+			height = temp.defaultHeight;
+		}
+		else
+		{
+			width = 40;
+			height = 40;
+		}
 		return temp;
 	}
 	
@@ -641,11 +709,14 @@ public class LevelEditor
 		assignPic(temp);
 		bottomShapes.add(temp);
 		
-		picsX += picsW + 50;
-		if (picsX >= EDITOR_RESOLUTION_X - 50)
+		picsX += 2*picsW;
+		if (picsX >= EDITOR_RESOLUTION_X - picsW)
 		{
 			picsX = 50;
-			picsY += picsH + 50;
+			if (lowRes)
+				picsY += picsH + 15;
+			else
+				picsY += picsH + 50;
 		}
 	}
 	
@@ -673,54 +744,54 @@ public class LevelEditor
 		// ----Start left side buttons
 		
 		// --- Ints
-		if (Mouse.isButtonDown(0) && mouseIn(0, 50, 290, 310))
+		if (Mouse.isButtonDown(0) && mouseIn(0, 50, TOP + 8*FONT_SIZE, TOP + 9*FONT_SIZE))
 			buttonCode = 1;			// i
-		if (Mouse.isButtonDown(0) && mouseIn(75, 125, 290, 310))
+		if (Mouse.isButtonDown(0) && mouseIn(75, 125, TOP + 8*FONT_SIZE, TOP + 9*FONT_SIZE))
 			buttonCode = 2;			// j
-		if (Mouse.isButtonDown(0) && mouseIn(145, 230, 290, 310))
+		if (Mouse.isButtonDown(0) && mouseIn(145, 230, TOP + 8*FONT_SIZE, TOP + 9*FONT_SIZE))
 			buttonCode = 3;			// that
-		if (Mouse.isButtonDown(0) && mouseIn(0, 95, 315, 335))
+		if (Mouse.isButtonDown(0) && mouseIn(0, 95, TOP + 9*FONT_SIZE + 5, TOP + 10*FONT_SIZE + 5))
 			buttonCode = 4;			// type
-		if (Mouse.isButtonDown(0) && mouseIn(130, 205, 315, 335))
+		if (Mouse.isButtonDown(0) && mouseIn(130, 205, TOP + 9*FONT_SIZE + 5, TOP + 10*FONT_SIZE + 5))
 			buttonCode = 5;			// init
 		
 		// --- Booleans
-		if (Mouse.isButtonDown(0) && mouseIn(0, 105, 355, 380))
+		if (Mouse.isButtonDown(0) && mouseIn(0, 105, TOP + 11*FONT_SIZE + 5, TOP + 12*FONT_SIZE + 5))
 		{
 			current.up = !current.up;
 			fixMouse();
 		}
-		if (Mouse.isButtonDown(0) && mouseIn(125, 245, 355, 380))
+		if (Mouse.isButtonDown(0) && mouseIn(125, 245, TOP + 11*FONT_SIZE + 5, TOP + 12*FONT_SIZE + 5))
 		{
 			current.upp = !current.upp;
 			fixMouse();
 		}
-		if (Mouse.isButtonDown(0) && mouseIn(0, 145, 385, 405))
+		if (Mouse.isButtonDown(0) && mouseIn(0, 145, TOP + 12*FONT_SIZE + 5, TOP + 13*FONT_SIZE + 5))
 		{
 			current.pause = !current.pause;
 			fixMouse();
 		}	
-		if (Mouse.isButtonDown(0) && mouseIn(160, 265, 385, 405))
+		if (Mouse.isButtonDown(0) && mouseIn(160, 265, TOP + 12*FONT_SIZE + 5, TOP + 13*FONT_SIZE + 5))
 		{
 			current.on = !current.on;
 			fixMouse();
 		}
-		if (Mouse.isButtonDown(0) && mouseIn(0, 120, 410, 430))
+		if (Mouse.isButtonDown(0) && mouseIn(0, 120, TOP + 13*FONT_SIZE + 5, TOP + 14*FONT_SIZE + 5))
 		{
 			current.vert = !current.vert;
 			fixMouse();
 		}	
-		if (Mouse.isButtonDown(0) && mouseIn(140, 265, 410, 430))
+		if (Mouse.isButtonDown(0) && mouseIn(140, 265, TOP + 13*FONT_SIZE + 5, TOP + 14*FONT_SIZE + 5))
 		{
 			current.right = !current.right;
 			fixMouse();
 		}
-		if (Mouse.isButtonDown(0) && mouseIn(0, 130, 435, 455))
+		if (Mouse.isButtonDown(0) && mouseIn(0, 130, TOP + 14*FONT_SIZE + 5, TOP + 15*FONT_SIZE + 5))
 		{
 			current.alive = !current.alive;
 			fixMouse();
 		}	
-		if (Mouse.isButtonDown(0) && mouseIn(145, 310, 435, 455))
+		if (Mouse.isButtonDown(0) && mouseIn(145, 310, TOP + 14*FONT_SIZE + 5, TOP + 15*FONT_SIZE + 5))
 		{
 			current.switch1 = !current.switch1;
 			fixMouse();
@@ -728,7 +799,7 @@ public class LevelEditor
 		
 		//-----End left side buttons
 			
-		if (Mouse.isButtonDown(0) && mouseY + transY >= BOTTOM + 40)
+		if (Mouse.isButtonDown(0) && mouseY + transY >= BOTTOM)
 		{
 			selected = getShape();
 		}
@@ -793,7 +864,7 @@ public class LevelEditor
 					current.j++;
 				if (buttonCode == 3)
 					current.that++;
-				if (buttonCode == 4)
+				if (buttonCode == 4 && current.type < MAX_TYPE_SIZE)
 					current.type++;
 				if (buttonCode == 5)
 					current.init++;
@@ -808,7 +879,7 @@ public class LevelEditor
 					current.j--;
 				if (buttonCode == 3)
 					current.that--;
-				if (buttonCode == 4)
+				if (buttonCode == 4 && current.type > MIN_TYPE_SIZE)
 					current.type--;
 				if (buttonCode == 5)
 					current.init--;
@@ -849,6 +920,7 @@ public class LevelEditor
 		mouseY = EDITOR_RESOLUTION_Y - Mouse.getY() - 1 - transY;
 	}
 
+	/*
 	private void drawButtons()
 	{
 		int buttonLeft = 40;
@@ -881,6 +953,7 @@ public class LevelEditor
 
 	}
 	
+
 	public void makeButton(int buttonLeft, int buttonWidth, int buttonHeight)
 	{
 		glBegin(GL_LINE_LOOP);
@@ -890,6 +963,7 @@ public class LevelEditor
 			glVertex2f(buttonLeft, buttonHeight);
 		glEnd();
 	}
+	*/
 	
 	private void drawBoundary()
 	{
@@ -960,7 +1034,7 @@ public class LevelEditor
 		if (pointerX > 0)
 			uniFont.drawString(pointerX, pointerY, "^");
 		
-		uniFont.drawString(55, 10, "Button!");
+	// uniFont.drawString(55, 10, "Button!");
 		// more text here
 		
 		
@@ -1059,7 +1133,7 @@ public class LevelEditor
 	@SuppressWarnings("unchecked")
 	private void initFonts() {
 
-        Font awtFont = new Font("", Font.PLAIN,55);
+        Font awtFont = new Font("", Font.PLAIN, FONT_SIZE);
        
         uniFont = new UnicodeFont(awtFont, FONT_SIZE, false, false);
         uniFont.addAsciiGlyphs();

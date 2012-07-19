@@ -9,6 +9,8 @@ public class Hang extends Shape
 		super(x, y, width, height);
 		code = 12;
 		name = "Hang";
+		defaultWidth = 170;
+		defaultHeight = 85;
 	}
 
 	@Override

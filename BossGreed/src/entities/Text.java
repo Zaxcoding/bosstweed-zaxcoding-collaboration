@@ -11,6 +11,8 @@ public class Text extends Shape
 		super(x, y, width, height);
 		code = 21;
 		name = "Text";
+		defaultWidth = 256;
+		defaultHeight = 48;
 	}
 
 	@Override

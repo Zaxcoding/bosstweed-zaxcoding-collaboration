@@ -10,6 +10,8 @@ public class Box extends Shape
 		super(x,y,width,height);
 		code = 4;
 		name = "Box";
+		defaultWidth = 26;
+		defaultHeight = 26;
 	}
 	
 	@Override

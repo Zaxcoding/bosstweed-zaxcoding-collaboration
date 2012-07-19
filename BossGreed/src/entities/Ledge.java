@@ -9,6 +9,8 @@ public class Ledge extends Shape
 		super(x, y, width, height);
 		code = 15;
 		name = "Ledge";
+		defaultWidth = 48;
+		defaultHeight = 12;
 	}
 
 	@Override

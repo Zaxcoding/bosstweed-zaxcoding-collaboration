@@ -9,6 +9,8 @@ public class Rope extends Shape
 		super(x, y, width, height);
 		code = 18;
 		name = "Rope";
+		defaultWidth = 2;
+		defaultHeight = 75;
 	}
 
 	@Override

@@ -10,6 +10,8 @@ public class News extends Shape
 		code = 17;
 		name = "News";
 		alive = true;
+		defaultWidth = 40;
+		defaultHeight = 40;
 	}
 
 	@Override

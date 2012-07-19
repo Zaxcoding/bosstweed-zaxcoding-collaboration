@@ -9,6 +9,8 @@ public class Coin extends Shape
 		super(x, y, width, height);
 		code = 7;
 		name = "Coin";
+		defaultWidth = 16;
+		defaultHeight = 32;
 	}
 
 	@Override

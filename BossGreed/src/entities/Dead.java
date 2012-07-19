@@ -11,6 +11,8 @@ public class Dead extends Shape
 		name = "Dead";
 		up = true;
 		right = true;
+		defaultWidth = 80;
+		defaultHeight = 18;
 	}
 
 	@Override
