@@ -11,6 +11,8 @@ public class Coin extends Shape
 		name = "Coin";
 		defaultWidth = 16;
 		defaultHeight = 32;
+		partner = this;
+		action = 2;	// disappear
 	}
 
 	@Override

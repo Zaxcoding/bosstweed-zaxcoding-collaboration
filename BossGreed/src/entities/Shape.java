@@ -21,9 +21,11 @@ public abstract class Shape
 	// -- these are only used in some classes, but I put them here so they can be 
 	// -- accessed through a common Shape variable. By default they're all 0 or false,
 	// -- so I only set them to true (or 5 or whatever) in the individual classes' constructor.
-	public int i, j, type, init, that;
-	public int defaultWidth, defaultHeight;
+	public int i, j, type, init, that, endHeight;
+	public int defaultWidth, defaultHeight, action;
 	public boolean pause, on, up, vert, upp, right, alive, switch1;
+	
+	public Shape partner;
 	
 
 	public Shape(double x, double y, double width, double height) 
@@ -227,6 +229,14 @@ public abstract class Shape
 			glVertex2d(this.x,this.y+this.height);
 		glEnd();
 		GL11.glDisable(GL11.GL_TEXTURE_2D);
+		
+		if (this.selected)
+		{
+			drawBorder(false);
+			if (partner != null)
+				partner.drawBorder(true);
+		}
+		
 	}
 	
 	public void textureStart()
@@ -239,26 +249,27 @@ public abstract class Shape
 	}
 	
 	// for selecting in the level editor
-	public void drawBorder()
+	public void drawBorder(boolean blue)
 	{
-		if (selected)
-		{
-			// copied most of the following from http://forums.inside3d.com/viewtopic.php?t=1326
+		// copied most of the following from http://forums.inside3d.com/viewtopic.php?t=1326
+		if (blue)
+			glColor3f(0,0,1); // blue
+		else
 			glColor3f(1,0,0); // red
+		
+		glLineWidth(2);  // Set line width to 2
+		glLineStipple(1, (short)0xf0f0);  // Repeat count, repeat pattern
+		glEnable(GL_LINE_STIPPLE); // Turn stipple on
 
-			glLineWidth(2);  // Set line width to 2
-			glLineStipple(1, (short)0xf0f0);  // Repeat count, repeat pattern
-			glEnable(GL_LINE_STIPPLE); // Turn stipple on
-
-			glBegin(GL_LINE_LOOP); 
-				glVertex2d(x - BORDER, y - BORDER);
-				glVertex2d(x + BORDER + width, y - BORDER);
-				glVertex2d(x + BORDER + width, y + BORDER + height);
-				glVertex2d(x - BORDER, y + BORDER + height);
-			glEnd ();
-			glDisable(GL_LINE_LOOP); // Turn it back off
-			glEnd();
-		}
+		glBegin(GL_LINE_LOOP); 
+			glVertex2d(x - BORDER, y - BORDER);
+			glVertex2d(x + BORDER + width, y - BORDER);
+			glVertex2d(x + BORDER + width, y + BORDER + height);
+			glVertex2d(x - BORDER, y + BORDER + height);
+		glEnd ();
+		glDisable(GL_LINE_LOOP); // Turn it back off
+		glDisable(GL_LINE_STIPPLE); // Turn it back off
+		glEnd();
 	}
 	
 	public boolean isVisible()

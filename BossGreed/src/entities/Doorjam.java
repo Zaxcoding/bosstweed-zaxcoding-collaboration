@@ -4,6 +4,8 @@ import game.Game;
 
 public class Doorjam extends Shape
 {		
+	Ledge ledge;
+	
 	public Doorjam(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
@@ -13,6 +15,11 @@ public class Doorjam extends Shape
 		defaultHeight = 128;
 	}
 
+	public void setLedge(Ledge ledge)
+	{
+		this.ledge = ledge;
+	}
+	
 	@Override
 	public void draw()
 	{

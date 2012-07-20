@@ -5,6 +5,8 @@ import static org.lwjgl.opengl.GL11.*;
 
 public class Box extends Shape
 {	
+	public int goldCount = 0;
+	
 	public Box(double x, double y , double width, double height)
 	{
 		super(x,y,width,height);
@@ -242,10 +244,4 @@ public class Box extends Shape
 	{
 		return((this.getX()+this.getWidth()) >= other.getX() && this.getX() <= (other.getX() + other.getWidth()) && (this.getY()-this.getHeight()) <= other.getY()-other.getHeight() && (this.getY()) >= other.getY());
 	}
-	
-	public boolean contains(Shape other)
-	{
-		return((this.getX()<other.getX()) && ((this.getX()+this.getWidth())>(other.getX()+other.getWidth())) && this.getY()<other.getY() && (this.getY() + this.getHeight())>(other.getY()+other.getHeight()));
-	}
-	
 }

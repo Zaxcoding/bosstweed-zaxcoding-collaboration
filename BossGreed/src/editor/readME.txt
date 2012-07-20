@@ -1,5 +1,29 @@
 ReadME for the Editor:
 
+// Fri July 20, 2012
+
+Game2.java:
+	The version I'll be working on as I re-write the engine. I've barely touched it, so don't even bother checking it out.
+
+Level.java:
+	Mostly a shell, will contain a lot of stuff. The loading for the game will be done from these.
+
+LevelEditor.java:
+
+	Controls:
+	Right click a piece to select it (more below).
+	M to move a selected piece (it picks it up and makes it your current piece).
+	Delete to delete the selected piece.
+	
+	Notes:
+	Added selecting pieces. Right click on an already-placed piece to select it. It is highlighted in red.
+		- Also note the additional text that appears on the right side, associated with it.
+		- Also also, right click on a non-piece to deselect.
+	Added a partner system. Select a piece (right click), then click '*SET PARTNER*' and left click another piece to set the partner.
+		- Once set, you have the option to select an action (by clicking on it). An arrow shows your choice.
+	Added moving selected pieces.
+	Added default behavior for coins to partner themselves and disappear.
+
 // Thur July 19, 2012
 
 Fixed the grav flip so that you can increase i (or decrease init) and it will cycle through the images.

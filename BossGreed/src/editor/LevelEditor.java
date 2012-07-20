@@ -26,8 +26,8 @@ import entities.*;
 public class LevelEditor
 {
 	// 1280x800 for high res, 1024x600 for low res
-	protected static final int EDITOR_RESOLUTION_X = 1024;			// width of the level editor screen
-	protected static final int EDITOR_RESOLUTION_Y = 600;			// height of the level editor screen
+	protected static final int EDITOR_RESOLUTION_X = 1280;			// width of the level editor screen
+	protected static final int EDITOR_RESOLUTION_Y = 800;			// height of the level editor screen
 	protected final static int GAME_RESOLUTION_X = 640;		// game dimensions
 	protected final static int GAME_RESOLUTION_Y = 480;		// of BossGreed
 	public static final int THICKNESS = 1;					// the thickness you adjust by
@@ -58,7 +58,7 @@ public class LevelEditor
 	int pointerX, pointerY;			// for the ^ used to show the current piece
 	
 	
-	boolean drawGrid = true, lowRes = EDITOR_RESOLUTION_X < 1280;
+	boolean drawGrid = true, lowRes = EDITOR_RESOLUTION_X < 1280, settingPartner;
 	
 	private String currShape = "Box", inputValue;
 	private Shape selected, current = new Box(0,0,0,0);
@@ -90,6 +90,7 @@ public class LevelEditor
 			
 			mouse();
 
+			mouseInput();
 			input();
 			render();
 			drawText();
@@ -233,6 +234,7 @@ public class LevelEditor
 	// for selecting a shape
 	public Shape getShape()
 	{
+		Shape ans = null;
 		if (mouseY + transY >= TOP && mouseY + transY <= BOTTOM)
 		{
 			for (Shape shape: shapes)
@@ -240,8 +242,9 @@ public class LevelEditor
 				if (mouseX >= shape.getX() && (mouseX <= shape.getX() + shape.getWidth())
 						&& mouseY >= shape.getY() && (mouseY <= shape.getY() + shape.getHeight()))
 				{
-					selected = shape;
-					shape.selected = true;
+					ans = shape;
+					if (!settingPartner)
+						shape.selected = true;
 				}
 				else
 				{
@@ -261,16 +264,15 @@ public class LevelEditor
 					if (current.name.equals("Cloud"))
 						current.type = 1;
 					assignPic(current);
-					selected = current;
+					ans = current;
 					pointerX = (int) (shape.getX() + (shape.getWidth() - FONT_SIZE)/2) + 5;
 					pointerY = (int) (shape.getY() + (shape.getHeight() + FONT_SIZE)/2) + 5;
 					
 				}
 			}
 		}
-		return selected;
+		return ans;
 	}
-	
 	
 	private void render()
 	{	 		
@@ -311,7 +313,7 @@ public class LevelEditor
 		
 	}
 	
-	private void assignPic(Shape temp)
+	public static void assignPic(Shape temp)
 	{
 		// this is where the heavy lifting is done to
 		// determine which picture to show
@@ -725,17 +727,25 @@ public class LevelEditor
 		return mouseX + transX >= left && mouseX + transX <= right && mouseY + transY > top && mouseY + transY < bottom;
 	}
 	
-	private void input()
+	private void mouseInput()
 	{
 		if (Mouse.isButtonDown(0) && mouseIn(LEFT, RIGHT, TOP, BOTTOM))
 		{	
-			shapes.add(current);
-			
-			current = getCurrShape();
-			if (current.name.equals("Cloud"))
-				current.type = 1;
-			assignPic(current);
-			
+			if (!settingPartner)
+			{
+				shapes.add(current);
+				
+				current = getCurrShape();
+				if (current.name.equals("Cloud"))
+					current.type = 1;
+				assignPic(current);
+			}
+			else
+			{
+				selected.partner = getShape();
+				settingPartner = false;
+				selected.selected = true;	//lololol
+			}
 			fixMouse();
 		}
 		
@@ -798,13 +808,46 @@ public class LevelEditor
 		}
 		
 		//-----End left side buttons
+		
+		//----Right side buttons
+				
+		if (Mouse.isButtonDown(0) && mouseIn(RIGHT, EDITOR_RESOLUTION_X, TOP + 3*FONT_SIZE, TOP + 4*FONT_SIZE))
+		{
+			settingPartner = true;
+		}
+		
+		if (Mouse.isButtonDown(0) && selected != null && mouseIn(RIGHT + 5, EDITOR_RESOLUTION_X, TOP + 7*FONT_SIZE, TOP + 10*FONT_SIZE))
+		{
+			if (selected.partner != null)
+			{
+				if (mouseIn(RIGHT + 5, EDITOR_RESOLUTION_X, TOP + 7*FONT_SIZE, TOP + 8*FONT_SIZE))
+					selected.partner.action = 1;
+				if (mouseIn(RIGHT + 5, EDITOR_RESOLUTION_X, TOP + 8*FONT_SIZE, TOP + 9*FONT_SIZE))
+					selected.partner.action = 2;
+				if (mouseIn(RIGHT + 5, EDITOR_RESOLUTION_X, TOP + 9*FONT_SIZE, TOP + 10*FONT_SIZE))
+					selected.partner.action = 3;
+			}
+		}
+		
+		//-----End right side buttons
 			
 		if (Mouse.isButtonDown(0) && mouseY + transY >= BOTTOM)
 		{
-			selected = getShape();
+			Shape temp = getShape();
+			if (temp != null)
+				current = temp;
 		}
 		
-		
+		if (Mouse.isButtonDown(1) && mouseY + transY <= BOTTOM && mouseY + transY >= TOP)
+		{
+			if (settingPartner)
+				settingPartner = false;
+			selected = getShape();
+		}
+	}
+	
+	private void input()
+	{	
 		if ((Keyboard.isKeyDown(Keyboard.KEY_LCONTROL) || Keyboard.isKeyDown(Keyboard.KEY_RCONTROL)
 				|| Keyboard.isKeyDown(Keyboard.KEY_LMETA) || Keyboard.isKeyDown(Keyboard.KEY_RMETA))
 				&& Keyboard.isKeyDown(Keyboard.KEY_S))
@@ -886,6 +929,20 @@ public class LevelEditor
 				
 				fixKeyboard();
 			}
+			
+			if (Keyboard.isKeyDown(Keyboard.KEY_DELETE) || Keyboard.isKeyDown(Keyboard.KEY_BACK))
+				delete();
+			
+			if (Keyboard.isKeyDown(Keyboard.KEY_M) && selected != null)
+			{
+				current = selected;
+				current.selected = false;
+				currShape = current.name;
+				selected = null;
+				width = (int) current.getWidth();
+				height = (int) current.getHeight();
+			}
+			
 		}
 	}
 	
@@ -920,6 +977,21 @@ public class LevelEditor
 		mouseY = EDITOR_RESOLUTION_Y - Mouse.getY() - 1 - transY;
 	}
 
+	public void delete()
+	{
+		// for some reason you have to do it like this,
+		// you can't just shapes.remove(selected)
+		Shape temp = new Box(0,0,0,0);
+		for (Shape shape : shapes)
+			if (shape.selected)
+				temp = shape;
+		
+		if (temp.selected)
+			shapes.remove(temp);
+		
+		selected = null;
+	}
+	
 	/*
 	private void drawButtons()
 	{
@@ -1000,6 +1072,7 @@ public class LevelEditor
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
 		
+		//---LEFT SIDE----
 		
 		uniFont.drawString(5, TOP, "Mouse: " + (mouseX + transX) + "," + (mouseY + transY));
 		uniFont.drawString(5, TOP + FONT_SIZE, "Game x,y: " + (mouseX - LEFT - 1) + "," + (mouseY - TOP - 2));
@@ -1031,6 +1104,34 @@ public class LevelEditor
 		uniFont.drawString(5, TOP + 13*FONT_SIZE, "vert: " + current.vert + "   right: " + current.right);
 		uniFont.drawString(5, TOP + 14*FONT_SIZE, "alive: " + current.alive + "   switch1: " + current.switch1);
 		 
+		//---END LEFT SIDE
+		
+		//---RIGHT SIDE
+		
+		if (selected != null)
+		{
+			uniFont.drawString(RIGHT + 5, TOP, "Selected shape:");
+			uniFont.drawString(RIGHT + 5, TOP + FONT_SIZE, selected.name);
+
+			if (!settingPartner)
+				uniFont.drawString(RIGHT + 5, TOP + 3*FONT_SIZE, "*SET PARTNER*");
+			else
+				uniFont.drawString(RIGHT + 5, TOP + 3*FONT_SIZE, "Click on partner");
+			if (selected.partner == null)
+				uniFont.drawString(RIGHT + 5, TOP + 4*FONT_SIZE, "No partner");
+			else
+			{
+				uniFont.drawString(RIGHT + 5, TOP + 4*FONT_SIZE, "Has partner");
+				uniFont.drawString(RIGHT + 5, TOP + 6*FONT_SIZE, "Action:");
+				uniFont.drawString(RIGHT + 5, TOP + 7*FONT_SIZE, "        Appear");
+				uniFont.drawString(RIGHT + 5, TOP + 8*FONT_SIZE, "        Disappear");
+				uniFont.drawString(RIGHT + 5, TOP + 9*FONT_SIZE, "        Start moving");
+				
+				if (selected.partner.action > 0)
+					uniFont.drawString(RIGHT + 5, TOP + (selected.partner.action + 6)*FONT_SIZE, "  -->");
+			}
+		}
+		
 		if (pointerX > 0)
 			uniFont.drawString(pointerX, pointerY, "^");
 		
