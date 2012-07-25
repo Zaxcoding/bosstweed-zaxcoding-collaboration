@@ -24,5 +24,11 @@ public class Lbox extends Shape
 	{
 		return false;
 	}
+	
+	@Override
+	public void interact(Box player) 
+	{
+		// nothing
+	}
 
 }

@@ -1,11 +1,17 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 import static org.lwjgl.opengl.GL11.*;
 
 public class Box extends Shape
 {	
 	public int goldCount = 0;
+	public boolean jumping, onIce = false, grounded = false, bounce = false;
+	public double startX, startY;
+	public int gravityMod = 1;						// gravityMod = 1 for normal, -1 for reverse
+	public int lastDIR = 1;
+	
+	public Shape groundPiece;
 	
 	public Box(double x, double y , double width, double height)
 	{
@@ -14,6 +20,10 @@ public class Box extends Shape
 		name = "Box";
 		defaultWidth = 26;
 		defaultHeight = 26;
+		alive = true;
+		startX = x;
+		startY = y;
+		groundPiece = null;
 	}
 	
 	@Override
@@ -153,29 +163,20 @@ public class Box extends Shape
 		}
 		*/
 		
-		if (this.type == 0){		// isn't this always the case?
-			if(Game.gravity){
-				if(Game.lastDIR==1){
-					Game.left.bind();
-				}
-				else if(Game.lastDIR==2){
-					Game.right.bind();
-				}	
-			}
-			else{
-				if(Game.lastDIR==1){
-					Game.gleft.bind();
-				}
-				else if(Game.lastDIR==2){
-					Game.gright.bind();
-				}
-			}
+		if (gravityMod == 1)
+		{
+			if (lastDIR == -1)
+				GameOn.left.bind();
+			else if (lastDIR == 1)
+				GameOn.right.bind();
 		}
-		else{
-			glColor4d(1,1,1,1);
-			Game.gright.bind();
-		}
-		
+		else
+		{
+			if (lastDIR == -1)
+				GameOn.gleft.bind();
+			else if (lastDIR == 1)
+				GameOn.gright.bind();
+		}	
 		textureVertices();
 	}
 	
@@ -244,4 +245,11 @@ public class Box extends Shape
 	{
 		return((this.getX()+this.getWidth()) >= other.getX() && this.getX() <= (other.getX() + other.getWidth()) && (this.getY()-this.getHeight()) <= other.getY()-other.getHeight() && (this.getY()) >= other.getY());
 	}
+	
+	@Override
+	public void interact(Box player) 
+	{
+		// nothing
+	}
+	
 }

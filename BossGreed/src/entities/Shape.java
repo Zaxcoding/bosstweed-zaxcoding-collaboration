@@ -11,7 +11,7 @@ import entities.Shape;
 public abstract class Shape
 {
 	public boolean visible, touched, selected, user, removeMe = false;
-	protected double dx, dy, x, y, width, height;
+	public double dx, dy, x, y, width, height;
 	protected int code;
 	public String name;
 	
@@ -38,7 +38,7 @@ public abstract class Shape
 		this.visible = true;
 	}
 	
-//	public abstract void interact(Player player);
+	public abstract void interact(Box player);
 //	public abstract void doYourThing();
 	public abstract void draw();
 	public abstract boolean intersects(Shape other);

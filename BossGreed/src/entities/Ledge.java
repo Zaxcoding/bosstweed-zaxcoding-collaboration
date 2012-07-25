@@ -28,5 +28,11 @@ public class Ledge extends Shape
 	{
 		return false;
 	}
+	
+	@Override
+	public void interact(Box player) 
+	{
+		// nothing
+	}
 
 }

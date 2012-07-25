@@ -36,5 +36,11 @@ public class Sky extends Shape
 	{
 		return false;
 	}
+	
+	@Override
+	public void interact(Box player) 
+	{
+		// nothing
+	}
 
 }

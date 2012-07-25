@@ -31,4 +31,13 @@ public class Coin extends Shape
 		return false;
 	}
 
+	@Override
+	public void interact(Box player) 
+	{
+		if (!this.removeMe)
+		{
+			player.goldCount++;
+			this.removeMe = true;
+		}
+	}
 }

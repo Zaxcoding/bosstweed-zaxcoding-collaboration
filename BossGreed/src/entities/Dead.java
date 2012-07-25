@@ -72,5 +72,11 @@ public class Dead extends Shape
 	{
 		return false;
 	}
+	
+	@Override
+	public void interact(Box player) 
+	{
+		player.alive = false;
+	}
 
 }

@@ -36,6 +36,12 @@ public class ArrowKey extends Shape
 		
 		textureVertices();
 	}
+	
+	@Override
+	public void interact(Box player) 
+	{
+		// nothing
+	}
 
 	@Override
 	public boolean intersects(Shape other)

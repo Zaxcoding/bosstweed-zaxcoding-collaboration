@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Grav extends Shape
 {
@@ -20,75 +20,75 @@ public class Grav extends Shape
 		textureStart();
 		
 		if(this.i<=2*init){
-			Game.gravflip.bind();
+			GameOn.gravflip.bind();
 		}
 		else if(this.i>2*init&&this.i<=4*init)
 		{
-			Game.gravflip2.bind();
+			GameOn.gravflip2.bind();
 		}
 		else if(this.i>4*init&&this.i<=6*init)
 		{
-			Game.gravflip3.bind();
+			GameOn.gravflip3.bind();
 		}
 		else if(this.i>6*init&&this.i<=8*init)
 		{
-			Game.gravflip4.bind();
+			GameOn.gravflip4.bind();
 		}
 		else if(this.i>8*init&&this.i<=10*init)
 		{
-			Game.gravflip5.bind();
+			GameOn.gravflip5.bind();
 		}
 		else if(this.i>10*init&&this.i<=12*init)
 		{
-			Game.gravflip6.bind();
+			GameOn.gravflip6.bind();
 		}
 		else if(this.i>12*init&&this.i<=14*init)
 		{
-			Game.gravflip7.bind();
+			GameOn.gravflip7.bind();
 		}
 		else if(this.i>14*init&&this.i<=16*init)
 		{
-			Game.gravflip8.bind();
+			GameOn.gravflip8.bind();
 		}
 		else if(this.i>16*init&&this.i<=18*init)
 		{
-			Game.gravflip9.bind();
+			GameOn.gravflip9.bind();
 		}
 		else if(this.i>18*init&&this.i<=20*init)
 		{
-			Game.gravflip10.bind();
+			GameOn.gravflip10.bind();
 		}
 		else if(this.i>20*init&&this.i<=22*init)
 		{
-			Game.gravflip11.bind();
+			GameOn.gravflip11.bind();
 		}
 		else if(this.i>22*init&&this.i<=24*init)
 		{
-			Game.gravflip12.bind();
+			GameOn.gravflip12.bind();
 		}
 		else if(this.i>24*init&&this.i<=26*init)
 		{
-			Game.gravflip13.bind();
+			GameOn.gravflip13.bind();
 		}
 		else if(this.i>26*init&&this.i<=28*init)
 		{
-			Game.gravflip14.bind();
+			GameOn.gravflip14.bind();
 		}
 		else if(this.i>28*init&&this.i<=30*init)
 		{
-			Game.gravflip15.bind();
+			GameOn.gravflip15.bind();
 		}
 		else if(this.i>30*init&&this.i<=32*init)
 		{
-			Game.gravflip16.bind();
+			GameOn.gravflip16.bind();
 		}
 		else if(this.i>32*init&&this.i<=34*init)
 		{
-			Game.gravflip17.bind();
+			GameOn.gravflip17.bind();
 		}
 		else if(this.i>34*init&&this.i<=36*init)
 		{
-			Game.gravflip18.bind();
+			GameOn.gravflip18.bind();
 			if(this.i==36*init){
 				this.i=0;
 			}
@@ -123,6 +123,17 @@ public class Grav extends Shape
 			
 		}	
 		return intersect;
+	}
+	
+	@Override
+	public void interact(Box player) 
+	{
+		if (player.groundPiece != this)
+		{
+			player.gravityMod = -player.gravityMod;
+			player.grounded = false;
+			player.bounce = true;
+		}
 	}
 
 }

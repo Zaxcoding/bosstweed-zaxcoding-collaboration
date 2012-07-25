@@ -563,6 +563,7 @@ public class Game {
 		}
 	}
 	//initialize opengl
+
 	public void initGL()
 	{
 		try 

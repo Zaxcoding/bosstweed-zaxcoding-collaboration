@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Bat extends Shape
 {	
@@ -19,13 +19,19 @@ public class Bat extends Shape
 		textureStart();
 		
 		if (this.vert)
-			Game.cliffv.bind();
+			GameOn.cliffv.bind();
 		else
-			Game.cliffi.bind();
+			GameOn.cliffi.bind();
 
 		textureVertices();
 	}
 
+	@Override
+	public void interact(Box player) 
+	{
+		// nothing
+	}
+	
 	@Override
 	public boolean intersects(Shape other)
 	{
