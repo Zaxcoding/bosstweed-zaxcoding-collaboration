@@ -1,6 +1,6 @@
 package entities;
 
-import static org.lwjgl.opengl.GL11.glColor3d;
+import static org.lwjgl.opengl.GL11.*;
 
 public class Sky extends Shape
 {
@@ -25,9 +25,9 @@ public class Sky extends Shape
 	
 	@Override
 	public void draw()
-	{
-		glColor3d(red,green,blue);
-
+	{		
+		textureVertices();
+		glColor4d(red,green,blue,1);
 		textureVertices();
 	}
 

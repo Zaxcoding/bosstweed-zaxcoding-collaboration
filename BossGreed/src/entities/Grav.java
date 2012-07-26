@@ -4,6 +4,8 @@ import game.GameOn;
 
 public class Grav extends Shape
 {
+	int init;
+	
 	public Grav(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
@@ -12,6 +14,7 @@ public class Grav extends Shape
 		init = 5;
 		defaultWidth = 80;
 		defaultHeight = 12;
+		solid = true;
 	}
 
 	@Override

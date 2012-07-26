@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class News extends Shape
 {		
@@ -12,6 +12,7 @@ public class News extends Shape
 		alive = true;
 		defaultWidth = 40;
 		defaultHeight = 40;
+		solid = true;
 	}
 
 	@Override
@@ -19,7 +20,7 @@ public class News extends Shape
 	{
 		textureStart();
 		
-		Game.news.bind();
+		GameOn.news.bind();
 		
 		textureVertices();
 	}

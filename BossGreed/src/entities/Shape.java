@@ -10,8 +10,9 @@ import entities.Shape;
 
 public abstract class Shape
 {
-	public boolean visible, touched, selected, user, removeMe = false;
-	public double dx, dy, x, y, width, height;
+	public boolean visible = true, touched, selected, user, removeMe = false;
+	public boolean solid = false, moving = false, upDown = true, downRight = true;
+	public double dx, dy, x, y, width, height, endPos, startPos, partnerX, partnerY, moveSpeed;
 	protected int code;
 	public String name;
 	
@@ -21,9 +22,11 @@ public abstract class Shape
 	// -- these are only used in some classes, but I put them here so they can be 
 	// -- accessed through a common Shape variable. By default they're all 0 or false,
 	// -- so I only set them to true (or 5 or whatever) in the individual classes' constructor.
-	public int i, j, type, init, that, endHeight;
+	public int i, type;
+	public boolean on, vert, alive;
+	
 	public int defaultWidth, defaultHeight, action;
-	public boolean pause, on, up, vert, upp, right, alive, switch1;
+
 	
 	public Shape partner;
 	
@@ -34,59 +37,33 @@ public abstract class Shape
 		this.y = y;
 		this.width = width;
 		this.height = height;
-//		this.touched = false;
-		this.visible = true;
 	}
 	
 	public abstract void interact(Box player);
-//	public abstract void doYourThing();
 	public abstract void draw();
 	public abstract boolean intersects(Shape other);
-//	public abstract void touch(Player player);
 	
-	// basically a void method, but also a return for in onGround
-/*
-	public boolean collision(Player player)
+	public void action()
 	{
-		boolean ans = false;
-		if (!this.name.equals("Player"))
-		{
-			double left = player.x;
-			double right = player.x + player.width;
-		
-			if ((left <= (this.x + this.width) && (right >= this.x)) 
-				&& (player.y > this.y)  && (player.y < this.y + this.height) )
-			{
-				// hit the bottom, stay under instead of flipping to the side
-				if (player.y + player.height >= this.y + this.height && player.jumping)
-				{
-			//		System.out.println("AAAAAAA");
-					player.y = this.y + this.height;
-					ans = true;
-				}
-				if (player.y + player.height < this.y + this.height)
-				{
-				boolean closerToLeft = player.x <= this.x + this.width/2;
-				if (closerToLeft)
-					player.x = this.x - player.width - 1;
-				else
-					player.x = this.x + this.width;
-				ans = true;
-				}
-			}
-		}
-		if (ans)
-			this.touch(player);
-		
-		return ans;
+		System.out.println("Actioning");
+		if (action == 1)
+			this.visible = true;
+		if (action == 2)
+			this.visible = false;
+		if (action == 3)
+			this.moving = true;
 	}
-*/
 	
 	public void editorDraw()
 	{
-		textureStart();
-		pic.bind();
-		textureVertices();
+		if (name.equals("Sky"))
+			this.draw();
+		else
+		{
+			textureStart();
+			pic.bind();
+			textureVertices();
+		}
 	}
 	
 	public void setPic(Texture tex)
@@ -157,23 +134,25 @@ public abstract class Shape
 			temp.width = IS.readDouble();
 			temp.height = IS.readDouble();
 			
+			temp.partnerX = IS.readDouble();
+			temp.partnerY = IS.readDouble();
+			temp.endPos = IS.readDouble();
+			temp.startPos = IS.readDouble();
+			temp.moveSpeed = IS.readDouble();
+			
 			temp.visible = IS.readBoolean();
+			temp.upDown = IS.readBoolean();
+			temp.downRight = IS.readBoolean();
+			temp.moving = IS.readBoolean();
 			
 			temp.i = IS.readInt();
-			temp.j = IS.readInt();
 			temp.type = IS.readInt();
-			temp.init = IS.readInt();
-			temp.that = IS.readInt();
-			
-			temp.pause = IS.readBoolean();
+			temp.action = IS.readInt();
+
 			temp.on = IS.readBoolean();
-			temp.up = IS.readBoolean();
 			temp.vert = IS.readBoolean();
-			temp.upp = IS.readBoolean();
-			temp.right = IS.readBoolean();
 			temp.alive = IS.readBoolean();
-			temp.switch1 = IS.readBoolean();
-			
+			temp.solid = IS.readBoolean();
 		} catch (IOException e)
 		{
 			// TODO Auto-generated catch block
@@ -191,23 +170,28 @@ public abstract class Shape
 			OS.writeDouble(temp.y);
 			OS.writeDouble(temp.width);
 			OS.writeDouble(temp.height);
-	
-			OS.writeBoolean(temp.visible);
-	
-			OS.writeInt(temp.i);
-			OS.writeInt(temp.j);
-			OS.writeInt(temp.type);
-			OS.writeInt(temp.init);
-			OS.writeInt(temp.that);
 			
-			OS.writeBoolean(temp.pause);
+			OS.writeDouble(temp.partnerX);
+			OS.writeDouble(temp.partnerY);
+			OS.writeDouble(temp.endPos);
+			OS.writeDouble(temp.startPos);
+			OS.writeDouble(temp.moveSpeed);
+			
+			
+			OS.writeBoolean(temp.visible);
+			OS.writeBoolean(temp.upDown);
+			OS.writeBoolean(temp.downRight);
+			OS.writeBoolean(temp.moving);
+			
+			
+			OS.writeInt(temp.i);
+			OS.writeInt(temp.type);
+			OS.writeInt(temp.action);
+			
 			OS.writeBoolean(temp.on);
-			OS.writeBoolean(temp.up);
 			OS.writeBoolean(temp.vert);
-			OS.writeBoolean(temp.upp);
-			OS.writeBoolean(temp.right);
 			OS.writeBoolean(temp.alive);
-			OS.writeBoolean(temp.switch1);
+			OS.writeBoolean(temp.solid);
 		}
 		catch (IOException e)
 		{
@@ -266,7 +250,31 @@ public abstract class Shape
 			glVertex2d(x + BORDER + width, y - BORDER);
 			glVertex2d(x + BORDER + width, y + BORDER + height);
 			glVertex2d(x - BORDER, y + BORDER + height);
-		glEnd ();
+		glEnd();
+		if (action == 3)	
+		{
+			glBegin(GL_LINE_LOOP); 
+			double endPoint = endPos;
+			if (!downRight)
+				endPoint = startPos;
+			//System.out.println("StartPos, EndPos, endPoint: " + startPos + ", " + endPos + ", " + endPoint);
+			if (upDown)
+			{
+				glVertex2d(x - BORDER, endPoint - BORDER);
+				glVertex2d(x + BORDER + width, endPoint - BORDER);
+				glVertex2d(x + BORDER + width, endPoint + BORDER + height);
+				glVertex2d(x - BORDER, endPoint + BORDER + height);
+			}
+			else
+			{
+				glVertex2d(endPoint - BORDER, y - BORDER);
+				glVertex2d(endPoint + BORDER + width, y - BORDER);
+				glVertex2d(endPoint + BORDER + width, y + BORDER + height);
+				glVertex2d(endPoint - BORDER, y + BORDER + height);
+			}
+			glEnd();
+		}
+		
 		glDisable(GL_LINE_LOOP); // Turn it back off
 		glDisable(GL_LINE_STIPPLE); // Turn it back off
 		glEnd();

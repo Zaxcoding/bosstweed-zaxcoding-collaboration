@@ -26,6 +26,7 @@ import org.newdawn.slick.opengl.TextureLoader;
 
 import entities.Box;
 import entities.Shape;
+import entities.Sky;
 
 public class GameOn 
 {
@@ -33,32 +34,37 @@ public class GameOn
 	public static final int HEIGHT = 480;
 	public static final int MOVEMENT_AMOUNT = 3;	// for moving left, right, and translating
 	public static final int GRAVITY_MOVEMENT_AMOUNT = 4;	// for jumping/falling
+	public static final int FONT_SIZE = 18;		
+
 
 	private float translateX = WIDTH/2, translateY = HEIGHT/2;
-	private float startX = 0, startY = 0;
-	private long lastFrame;	
+	private float startX = translateX, startY = translateY;
+	private long lastFrame, startTime;	
 		
 	private List<Shape> shapes = new ArrayList<Shape>(20);
 	private UnicodeFont uniFont;
 	private String inputValue;
 	
+	private Sky background = new Sky(-5000, -5000, 10000, 10000);
+	double r, g, b;
+	
 	public static Texture left,right,gright,gleft,icel,cliffi,cliffv,icev,deadi,deadi1,deadi2,deadi3,deadi4,deadv,deadv1,deadv2,deadv3,deadv4,coini,door,doorv,gravflip,gravflip2,gravflip3,gravflip4,gravflip5,gravflip6,gravflip7,gravflip8,gravflip9,gravflip10,gravflip11,gravflip12,gravflip13,gravflip14,gravflip15,gravflip16,gravflip17,gravflip18,Lon,Loff,brick,brickv,wallpaper;
 	public static Texture cloud1,cloud2,cloud3,cloud4,cloud5,cloud6,cloud7,cloud8,cloud9,cloud10,lboxi,doorjam,doorjamv,woodi,ledgei,ropei,hangi,hangv,wheeli,wheeli2,sky1,sky2,sky3,sky4,sky5,sky6,a1,a2,a3,a4,a5,esc,space,words,words2,words3,words4,words5,words6,words7,words8,words9,words10,words11,words12,words13,words14,words15,words16,words17,words18,words19,words20,words21,words22;
 	public static Texture p,pr,pre,pres,press,news;
 	
+	private Box player;
 	
-	private Box player = new Box(startX + 50, startY, 26, 26);
-			
+	public String fileName;
+				
 	public GameOn()
 	{		
 		loadLevel();
-	//	initFonts();		// not needed for now
 		initGL();
+		initFonts();		// not needed for now
 		initTextures();
 		
-		shapes.add(player);
-		
 		lastFrame = getTime();
+		startTime = lastFrame;
 	
 		while (!Display.isCloseRequested())
 		{			
@@ -238,30 +244,69 @@ public class GameOn
 	}
 	
 	// good
+	private void load(String filename)
+	{
+		try
+		{
+			shapes.clear();
+			ObjectInputStream IS = new ObjectInputStream(new FileInputStream(inputValue));
+			int size = IS.readInt();
+			
+			r = IS.readDouble();
+			g = IS.readDouble();
+			b = IS.readDouble();
+			
+			background.setRGB(r,g,b);
+			shapes.add(background);
+			
+			for (int i = 0; i < size; i++)
+			{
+				int code = IS.readInt();
+				Shape temp = Shape.load(IS, code);
+				shapes.add(temp);
+			}
+			
+			startX = IS.readFloat();
+			startY = IS.readFloat();
+			IS.close();
+
+
+			player = new Box(startX, startY, 26, 26);
+			shapes.add(player);
+			
+			
+			
+			for (Shape shape : shapes)
+				if (shape.partnerX != 0 && shape.partnerY != 0)
+					for (Shape shaper : shapes)
+						if (shape.partnerX == shaper.x && shape.partnerY == shaper.y)
+						{
+							shape.partner = shaper;
+							if (shape == shaper && shape.action == 3)
+								shape.action();
+						}
+			// start here
+			// with the actioning
+			
+			
+			
+			System.out.println("Loaded level, now for fonts!");
+		} catch (FileNotFoundException e)
+		{
+			e.printStackTrace();
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	
 	public void loadLevel()
 	{
 		inputValue = JOptionPane.showInputDialog("Enter the filename to load please: ");
 		if (inputValue != null && !inputValue.equals(""))
 		{
-			try
-			{
-				shapes.clear();
-				ObjectInputStream IS = new ObjectInputStream(new FileInputStream(inputValue));
-				int size = IS.readInt();
-				for (int i = 0; i < size; i++)
-				{
-					int code = IS.readInt();
-					Shape temp = Shape.load(IS, code);
-					shapes.add(temp);
-				}
-				System.out.println("Loaded!");
-			} catch (FileNotFoundException e)
-			{
-				e.printStackTrace();
-			} catch (IOException e)
-			{
-				e.printStackTrace();
-			}
+			load(inputValue);
+			fileName = inputValue;
 		}	
 	}
 	
@@ -273,11 +318,81 @@ public class GameOn
 		if (!player.jumping && !player.grounded)
 		{
 			player.setY(player.y + GRAVITY_MOVEMENT_AMOUNT*player.gravityMod);
+			player.groundPiece = null;
 		}
 		else
 		{
 			if (player.jumping)
 				player.setY(player.getY() - GRAVITY_MOVEMENT_AMOUNT*player.gravityMod);		// go up/down by 4				
+		}
+		if (!player.alive)
+		{
+			System.out.println("DEAD");
+			restart();
+		}
+		if (player.groundPiece != null)
+			if (!player.groundPiece.name.equals("Ice") && !player.groundPiece.name.equals("Grav"))
+				player.onIce = false;
+		
+		if (player.onIce)
+			player.x += MOVEMENT_AMOUNT*player.lastDIR;
+		
+		Shape temp = new Box(0,0,0,0);
+		for (Shape shape: shapes)
+		{
+			if (player.intersects(shape) && !shape.name.equals("Box") &&
+											player.groundPiece != shape)
+			if (shape.removeMe)
+				temp = shape;
+			if (shape.moving)
+				handleMoving(shape);
+			
+		}
+		if (temp.removeMe)
+			shapes.remove(temp);
+		
+	}
+	
+	private void handleMoving(Shape shape)
+	{
+		if (shape.name.equals("Cloud"))
+		{
+			shape.x += shape.moveSpeed;
+		}
+		else
+		{
+			if (shape.upDown && shape.downRight)
+			{
+				shape.y += shape.moveSpeed;
+				if (player.groundPiece == shape)
+					player.y += shape.moveSpeed;
+				if (shape.y > shape.endPos)
+					shape.downRight = false;
+			}
+			else if (shape.upDown && !shape.downRight)
+			{
+				shape.y -= shape.moveSpeed;
+				if (player.groundPiece == shape)
+					player.y -= shape.moveSpeed;
+				if (shape.y < shape.startPos)
+					shape.downRight = true;
+			}
+			else if (!shape.upDown && shape.downRight)
+			{
+				shape.x += shape.moveSpeed;
+				if (player.groundPiece == shape)
+					player.x += shape.moveSpeed;
+				if (shape.x > shape.endPos)
+					shape.downRight = false;
+			}
+			else if (!shape.upDown && !shape.downRight)
+			{
+				shape.x -= shape.moveSpeed;
+				if (player.groundPiece == shape)
+					player.x -= shape.moveSpeed;
+				if (shape.x < shape.startPos)
+					shape.downRight = true;
+			}
 		}
 	}
 	
@@ -313,13 +428,13 @@ public class GameOn
 			player.groundPiece = null;
 			return false;
 		}
-			
+					
 		// if we're already on the ground, then just check that we're still on top of the groundPiece
 		// note the extra 3/4 width cushion for the player (to make it more fun)
 		if (player.groundPiece != null && player.grounded)
 		{
-			if ((player.groundPiece.x - player.width/2 <= player.x && 
-					(player.groundPiece.x + player.groundPiece.width >= player.x + player.width/2)))
+			if ((player.groundPiece.x - player.width + 5 <= player.x && 
+					(player.groundPiece.x + player.groundPiece.width >= player.x + 5)))
 			{
 				player.groundPiece.interact(player);
 				return true;
@@ -330,9 +445,9 @@ public class GameOn
 		for (Shape shape : shapes)
 		{		
 			// lined up between the ends, not the player, and player not jumping
-			if ((shape.x - player.width/2 <= player.x  && 
-					(shape.x + shape.width >= player.x + player.width/2)) &&
-					!player.jumping && !shape.name.equals("Box"))
+			if ((shape.x - player.width + 5 <= player.x  && 
+					(shape.x + shape.width >= player.x + 5)) &&
+					!player.jumping && !shape.name.equals("Box") && shape.solid && shape.visible)
 			{
 				if (player.gravityMod == 1 && 					// falling
 					(player.y + player.height > shape.y) &&		// through top
@@ -340,6 +455,8 @@ public class GameOn
 				{
 					player.y = shape.y - player.height;
 					shape.interact(player);
+					if (shape.partner != null)
+						shape.partner.action();
 					player.groundPiece = shape;
 					return true;
 				}
@@ -349,6 +466,8 @@ public class GameOn
 				{
 					player.y = shape.y + shape.height;
 					shape.interact(player);
+					if (shape.partner != null)
+						shape.partner.action();
 					player.groundPiece = shape;
 					return true;
 				}				
@@ -362,6 +481,7 @@ public class GameOn
 	{	
 		player.jumping = true;
 		player.grounded = false;
+		player.groundPiece = null;
 	}
 	
 	// good
@@ -388,10 +508,15 @@ public class GameOn
 	// empty
 	private void restart()
 	{
-		player.x = startX + 50;
+		player.alive = true;
+		player.x = startX;
 		player.y = startY;
 		translateX = WIDTH/2;
 		translateY = HEIGHT/2;
+		player.gravityMod = 1;
+		player.onIce = false;
+		startTime = getTime();
+		load(fileName);
 	}
 	
 	// done
@@ -416,10 +541,12 @@ public class GameOn
 	// done
 	private void render()
 	{			
-		// draw the placed boxes
 		for (Shape shape : shapes)
-			if (shape.isVisible())
+			if (shape.visible)
 				shape.draw();
+
+		uniFont.drawString(5 - translateX, 5 - translateY,"GoldCount: " + player.goldCount);
+		uniFont.drawString(5 - translateX + WIDTH/3, 5 - translateY,"Time: " + (getTime() - startTime)/1000.);
 		
 		translateY = HEIGHT/2 - (int)player.y;
 		translateX = WIDTH/2 - (int)player.x;
@@ -442,19 +569,23 @@ public class GameOn
 	}
 	
 	// done
-	private void initFonts() 
-	{
+	@SuppressWarnings("unchecked")
+	private void initFonts() {
+
+        Font awtFont = new Font("", Font.PLAIN, FONT_SIZE);
+       
+        uniFont = new UnicodeFont(awtFont, FONT_SIZE, false, false);
+        uniFont.addAsciiGlyphs();
+        uniFont.addGlyphs(400,600);           // Setting the unicode Range
+        uniFont.getEffects().add(new ColorEffect(java.awt.Color.white));
+        try {
+            uniFont.loadGlyphs();
+        } catch (SlickException e) {};
+        
+        System.out.println("Fonts initialized!");
+    }
 	
-	    Font awtFont = new Font("", Font.PLAIN,55);
-	    
-	    uniFont = new UnicodeFont(awtFont, 45, false, false);
-	    uniFont.addAsciiGlyphs();
-	    uniFont.addGlyphs(400,600);           // Setting the unicode Range
-	    uniFont.getEffects().add(new ColorEffect(java.awt.Color.white));
-	    try {
-	        uniFont.loadGlyphs();
-	    } catch (SlickException e) {};
-	}
+	
 	
 	// done
 	public static Texture loadTexture(String key){

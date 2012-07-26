@@ -1,5 +1,11 @@
 ReadME for the Editor:
 
+// Wed July 25, 2012
+
+GameOn:
+	This is where I'm working now. 
+
+
 // Fri July 20, 2012
 
 Game2.java:

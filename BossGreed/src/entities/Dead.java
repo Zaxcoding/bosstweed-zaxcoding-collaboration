@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Dead extends Shape
 {	
@@ -9,10 +9,9 @@ public class Dead extends Shape
 		super(x, y, width, height);
 		code = 8;
 		name = "Dead";
-		up = true;
-		right = true;
 		defaultWidth = 80;
 		defaultHeight = 18;
+		solid = true;
 	}
 
 	@Override
@@ -21,43 +20,43 @@ public class Dead extends Shape
 		textureStart();
 		
 		if(this.vert){
-			if(this.j<=10){
-				Game.deadv.bind();
+			if (this.i<=10){
+				GameOn.deadv.bind();
 			}
-			else if(this.j<=20){
-				Game.deadv1.bind();
+			else if(this.i<=20){
+				GameOn.deadv1.bind();
 			}
-			else if(this.j<=30){
-				Game.deadv2.bind();
+			else if(this.i<=30){
+				GameOn.deadv2.bind();
 			}
-			else if(this.j<=40){
-				Game.deadv3.bind();
+			else if(this.i<=40){
+				GameOn.deadv3.bind();
 			}
-			else if(this.j<=50){
-				Game.deadv4.bind();
-				if(this.j==50)
-					this.j=0;
+			else if(this.i<=50){
+				GameOn.deadv4.bind();
+				if(this.i==50)
+					this.i=0;
 			}
 			else{
-				this.j = 0;
+				this.i = 0;
 			}
-			this.j++;
+			this.i++;
 		}
 		else{
 			if(this.i<=10){
-				Game.deadi.bind();
+				GameOn.deadi.bind();
 			}
 			else if(this.i<=20){
-				Game.deadi1.bind();
+				GameOn.deadi1.bind();
 			}
 			else if(this.i<=30){
-				Game.deadi2.bind();
+				GameOn.deadi2.bind();
 			}
 			else if(this.i<=40){
-				Game.deadi3.bind();
+				GameOn.deadi3.bind();
 			}
 			else if(this.i<=50){
-				Game.deadi4.bind();
+				GameOn.deadi4.bind();
 				if(i==50)
 					this.i=0;
 			}

@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Rope extends Shape
 {	
@@ -18,7 +18,7 @@ public class Rope extends Shape
 	{
 		textureStart();
 		
-		Game.ropei.bind();
+		GameOn.ropei.bind();
 		
 		textureVertices();
 	}

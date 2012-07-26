@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Arrow extends Shape
 {		
@@ -18,11 +18,11 @@ public class Arrow extends Shape
 		
 		if (this.i < 10)
 		{
-			Game.a1.bind();
+			GameOn.a1.bind();
 		}
 		else if (this.i >= 10 && this.i <= 20)
 		{
-			Game.a2.bind();
+			GameOn.a2.bind();
 			if (this.i == 20)
 			{
 				this.i = 0;

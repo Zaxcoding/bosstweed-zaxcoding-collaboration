@@ -1,11 +1,9 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Doorjam extends Shape
 {		
-	Ledge ledge;
-	
 	public Doorjam(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
@@ -13,11 +11,7 @@ public class Doorjam extends Shape
 		name = "Doorjam";
 		defaultWidth = 32;
 		defaultHeight = 128;
-	}
-
-	public void setLedge(Ledge ledge)
-	{
-		this.ledge = ledge;
+		solid = true;
 	}
 	
 	@Override
@@ -25,11 +19,11 @@ public class Doorjam extends Shape
 	{
 		textureStart();
 		
-		if(!this.vert){
-			Game.doorjam.bind();
+		if (!this.vert){
+			GameOn.doorjam.bind();
 		}
 		else{
-			Game.doorjamv.bind();
+			GameOn.doorjamv.bind();
 		}
 		textureVertices();
 	}
@@ -43,7 +37,7 @@ public class Doorjam extends Shape
 	@Override
 	public void interact(Box player) 
 	{
-		// nothing
+		player.alive = false;
 	}
 
 }

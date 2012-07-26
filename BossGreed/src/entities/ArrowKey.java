@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class ArrowKey extends Shape
 {		
@@ -19,19 +19,19 @@ public class ArrowKey extends Shape
 		textureStart();
 		
 		if(this.type==0){
-			Game.a3.bind();
+			GameOn.a3.bind();
 		}
 		else if(this.type==1){
-			Game.a4.bind();
+			GameOn.a4.bind();
 		}
 		else if(this.type==2){
-			Game.a5.bind();
+			GameOn.a5.bind();
 		}
 		else if(this.type==3){
-			Game.esc.bind();
+			GameOn.esc.bind();
 		}
 		else if(this.type==4){
-			Game.space.bind();
+			GameOn.space.bind();
 		}
 		
 		textureVertices();

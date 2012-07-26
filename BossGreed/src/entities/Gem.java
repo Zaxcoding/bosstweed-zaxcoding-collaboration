@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Gem extends Shape
 {	
@@ -19,9 +19,9 @@ public class Gem extends Shape
 		textureStart();
 		
 		if (!this.vert)
-			Game.door.bind();
+			GameOn.door.bind();
 		else
-			Game.doorv.bind();
+			GameOn.doorv.bind();
 		
 		textureVertices();
 	}

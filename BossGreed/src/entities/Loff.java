@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Loff extends Shape
 {		
@@ -19,9 +19,9 @@ public class Loff extends Shape
 		textureStart();
 		
 		if(!on)
-			Game.Loff.bind();
+			GameOn.Loff.bind();
 		else
-			Game.Lon.bind();
+			GameOn.Lon.bind();
 		
 		textureVertices();
 	}

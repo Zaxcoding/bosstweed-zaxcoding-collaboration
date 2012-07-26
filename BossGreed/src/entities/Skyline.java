@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Skyline extends Shape
 {	
@@ -18,23 +18,23 @@ public class Skyline extends Shape
 	{
 		textureStart();
 		
-		if(this.that ==0){
-			Game.sky1.bind();
+		if(this.type ==0){
+			GameOn.sky1.bind();
 		}
-		else if(this.that ==1){
-			Game.sky2.bind();
+		else if(this.type==1){
+			GameOn.sky2.bind();
 		}
-		else if(this.that ==2){
-			Game.sky3.bind();
+		else if(this.type ==2){
+			GameOn.sky3.bind();
 		}
-		else if(this.that ==3){
-			Game.sky4.bind();
+		else if(this.type ==3){
+			GameOn.sky4.bind();
 		}
-		else if(this.that ==4){
-			Game.sky5.bind();
+		else if(this.type ==4){
+			GameOn.sky5.bind();
 		}
-		else if(this.that ==5){
-			Game.sky6.bind();
+		else if(this.type ==5){
+			GameOn.sky6.bind();
 		}
 		
 		textureVertices();

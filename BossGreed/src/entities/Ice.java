@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Ice extends Shape
 {	
@@ -11,6 +11,7 @@ public class Ice extends Shape
 		name = "Ice";
 		defaultWidth = 80;
 		defaultHeight = 12;
+		solid = true;
 	}		
 	
 	@Override
@@ -18,10 +19,10 @@ public class Ice extends Shape
 	{
 		textureStart();
 		
-		if(this.up)
-			Game.icev.bind();
+		if (this.vert)
+			GameOn.icev.bind();
 		else
-			Game.icel.bind();
+			GameOn.icel.bind();
 		
 		textureVertices();
 	}

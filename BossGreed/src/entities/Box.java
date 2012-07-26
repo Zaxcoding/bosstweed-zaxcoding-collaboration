@@ -21,8 +21,6 @@ public class Box extends Shape
 		defaultWidth = 26;
 		defaultHeight = 26;
 		alive = true;
-		startX = x;
-		startY = y;
 		groundPiece = null;
 	}
 	
@@ -183,10 +181,10 @@ public class Box extends Shape
 	public boolean intersects(Shape other)
 	{
 		boolean intersect = false;
-		double p1y = this.getY();
-		double p1x = this.getX();
-		double p2x = this.getX() + this.getWidth();
-		double p2y = this.getY()+this.getHeight();
+		double p1y = this.getY() + 4;
+		double p1x = this.getX() + 4;
+		double p2x = this.getX() + this.getWidth() - 4;
+		double p2y = this.getY()+this.getHeight() - 4;
 		double p3y = other.getY();
 		double p3x = other.getX();
 		double p4x = other.getX()+other.getWidth();
@@ -198,11 +196,9 @@ public class Box extends Shape
 		else{
 			intersect = true;
 		}
-		//! ( P2.y < P3.y || P1.y > P4.y || P2.x < P3.x || P1.x > P4.x )
 		
 		
-		/*
-		if((this.getX()+this.getWidth())>= other.getX()&&(this.getX()+this.getWidth())<=(other.getX()+other.getWidth())&&(this.getY()+this.getHeight())>=other.getY()&&(this.getY()+this.getHeight())<=(other.getY()+other.getHeight()))
+		/*if((this.getX()+this.getWidth())>= other.getX()&&(this.getX()+this.getWidth())<=(other.getX()+other.getWidth())&&(this.getY()+this.getHeight())>=other.getY()&&(this.getY()+this.getHeight())<=(other.getY()+other.getHeight()))
 		{
 			intersect = true;
 			
@@ -223,6 +219,26 @@ public class Box extends Shape
 			
 		}	
 		*/
+		if (intersect && other.visible)
+		{
+			if (other.partner != null)
+				if (other.name.equals("Grav") && other.width < 15 & other.height < 15)
+				{
+					other.partner.action();		// this is for blips
+					other.visible = false;		// make them disappear on touch
+				}
+			if (other.name.equals("Coin"))
+				other.interact(this);
+			if (other.name.equals("Dead") || other.name.equals("Doorjam"))
+				this.alive = false;
+			if (other.name.equals("Sky"))
+				intersect = false;
+			if (onIce && other.name.equals("Ice") && other.vert)
+				lastDIR *= -1;				// bouncing off of the side of ice
+				
+		}
+		
+		
 		return intersect;
 	}
 

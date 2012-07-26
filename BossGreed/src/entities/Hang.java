@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Hang extends Shape
 {	
@@ -18,11 +18,12 @@ public class Hang extends Shape
 	{
 		textureStart();
 		
-		if(!this.upp){
-			Game.hangi.bind();
+		if (!this.vert)
+		{
+			GameOn.hangi.bind();
 		}
 		else{
-			Game.hangv.bind();
+			GameOn.hangv.bind();
 		}
 		
 		textureVertices();

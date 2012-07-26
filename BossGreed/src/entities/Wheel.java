@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Wheel extends Shape
 {		
@@ -9,7 +9,7 @@ public class Wheel extends Shape
 		super(x, y, width, height);
 		code = 23;
 		name = "Wheel";
-		switch1 = true;
+		on = true;
 		defaultWidth = 32;
 		defaultHeight = 32;
 	}
@@ -56,11 +56,12 @@ public class Wheel extends Shape
 			switch1 = false;
 		}
 	*/
-		if(switch1){
-			Game.wheeli.bind();
+		if (on)
+		{
+			GameOn.wheeli.bind();
 		}
 		else{
-			Game.wheeli2.bind();
+			GameOn.wheeli2.bind();
 		}
 		
 		textureVertices();

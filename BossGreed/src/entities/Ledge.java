@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Ledge extends Shape
 {	
@@ -11,6 +11,7 @@ public class Ledge extends Shape
 		name = "Ledge";
 		defaultWidth = 48;
 		defaultHeight = 12;
+		solid = true;
 	}
 
 	@Override
@@ -18,7 +19,7 @@ public class Ledge extends Shape
 	{
 		textureStart();
 		
-		Game.ledgei.bind();
+		GameOn.ledgei.bind();
 		
 		textureVertices();
 	}

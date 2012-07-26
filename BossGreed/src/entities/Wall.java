@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Wall extends Shape
 {	
@@ -17,7 +17,7 @@ public class Wall extends Shape
 	public void draw()
 	{
 		textureStart();
-		Game.wallpaper.bind();
+		GameOn.wallpaper.bind();
 		textureVertices();
 	}
 

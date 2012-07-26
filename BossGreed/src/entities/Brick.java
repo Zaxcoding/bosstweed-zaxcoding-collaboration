@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Brick extends Shape
 {
@@ -9,6 +9,7 @@ public class Brick extends Shape
 		super(x, y, width, height);
 		code = 5;
 		name = "Brick";
+		solid = true;
 	}
 
 	@Override
@@ -16,11 +17,11 @@ public class Brick extends Shape
 	{
 		textureStart();
 		
-		if(this.up){
-			Game.brickv.bind();
+		if (this.vert){
+			GameOn.brickv.bind();
 		}
 		else{
-			Game.brick.bind();
+			GameOn.brick.bind();
 		}	
 		
 		textureVertices();

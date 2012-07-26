@@ -11,6 +11,8 @@ public class Bat extends Shape
 		name = "Bat";
 		defaultWidth = 80;
 		defaultHeight = 12;
+		solid = true;
+		visible = true;
 	}
 
 	@Override

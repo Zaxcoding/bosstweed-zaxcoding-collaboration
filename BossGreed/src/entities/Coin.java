@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Coin extends Shape
 {	
@@ -20,7 +20,7 @@ public class Coin extends Shape
 	{
 		textureStart();
 		
-		Game.coini.bind();
+		GameOn.coini.bind();
 		
 		textureVertices();
 	}

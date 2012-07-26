@@ -1,7 +1,7 @@
 package entities;
 
 import static org.lwjgl.opengl.GL11.glColor4d;
-import game.Game;
+import game.GameOn;
 
 public class Cloud extends Shape
 {
@@ -26,34 +26,34 @@ public class Cloud extends Shape
 			glColor4d(1.0,1,1,.7);
 		}
 		if(this.type==1){
-			Game.cloud1.bind();
+			GameOn.cloud1.bind();
 		}
 		else if(this.type==2){
-			Game.cloud2.bind();
+			GameOn.cloud2.bind();
 		}
 		else if(this.type==3){
-			Game.cloud3.bind();
+			GameOn.cloud3.bind();
 		}
 		else if(this.type==4){
-			Game.cloud4.bind();
+			GameOn.cloud4.bind();
 		}
 		else if(this.type==5){
-			Game.cloud5.bind();
+			GameOn.cloud5.bind();
 		}
 		else if(this.type==6){
-			Game.cloud6.bind();
+			GameOn.cloud6.bind();
 		}
 		else if(this.type==7){
-			Game.cloud7.bind();
+			GameOn.cloud7.bind();
 		}
 		else if(this.type==8){
-			Game.cloud8.bind();
+			GameOn.cloud8.bind();
 		}
 		else if(this.type==9){
-			Game.cloud9.bind();
+			GameOn.cloud9.bind();
 		}
 		else if(this.type==10){
-			Game.cloud10.bind();
+			GameOn.cloud10.bind();
 		}
 		
 		textureVertices();

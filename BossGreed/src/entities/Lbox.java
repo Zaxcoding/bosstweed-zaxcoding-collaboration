@@ -1,6 +1,6 @@
 package entities;
 
-import game.Game;
+import game.GameOn;
 
 public class Lbox extends Shape
 {
@@ -15,7 +15,7 @@ public class Lbox extends Shape
 	public void draw()
 	{
 		textureStart();
-		Game.lboxi.bind();
+		GameOn.lboxi.bind();
 		textureVertices();
 	}
 
