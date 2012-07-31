@@ -190,7 +190,7 @@ public class Box extends Shape
 		double p4x = other.getX()+other.getWidth();
 		double p4y = other.getY()+other.getHeight();
 		
-		if(p2y<p3y || p1y>p4y || p2x<p3x ||p1x>p4x){
+		if (p2y<p3y || p1y>p4y || p2x<p3x ||p1x>p4x){
 			
 		}
 		else{
@@ -227,6 +227,8 @@ public class Box extends Shape
 					other.partner.action();		// this is for blips
 					other.visible = false;		// make them disappear on touch
 				}
+			if (other.name.equals("Grav") && other.width > 15)
+				other.interact(this);
 			if (other.name.equals("Coin"))
 				other.interact(this);
 			if (other.name.equals("Dead") || other.name.equals("Doorjam"))

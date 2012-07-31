@@ -1,5 +1,63 @@
 ReadME for the Editor:
 
+//Tue July 31, 2012
+
+LevelEditor.java:
+
+	You can now click (left-click) on width and height to enter a number manually.
+	The current width and height are no longer reset to default after each time a piece is placed.
+		- To reset to the default size, just click on the piece in the bottom pic grid.
+	You can no longer have a negative value for i.
+	
+	Not sure if I mentioned this before, but setting a piece to partner itself and 'start moving' as the action will cause an automatically moving piece.
+	
+	Labeled a few items with 'CHANGE THIS' (for easy searching) that will allow you to adjust the editor's GUI and functionality.
+
+	Okay. That's all for now. As usual, please ask me for any bug fixes/feature additions.
+
+//Thu July 26, 2012
+
+So a lot of changes. Big changes. I'm calling this a Beta release because it's the first working product that works from Editor-Game and back again.
+
+LevelEditor.java:
+
+	Full List of Controls:
+	Control-S to save. Always prompts for a name, just overwrite with same name if wanted.
+	Control-O to open.
+	
+	WASD to move the game camera.
+	IJKL to adjust the current piece's width and height.
+	, to decrease the grid size.
+	. to increase the grid size.
+	T to toggle the grid on or off.
+	[ to decrease the current instance int's value.
+	] to increase the current instance int's value.
+	DELETE to remove the selected piece. 
+	M to pick up and move the selected piece (slightly buggy at times).
+	LSHIFT to lock the mouse's x value (and adjust only y).
+	RSHIFT to lock the mouse's y value (and adjust only x).
+	
+	Left click on instance variables to select them.
+	Left click on booleans to toggle.
+	Left click on Sky to set the hex value.
+	Left click on Start x,y and then click again to set the starting position.
+	Left click on the lower icons to change the current piece.
+	
+	Right click on a placed piece to select it.
+	
+	Once selected,
+	Right click on a non-piece to deselect.
+	Left click '*SET PARTNER*', and then click again on a piece to set the partner.
+	Once selected piece has a partner,
+	Left click on an action to select it.
+	
+	
+	Notes:
+	I gave my mom the game and she found a bug in 30 seconds. If you held jump while landing on a grav,
+	you would jump through the other side and screw things up. I fixed it after like 20 minutes of hunting.
+
+	I got really frustrated trying to add right left collision detection and didn't touch the game for a while.
+
 // Wed July 25, 2012
 
 GameOn:

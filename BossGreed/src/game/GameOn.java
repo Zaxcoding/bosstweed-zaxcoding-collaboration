@@ -18,6 +18,8 @@ import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
+import org.lwjgl.util.WaveData;
+
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
@@ -27,6 +29,9 @@ import org.newdawn.slick.opengl.TextureLoader;
 import entities.Box;
 import entities.Shape;
 import entities.Sky;
+
+import org.lwjgl.openal.AL;
+import static org.lwjgl.openal.AL10.*;
 
 public class GameOn 
 {
@@ -55,6 +60,9 @@ public class GameOn
 	private Box player;
 	
 	public String fileName;
+	
+	WaveData coin, jump;
+	int source;
 				
 	public GameOn()
 	{		
@@ -62,10 +70,13 @@ public class GameOn
 		initGL();
 		initFonts();		// not needed for now
 		initTextures();
+		initSound();
 		
 		lastFrame = getTime();
 		startTime = lastFrame;
 	
+		
+		
 		while (!Display.isCloseRequested())
 		{			
 			glClear(GL_COLOR_BUFFER_BIT);
@@ -73,9 +84,9 @@ public class GameOn
 					
 			glTranslatef(translateX, 0, 0);
 			glTranslatef(0, translateY, 0);
-
-			input();
+			
 			player.grounded = onGround();
+			input();
 						
 			update();
 			render();
@@ -89,6 +100,23 @@ public class GameOn
 		Display.destroy();
 		System.exit(0);
 	}	
+	
+	private void initSound()
+	{
+		WaveData data;
+		try {
+			data = WaveData.create(new FileInputStream("res/jump.wav"));
+			int buffer = alGenBuffers();
+	        alBufferData(buffer, data.format, data.data, data.samplerate);
+	        data.dispose();
+	        source = alGenSources();
+	        alSourcei(source, AL_BUFFER, buffer);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
+	}
 	
 	public static void initTextures()
 	{
@@ -257,7 +285,7 @@ public class GameOn
 			b = IS.readDouble();
 			
 			background.setRGB(r,g,b);
-			shapes.add(background);
+			//shapes.add(background);
 			
 			for (int i = 0; i < size; i++)
 			{
@@ -273,7 +301,6 @@ public class GameOn
 
 			player = new Box(startX, startY, 26, 26);
 			shapes.add(player);
-			
 			
 			
 			for (Shape shape : shapes)
@@ -331,7 +358,7 @@ public class GameOn
 			restart();
 		}
 		if (player.groundPiece != null)
-			if (!player.groundPiece.name.equals("Ice") && !player.groundPiece.name.equals("Grav"))
+			if (!player.groundPiece.name.equals("Ice"))
 				player.onIce = false;
 		
 		if (player.onIce)
@@ -342,6 +369,9 @@ public class GameOn
 		{
 			if (player.intersects(shape) && !shape.name.equals("Box") &&
 											player.groundPiece != shape)
+			{
+	
+			}
 			if (shape.removeMe)
 				temp = shape;
 			if (shape.moving)
@@ -402,8 +432,11 @@ public class GameOn
 		// W or up arrow to jump
 		if ((Keyboard.isKeyDown(Keyboard.KEY_W) || Keyboard.isKeyDown(Keyboard.KEY_UP)) && player.grounded && !player.jumping)
 		{
-			jump(player);
-			lastFrame = getTime();
+			if (!player.groundPiece.name.equals("Grav"))
+			{	
+				jump(player);
+				lastFrame = getTime();
+			}
 		}
 		// move the player and the camera left
 		if (Keyboard.isKeyDown(Keyboard.KEY_A) || Keyboard.isKeyDown(Keyboard.KEY_LEFT)) 
@@ -447,7 +480,7 @@ public class GameOn
 			// lined up between the ends, not the player, and player not jumping
 			if ((shape.x - player.width + 5 <= player.x  && 
 					(shape.x + shape.width >= player.x + 5)) &&
-					!player.jumping && !shape.name.equals("Box") && shape.solid && shape.visible)
+					!player.jumping && !shape.name.equals("Box") && shape.solid && shape.visible && shape.width > 15)
 			{
 				if (player.gravityMod == 1 && 					// falling
 					(player.y + player.height > shape.y) &&		// through top
@@ -479,9 +512,11 @@ public class GameOn
 	// needs testing
 	private void jump(Box player)
 	{	
+		System.out.println("JUMP");
 		player.jumping = true;
 		player.grounded = false;
 		player.groundPiece = null;
+		alSourcePlay(source);
 	}
 	
 	// good
@@ -527,6 +562,7 @@ public class GameOn
 			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
 			Display.setTitle("BossGreed");
 			Display.create();
+			AL.create();
 		} catch (LWJGLException e) 
 		{	e.printStackTrace();	}
 
@@ -541,8 +577,14 @@ public class GameOn
 	// done
 	private void render()
 	{			
+		background.draw();
+		
 		for (Shape shape : shapes)
-			if (shape.visible)
+			if (shape.visible && shape.name.equals("Cloud"))
+				shape.draw();
+
+		for (Shape shape : shapes)
+			if (shape.visible && !shape.name.equals("Cloud"))
 				shape.draw();
 
 		uniFont.drawString(5 - translateX, 5 - translateY,"GoldCount: " + player.goldCount);

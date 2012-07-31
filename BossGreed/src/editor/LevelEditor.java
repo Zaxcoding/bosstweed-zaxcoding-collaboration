@@ -30,7 +30,6 @@ public class LevelEditor
 	protected static final int EDITOR_RESOLUTION_Y = 800;			// height of the level editor screen
 	protected final static int GAME_RESOLUTION_X = 640;		// game dimensions
 	protected final static int GAME_RESOLUTION_Y = 480;		// of BossGreed
-	public static final int THICKNESS = 1;					// the thickness you adjust by
 	public static final int MAX_GRID_SIZE = 200;			// maximum size for the grid
 	public static final int MIN_GRID_SIZE = 10;				// minimum size for the grid
 	public static final int MAX_TYPE_SIZE = 25;				// maximum size for the 'type' var
@@ -44,15 +43,15 @@ public class LevelEditor
 	int RIGHT = (EDITOR_RESOLUTION_X + GAME_RESOLUTION_X)/2 - 1;
 
 	// not final, so you can change within the editor
-	int FONT_SIZE = 24;		
-	int GRID_SIZE = 50;
-	int CAMERA_SCROLL_SPEED = 5;
-	public static int FUDGE_X = 320;				// don't worry about this
-	public static int FUDGE_Y = 91;					// or this
-	
+	int FONT_SIZE = 24;				// (this is automatically changed if lowRes)
+	int GRID_SIZE = 50;				// CHANGE THIS for a different default grid size
+	int CAMERA_SCROLL_SPEED = 5;	// CHANGE THIS to adjust the WASD scroll speed
+	int FUDGE_X = 320;				// don't worry about this
+	int FUDGE_Y = 91;				// or this
+	int THICKNESS = 1;				// CHANGE THIS to adjust the IJKL thickness
+
 	double r, g, b;					// for the sky
 
-	
 	int transX = GAME_RESOLUTION_X/2, transY = GAME_RESOLUTION_Y/2, mouseX, mouseY, width = 26, height = 26;
 	float startX, startY;
 	int [] Keys = new int[20];		// make an array to hold the keys for controls
@@ -71,6 +70,7 @@ public class LevelEditor
 	private List<Shape> shapes = new ArrayList<Shape>(20);
 	private List<Shape> bottomShapes = new ArrayList<Shape>(20);
 	
+	// CHANGE THIS to make it smaller if you think this is excessive.
 	public Sky background = new Sky(-5000,-5000,10000,10000);
 	
 	UnicodeFont uniFont;
@@ -112,6 +112,7 @@ public class LevelEditor
 	
 	public void adjustResolution()
 	{	
+		// CHANGE THIS if you find problems with lowRes mode
 		if (lowRes)
 		{
 			FONT_SIZE = 18;
@@ -124,8 +125,7 @@ public class LevelEditor
 			picsH = 35;
 			picsY -= 15;
 			FUDGE_X = 242;				// don't worry about this
-			FUDGE_Y = 21;				// or this
-			
+			FUDGE_Y = 21;				// or this		
 		}
 	}
 	
@@ -505,15 +505,10 @@ public class LevelEditor
 		if (currShape == "Wheel")
 			temp = new Wheel(mouseX, mouseY, width, height);
 		
-		if (temp.defaultWidth > 0)
+		if (temp.defaultWidth > 0 && (mouseY + transY > BOTTOM))
 		{
 			width = temp.defaultWidth; 
 			height = temp.defaultHeight;
-		}
-		else
-		{
-			width = 40;
-			height = 40;
 		}
 		
 		return temp;
@@ -627,6 +622,25 @@ public class LevelEditor
 		// up if the interface shifts around, but at least it's very easy to change
 		// ----Start left side buttons
 		
+		// CHANGE THIS if you have problems clicking the buttons. Although, you really shouldn't.
+		
+		//-- Width and height
+		if (Mouse.isButtonDown(0) && mouseIn(0,LEFT, TOP + 3*FONT_SIZE, TOP + 4*FONT_SIZE))
+		{
+			inputValue = JOptionPane.showInputDialog("Enter a positive integer width.");
+			if (inputValue != null && !inputValue.equals(""))
+				width = Integer.parseInt(inputValue);
+			fixMouse();
+		}
+		if (Mouse.isButtonDown(0) && mouseIn(0,LEFT, TOP + 4*FONT_SIZE, TOP + 5*FONT_SIZE))
+		{
+			inputValue = JOptionPane.showInputDialog("Enter a positive integer height.");
+			if (inputValue != null && !inputValue.equals(""))
+				height = Integer.parseInt(inputValue);
+			fixMouse();
+		}
+		
+		
 		// --- Ints
 		if (Mouse.isButtonDown(0) && mouseIn(0, 50, TOP + 8*FONT_SIZE, TOP + 9*FONT_SIZE))
 			buttonCode = 1;			// i
@@ -729,13 +743,12 @@ public class LevelEditor
 		{
 			fixKeyboard();
 			load(shapes);
-			
-			// reset the camera
-			transX= 0;
-			transY= 0;
 		}
 		else
 		{
+			// CHANGE THIS if you want to change the button mapping,
+			// or just add new functionality
+			
 			if (Keyboard.isKeyDown(Keyboard.KEY_W)) 
 				transY += CAMERA_SCROLL_SPEED;
 			if (Keyboard.isKeyDown(Keyboard.KEY_S)) 
@@ -777,7 +790,7 @@ public class LevelEditor
 			}
 			if (Keyboard.isKeyDown(Keyboard.KEY_LBRACKET))
 			{
-				if (buttonCode == 1)
+				if (buttonCode == 1 && current.i > 0)
 					current.i--;
 				if (buttonCode == 2  && current.type > MIN_TYPE_SIZE)
 					current.type--;
@@ -800,6 +813,7 @@ public class LevelEditor
 			
 			mouseLockX = false;
 			mouseLockY = false;
+			
 			if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT))
 			{
 				mouseLockX = true;
@@ -808,6 +822,7 @@ public class LevelEditor
 			{
 				mouseLockY  = true;
 			}			
+		
 		}
 	}
 	
@@ -962,6 +977,9 @@ public class LevelEditor
 		glEnable(GL_BLEND);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA); 
 		
+		// CHANGE THIS if you want to add more text/debug stuff to the screen
+		
+		
 		//---LEFT SIDE----
 		
 		uniFont.drawString(5, TOP, "Mouse: " + (mouseX + transX) + "," + (mouseY + transY));
@@ -1050,7 +1068,7 @@ public class LevelEditor
 				b = IS.readDouble();
 				
 				background.setRGB(r,g,b);
-				shapes.add(background);
+			//	shapes.add(background);
 				
 				for (int i = 0; i < size; i++)
 				{
