@@ -852,8 +852,7 @@ public class LevelEditor
 			e.printStackTrace();
 		}
 	}
-	
-	
+
 	public void fixKeyboard()
 	{
 		Keyboard.destroy();

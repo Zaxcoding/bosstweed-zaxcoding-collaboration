@@ -31,17 +31,18 @@ import entities.Shape;
 import entities.Sky;
 
 import org.lwjgl.openal.AL;
+
+import com.sun.corba.se.impl.oa.poa.ActiveObjectMap.Key;
+
 import static org.lwjgl.openal.AL10.*;
 
 public class GameOn 
 {
 	public static final int WIDTH = 640;			// game resolution
 	public static final int HEIGHT = 480;
-	public static final int MOVEMENT_AMOUNT = 3;	// for moving left, right, and translating
 	public static final int GRAVITY_MOVEMENT_AMOUNT = 4;	// for jumping/falling
 	public static final int FONT_SIZE = 18;		
-
-
+	
 	private float translateX = WIDTH/2, translateY = HEIGHT/2;
 	private float startX = translateX, startY = translateY;
 	private long lastFrame, startTime;	
@@ -61,9 +62,27 @@ public class GameOn
 	
 	public String fileName;
 	
+	// sound, still needs work
 	WaveData coin, jump;
 	int source;
-				
+	
+	// RUNNING, JUMPING, SLIDING - ADJUST THESE ANDY
+	double runSpeed;
+	boolean running, moving, pressingJump;
+	int failCount = 0;			
+	
+	int HANGTIME = 300;				// for normal jumps, how long you rise
+	int HANGTIME_RUN = 400;			// when running, you rise this long
+	int MAX_FAILS = 5;				// this is to determine when the player has let go of the jump key
+	double MOVEMENT_AMOUNT = 3;		// max walk speed
+	double CHANGE_DIR_SPEED = .20;	// deceleration amount when changing directions
+	double RUN_ACCEL_SPEED = .1;	// how fast your speed goes up when running
+	double INIT_ACCEL_SPEED = .25;	// how fast you raise up to the normal MOVEMENT_AMOUNT
+	double DEACCEL_SPEED = .20;		// how fast you slow down if you're above MOVEMENT_AMOUNT and let go of run, but keep moving
+	double RUN_SLIDE_AMOUNT = .15;	// deceleration if you're running and stop moving
+	double WALK_SLIDE_AMOUNT = .35;	// deceleration if you're walking and stop moving
+	
+	
 	public GameOn()
 	{		
 		loadLevel();
@@ -84,7 +103,7 @@ public class GameOn
 					
 			glTranslatef(translateX, 0, 0);
 			glTranslatef(0, translateY, 0);
-			
+
 			player.grounded = onGround();
 			input();
 						
@@ -340,8 +359,11 @@ public class GameOn
 	// good
 	private void update()
 	{
-		if (getTime() - lastFrame > 300)
+		if (!running && (getTime() - lastFrame > HANGTIME || !pressingJump))
 			player.jumping = false;
+		if (running && (getTime() - lastFrame > HANGTIME_RUN || !pressingJump))
+			player.jumping = false;		// CHANGE THIS ^ to adjust the run jump height
+		
 		if (!player.jumping && !player.grounded)
 		{
 			player.setY(player.y + GRAVITY_MOVEMENT_AMOUNT*player.gravityMod);
@@ -362,15 +384,14 @@ public class GameOn
 				player.onIce = false;
 		
 		if (player.onIce)
-			player.x += MOVEMENT_AMOUNT*player.lastDIR;
+			player.x += runSpeed*player.lastDIR;
 		
 		Shape temp = new Box(0,0,0,0);
 		for (Shape shape: shapes)
 		{
-			if (player.intersects(shape) && !shape.name.equals("Box") &&
-											player.groundPiece != shape)
+			if (player.intersects(shape) && shape.name.equals("Coin"))
 			{
-	
+				// play coin sound
 			}
 			if (shape.removeMe)
 				temp = shape;
@@ -380,6 +401,26 @@ public class GameOn
 		}
 		if (temp.removeMe)
 			shapes.remove(temp);
+		
+		// sliding/running
+		
+		if (moving)
+			player.x += runSpeed*player.lastDIR;
+		else if (!player.onIce)
+		{
+			if (runSpeed > 0)
+			{
+				if (running)
+					runSpeed -= RUN_SLIDE_AMOUNT;	// slide longer when running
+				else
+					runSpeed -= WALK_SLIDE_AMOUNT;	// if not running, slow down faster
+				player.x += runSpeed*player.lastDIR;
+			}
+		}
+		
+		moving = false;
+			
+		
 		
 	}
 	
@@ -430,26 +471,50 @@ public class GameOn
 	public void input()
 	{
 		// W or up arrow to jump
-		if ((Keyboard.isKeyDown(Keyboard.KEY_W) || Keyboard.isKeyDown(Keyboard.KEY_UP)) && player.grounded && !player.jumping)
+		failCount++;
+		if (failCount > MAX_FAILS)			// if you've let go of jump for 5 straight times,
+			pressingJump = false;	// then you're not pressing jump
+		if (Keyboard.isKeyDown(Keyboard.KEY_W) || Keyboard.isKeyDown(Keyboard.KEY_UP))
 		{
-			if (!player.groundPiece.name.equals("Grav"))
-			{	
-				jump(player);
-				lastFrame = getTime();
-			}
+			pressingJump = true;
+			failCount = 0;			// reset the failCount
+			if (player.groundPiece != null)
+				if (!player.groundPiece.name.equals("Grav") && player.grounded && !player.jumping)
+				{	
+					jump(player);
+					lastFrame = getTime();
+				}
 		}
+		running = false;
+		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
+			running = true;		
 		// move the player and the camera left
 		if (Keyboard.isKeyDown(Keyboard.KEY_A) || Keyboard.isKeyDown(Keyboard.KEY_LEFT)) 
-			moveLeft(player);
+			move(player, -1);
 		// move the player and the camera right
 		if (Keyboard.isKeyDown(Keyboard.KEY_D) || Keyboard.isKeyDown(Keyboard.KEY_RIGHT)) 
-			moveRight(player);
+			move(player, 1);
 		// reset the player's position, the camera, and the gravity
 		if (Keyboard.isKeyDown(Keyboard.KEY_R))
 			restart();
 		
-		if (Keyboard.isKeyDown(Keyboard.KEY_G))
+		if (Keyboard.isKeyDown(Keyboard.KEY_G))	// debugging
+		{
 			player.gravityMod *= -1;
+			fixKeyboard();
+		}
+	}
+	
+	public void fixKeyboard()
+	{
+		Keyboard.destroy();
+		try
+		{
+			Keyboard.create();
+		} catch (LWJGLException e)
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	// needs testing
@@ -519,24 +584,35 @@ public class GameOn
 		alSourcePlay(source);
 	}
 	
-	// good
-	private void moveLeft(Box player)
-	{
-		//conditions
-		if (!player.onIce)
+	private void move(Box player, int dir)
+	{	
+		if (dir != player.lastDIR && !player.onIce)
 		{
-			player.x -= MOVEMENT_AMOUNT;
-			player.lastDIR = -1;
+			runSpeed -= CHANGE_DIR_SPEED;			// changing directions deceleration amount
+			// slide sound
+			if (runSpeed < 0)
+			{
+				player.lastDIR = dir;
+				runSpeed = .25;			// just so you're not going the wrong direction
+			}
 		}
-	}
-	
-	// good
-	private void moveRight(Box player)
-	{
-		if (!player.onIce)
+		else if (!player.onIce)
 		{
-			player.x += MOVEMENT_AMOUNT;
-			player.lastDIR = 1;
+			moving = true;
+						
+			if (runSpeed < 2*MOVEMENT_AMOUNT && running)
+			{
+				runSpeed += RUN_ACCEL_SPEED;			// acceleration amount
+				System.out.println("runspeed: " + runSpeed);
+			}
+			if (runSpeed < MOVEMENT_AMOUNT)
+				runSpeed += INIT_ACCEL_SPEED;		// initial acceleration amount
+			if (!running && runSpeed > MOVEMENT_AMOUNT)
+			{
+				runSpeed -= DEACCEL_SPEED;			// when you let go of running
+				if (runSpeed < MOVEMENT_AMOUNT)
+					runSpeed = MOVEMENT_AMOUNT;
+			}
 		}
 	}
 	
@@ -552,6 +628,7 @@ public class GameOn
 		player.onIce = false;
 		startTime = getTime();
 		load(fileName);
+		fixKeyboard();
 	}
 	
 	// done
