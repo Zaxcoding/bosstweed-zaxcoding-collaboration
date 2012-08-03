@@ -207,7 +207,7 @@ public class GameOn
 		{
 			if (player.intersects(shape) && shape.name.equals("Coin"))
 			{
-				// play coin sound
+				coinSound.playAsSoundEffect(1, 1, false);
 			}
 			if (shape.removeMe)
 				temp = shape;
