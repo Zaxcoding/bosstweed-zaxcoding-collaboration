@@ -1,6 +1,15 @@
 package game;
 
-import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
+import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
+import static org.lwjgl.opengl.GL11.GL_PROJECTION;
+import static org.lwjgl.opengl.GL11.glClear;
+import static org.lwjgl.opengl.GL11.glLoadIdentity;
+import static org.lwjgl.opengl.GL11.glMatrixMode;
+import static org.lwjgl.opengl.GL11.glOrtho;
+import static org.lwjgl.opengl.GL11.glPopMatrix;
+import static org.lwjgl.opengl.GL11.glPushMatrix;
+import static org.lwjgl.opengl.GL11.glTranslatef;
 
 import java.awt.Font;
 import java.io.File;
@@ -16,23 +25,21 @@ import javax.swing.JOptionPane;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.DisplayMode;
-import org.lwjgl.util.WaveData;
-
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
 import org.newdawn.slick.font.effects.ColorEffect;
+import org.newdawn.slick.openal.Audio;
+import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.opengl.Texture;
 import org.newdawn.slick.opengl.TextureLoader;
+import org.newdawn.slick.util.ResourceLoader;
 
 import entities.Box;
 import entities.Shape;
 import entities.Sky;
-
-import org.lwjgl.openal.AL;
-
-import static org.lwjgl.openal.AL10.*;
 
 public class GameOn 
 {
@@ -62,20 +69,13 @@ public class GameOn
 	
 	private Box player;
 	private Sky background = new Sky(-5000, -5000, 10000, 10000);
-
-	// sound, still needs work
-	WaveData coin, jump;
-	int source;
 	
 	// RUNNING, JUMPING, SLIDING - ADJUST THESE ANDY
 	double runSpeed;
 	boolean running, moving, pressingJump;
 	int failCount = 0;			
 	
-	int HANGTIME = 300;				// for normal jumps, how long you rise
-	int HANGTIME_RUN = 400;			// when running, you rise this long
 	int MAX_FAILS = 5;				// this is to determine when the player has let go of the jump key
-	int GRAVITY_MOVEMENT_AMOUNT = 6;	// for jumping/falling
 	double MOVEMENT_AMOUNT = 7;		// max walk speed
 	double CHANGE_DIR_SPEED = .20;	// deceleration amount when changing directions
 	double RUN_ACCEL_SPEED = .15;	// how fast your speed goes up when running
@@ -84,6 +84,30 @@ public class GameOn
 	double RUN_SLIDE_AMOUNT = .25;	// deceleration if you're running and stop moving
 	double WALK_SLIDE_AMOUNT = .25;	// deceleration if you're walking and stop moving
 	
+	// Jumping and gravity
+	// this is the order of jumping:	Press Jump to START_SLOWDOWN1_TIME
+	//									START_SLOWDOWN1_TIME to START_SLOWDOWN2_TIME
+	//									START_SLOWDOWN2_TIME to HANGTIME
+	//									HANGTIME to HANGTIME_RUN (if the player is sprinting)
+	//
+	// The corresponding gravSpeeds are INIT_JUMP_SPEED for the first period,
+	// SLOWDOWN1_JUMP_SPEED for the second period, SLOWDOWN2_JUMP_SPEED for the third and fourth.
+	
+	double START_SLOWDOWN1_TIME = 250;	// transition point between the two above constants
+	double START_SLOWDOWN2_TIME = 350;	// transition point between the two above constants
+	double HANGTIME = 450;				// for normal jumps, how long you rise (MUST BE BIGGER THAN START_SLOWDOWN1_TIME)
+	double HANGTIME_RUN = 500;			// when running, you rise this long (MUST BE BIGGER THAN HANGTIME)
+
+	double gravSpeed;
+	double INIT_JUMP_SPEED = 5.2;		// the initial speed that you start rising with
+	double SLOWDOWN1_JUMP_SPEED = 3.2;	// once past START_SLOWDOWN1_TIME, you rise with this speed
+	double SLOWDOWN2_JUMP_SPEED = 1.2;	// once past START_SLOWDOWN2_TIME, you rise with this speed
+	
+	double GRAVITY_FALL_AMOUNT = 6;		// speed that you fall after the jump's apex, or when walking off cliffs and such
+	
+	
+	// Sounds!
+	private Audio jumpSound, slideSound, coinSound;
 	
 	public GameOn()
 	{		
@@ -105,8 +129,7 @@ public class GameOn
 			glTranslatef(0, translateY, 0);
 
 			player.grounded = onGround();
-			input();
-						
+			input();		
 			update();
 			render();
 						
@@ -117,12 +140,23 @@ public class GameOn
 		}
 
 		Display.destroy();
+		AL.destroy();
 		System.exit(0);
 	}	
 	
 	// a ton of the game logic is done here
 	private void update()
 	{
+	/* 	// LOOK HERE ANDY
+		// if you want, you can adjust the values here and run in debug mode to see the changes without restarting
+		INIT_JUMP_SPEED = 5.2;		// the initial speed that you start rising with
+		SLOWDOWN1_JUMP_SPEED = 3.2;	// once past START_SLOWDOWN1_TIME, you rise with this speed
+		START_SLOWDOWN1_TIME = 350;	// transition point between the two above constants		HANGTIME = 500;				// for normal jumps, how long you rise (MUST BE BIGGER THAN START_SLOWDOWN_TIME)
+		HANGTIME = 450;				// for normal jumps, how long you rise (MUST BE BIGGER THAN START_SLOWDOWN_TIME)
+		HANGTIME_RUN = 475;	
+		GRAVITY_FALL_AMOUNT = 6;		
+	*/
+		
 		// if you're walking and jump then you have a max of HANGTIME until you start falling
 		if (!running && (getTime() - lastFrame > HANGTIME || !pressingJump))
 			player.jumping = false;
@@ -134,14 +168,21 @@ public class GameOn
 		// this is for falling - if you're not grounded and not on the way up
 		if (!player.jumping && !player.grounded)
 		{
-			player.setY(player.y + GRAVITY_MOVEMENT_AMOUNT*player.gravityMod);
+			player.setY(player.y + GRAVITY_FALL_AMOUNT*player.gravityMod);
 			player.groundPiece = null;
 		}
 		else
 		{
 			// this is for rising - if you're jumping
 			if (player.jumping)
-				player.setY(player.getY() - GRAVITY_MOVEMENT_AMOUNT*player.gravityMod);		
+			{
+				gravSpeed = INIT_JUMP_SPEED;
+				if (getTime() - lastFrame > START_SLOWDOWN1_TIME)
+					gravSpeed = SLOWDOWN1_JUMP_SPEED;
+				if (getTime() - lastFrame > START_SLOWDOWN2_TIME)
+					gravSpeed = SLOWDOWN2_JUMP_SPEED;
+				player.setY(player.getY() - gravSpeed*player.gravityMod);		
+			}
 		}
 		
 		// kinda just filler for now, if you're dead then restart
@@ -281,6 +322,7 @@ public class GameOn
 		if (Keyboard.isKeyDown(Keyboard.KEY_G))	// debugging
 		{
 			player.gravityMod *= -1;
+			coinSound.playAsSoundEffect(1, 1, false);
 			fixKeyboard();
 		}
 	}
@@ -349,7 +391,7 @@ public class GameOn
 		player.jumping = true;			// you're jumping
 		player.grounded = false;		// you aren't grounded (note this is not grounded = onGround() grounded, that will be determined on its own)
 		player.groundPiece = null;		// you have no groundPiece
-		alSourcePlay(source);			// play the jump sound!
+		jumpSound.playAsSoundEffect(1, 1, false);	// play the jump sound!
 	}
 	
 	// this is a generalized version of moveLeft and moveRight
@@ -514,7 +556,6 @@ public class GameOn
 			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
 			Display.setTitle("BossGreed");
 			Display.create();
-			AL.create();
 		} catch (LWJGLException e) 
 		{	e.printStackTrace();	}
 
@@ -545,16 +586,12 @@ public class GameOn
 	// NEEDS MORE SOUNDS
 	private void initSound()
 	{
-		// not too sure how this works, will keep working on it later
-		WaveData data;
-		try {
-			data = WaveData.create(new FileInputStream("res/jump.wav"));
-			int buffer = alGenBuffers();
-	        alBufferData(buffer, data.format, data.data, data.samplerate);
-	        data.dispose();
-	        source = alGenSources();
-	        alSourcei(source, AL_BUFFER, buffer);
-		} catch (FileNotFoundException e) {
+		try 
+		{
+			jumpSound = AudioLoader.getAudio("WAV", ResourceLoader.getResourceAsStream("res/sound/jump.wav"));
+			coinSound = AudioLoader.getAudio("WAV", ResourceLoader.getResourceAsStream("res/sound/coin.wav"));
+		} catch (IOException e)
+		{
 			e.printStackTrace();
 		}
         
@@ -679,7 +716,7 @@ public class GameOn
 	public static Texture loadTexture(String key)
 	{
 			try {
-				return TextureLoader.getTexture("png",new FileInputStream(new File("res/img" + key + ".png")));
+				return TextureLoader.getTexture("png",new FileInputStream(new File("res/img/" + key + ".png")));
 			} catch (FileNotFoundException e) {
 				
 				e.printStackTrace();
