@@ -78,8 +78,8 @@ import entities.Wheel;
 public class LevelEditor
 {
 	// 1280x800 for high res, 1024x600 for low res
-	protected static final int EDITOR_RESOLUTION_X = 1024;			// width of the level editor screen
-	protected static final int EDITOR_RESOLUTION_Y = 600;			// height of the level editor screen
+	protected static final int EDITOR_RESOLUTION_X = 1280;			// width of the level editor screen
+	protected static final int EDITOR_RESOLUTION_Y = 800;			// height of the level editor screen
 	protected final static int GAME_RESOLUTION_X = 640;		// game dimensions
 	protected final static int GAME_RESOLUTION_Y = 480;		// of BossGreed
 	public static final int MAX_GRID_SIZE = 200;			// maximum size for the grid
@@ -111,6 +111,8 @@ public class LevelEditor
 	int picsX = 50, picsY = BOTTOM + 50, picsW = 50, picsH = 50;		// for the bottom pics grid
 	int buttonCode = 1;				// used to choose which instance int to change
 	int pointerX, pointerY;			// for the ^ used to show the current piece
+	int page = 1;					// used for the bottom pics
+	int MAX_PAGES = 1;
 
 	boolean drawGrid = true, lowRes = EDITOR_RESOLUTION_X < 1280,
 			settingPartner, settingStart;
@@ -187,9 +189,9 @@ public class LevelEditor
 			BOTTOM += 30;
 			LEFT += 50;
 			RIGHT += 50;
-			picsW = 35;
-			picsH = 35;
-			picsY -= 15;
+			//	picsW = 35;
+			//	picsH = 35;
+			//	picsY -= 15;
 			FUDGE_X = 242;				// don't worry about this
 			FUDGE_Y = 21;				// or this		
 		}
@@ -225,7 +227,8 @@ public class LevelEditor
 				if (mouseX + transX >= shape.getX()
 						&& (mouseX + transX <= shape.getX() + shape.getWidth())
 						&& mouseY + transY >= shape.getY()
-						&& (mouseY + transY <= shape.getY() + shape.getHeight()))
+						&& (mouseY + transY <= shape.getY() + shape.getHeight())
+						&& page == shape.editorPage)
 				{
 					currShape = shape.name;
 					current = getCurrShape();
@@ -272,7 +275,8 @@ public class LevelEditor
 		glPopMatrix();
 
 		for (Shape shape : bottomShapes)
-			shape.editorDraw();
+			if (page == shape.editorPage)
+				shape.editorDraw();
 
 		//	drawButtons(); 
 
@@ -590,67 +594,81 @@ public class LevelEditor
 	public void drawShapes()
 	{
 		Shape temp = new Arrow(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new ArrowKey(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Bat(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Box(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Brick(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Cactus(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Cloud(picsX, picsY, picsW, picsH);
 		temp.type = 1;
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Coin(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Dead(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Doorjam(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Gem(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Grav(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Hang(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Ice(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Lbox(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Ledge(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Loff(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new News(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Rope(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Skyline(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Text(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Wall(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
 		temp = new Wheel(picsX, picsY, picsW, picsH);
-		drawAndMove(temp);
+		assignAndMove(temp);
+
+		page = 1;
 	}
 
-	public void drawAndMove(Shape temp)
+	public void assignAndMove(Shape temp)
 	{
 		assignPic(temp);
 		bottomShapes.add(temp);
+		temp.editorPage = page;
 
 		picsX += 2 * picsW;
-		if (picsX >= EDITOR_RESOLUTION_X - picsW)
+		if (picsX + 2 * picsW >= EDITOR_RESOLUTION_X
+				&& picsY < EDITOR_RESOLUTION_Y)
 		{
 			picsX = 50;
 			if (lowRes)
 				picsY += picsH + 15;
 			else
 				picsY += picsH + 50;
+
+			if (picsY + picsH >= EDITOR_RESOLUTION_Y)
+			{
+				if (lowRes)
+					picsY = BOTTOM + 15;
+				else
+					picsY = BOTTOM + 50;
+				page++;
+				MAX_PAGES++;
+			}
 		}
 	}
 
@@ -925,6 +943,16 @@ public class LevelEditor
 				mouseLockY = true;
 			}
 
+			if (Keyboard.isKeyDown(Keyboard.KEY_MINUS) && page > 1)
+			{
+				page--;
+				fixKeyboard();
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_EQUALS) && page < MAX_PAGES)
+			{
+				page++;
+				fixKeyboard();
+			}
 		}
 	}
 

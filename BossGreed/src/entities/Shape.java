@@ -45,6 +45,7 @@ public abstract class Shape
 	public boolean on, vert, alive;
 
 	public String tileSet = "Default";
+	public int editorPage = 1;
 
 	public int defaultWidth, defaultHeight, action;
 

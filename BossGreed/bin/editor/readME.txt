@@ -1,5 +1,19 @@
 ReadME for the Editor:
 
+// Aug 7, 2012
+
+LevelEditor.java:
+	Controls:
+	- to go to the previous page
+	+ to go to the next page
+	
+Cactus.java:
+	New entity
+	
+instructions.txt:
+	Detailed instructions to add new entities/images
+	
+
 //Tue July 31, 2012
 
 LevelEditor.java:
