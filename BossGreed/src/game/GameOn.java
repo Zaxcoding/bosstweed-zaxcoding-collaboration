@@ -177,19 +177,19 @@ public class GameOn
 		INITIAL_FALL_SPEED = .2;
 
 		if (getTime() - lastFrame > HANGTIME || !pressingJump)
-
 			player.jumping = false;
 
 		if (!player.jumping && !player.grounded
 				&& getTime() - lastFrame > HANGTIME)
 		{
 			startFall = getTime();
+			lastFrame = getTime();
 		}
 
 		// this is for falling - if you're not grounded and not on the way up
 		if (!player.jumping && !player.grounded)
 		{
-			if (getTime() - startFall < TERMINAL_VELOCITY_TIME)
+			if (getTime() - lastFrame - HANGTIME > TERMINAL_VELOCITY_TIME)
 			{
 				player.setY(player.y + INITIAL_FALL_SPEED * player.gravityMod);
 				System.out.println("Stall");
@@ -251,8 +251,18 @@ public class GameOn
 
 		// if you pushed left or right, then move in that direction
 		if (moving)
+		{
+
 			player.x += runSpeed * player.lastDIR;
-		else if (!player.onIce)
+			for (Shape shape : shapes)
+				if (player.intersects(shape) && shape.solid)
+				{
+					System.out.println("Hit!");
+					player.x -= runSpeed * player.lastDIR;
+					moving = false;
+					runSpeed = 0;
+				}
+		} else if (!player.onIce)
 		{
 			// otherwise, as long as you're not on ice, start sliding
 			if (runSpeed > 0)
