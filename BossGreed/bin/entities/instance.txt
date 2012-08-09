@@ -1,0 +1,12 @@
+Wheel - On
+Text - type 0 - 22, i 0 - 350
+Skyline - type 0 - 5
+Loff - On
+Ice - vert
+Hang - vert
+Grav - i
+Gem - vert
+Doorjam - vert
+Dead - i
+Cloud - type
+Brick - vert

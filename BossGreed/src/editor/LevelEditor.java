@@ -1316,7 +1316,7 @@ public class LevelEditor
 			try
 			{
 				ObjectOutputStream OS = new ObjectOutputStream(
-						new FileOutputStream(fileName));
+						new FileOutputStream("levels/" + fileName));
 				OS.writeInt(shapes.size());
 
 				OS.writeDouble(r);
