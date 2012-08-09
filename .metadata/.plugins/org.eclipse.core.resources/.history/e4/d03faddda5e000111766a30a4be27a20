@@ -1,0 +1,10 @@
+How to add images to the LevelEditor
+
+1. Copy the images to /res/img/
+
+2. Determine if a new entity is needed. 
+	- In general you just need to determine if the new image will have properties/behaviors that are very 
+	different from already existing Entites.
+	- Re-skins of already existing Entities (ex. desertCliff) never need new Entities.
+
+3. 
