@@ -71,9 +71,17 @@ public class GameOn
 			words11, words12, words13, words14, words15, words16, words17,
 			words18, words19, words20, words21, words22;
 	public static Texture p, pr, pre, pres, press, news;
+<<<<<<< HEAD
 	public static Texture cliffdesert, cliffdesert2, desertbush, cactus,desertplatform,
 	desertplatform1,desertplatform2,desertplatform3,desertplatform4,desertplatform5,desertplatform6,
 	desertplatform7,desertplatform8,desertplatform9,desertplatform10,desertplatform11,desertback;
+=======
+	public static Texture cliffdesert, cliffdesert2, desertbush, cactus,
+			desertplatform, desertplatform1, desertplatform2, desertplatform3,
+			desertplatform4, desertplatform5, desertplatform6, desertplatform7,
+			desertplatform8, desertplatform9, desertplatform10,
+			desertplatform11, desertback;
+>>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 
 	private Box player;
 	private Sky background = new Sky(-5000, -5000, 10000, 10000);
@@ -505,6 +513,7 @@ public class GameOn
 		background.draw();		// draw the sky
 
 		// first draw the clouds (and other background objects)
+<<<<<<< HEAD
 		for (Shape shape : shapes)
 			if (shape.visible && shape.name.equals("Clouds"))
 				shape.draw();
@@ -515,6 +524,12 @@ public class GameOn
 		for (Shape shape : shapes)
 			if (shape.visible && !shape.name.equals("Cloud"))
 				shape.draw();
+=======
+		for (int i = 1; i <= 4; i++)
+			for (Shape shape : shapes)
+				if (shape.visible && shape.displayOrder == i)
+					shape.draw();
+>>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 
 		// draw the text
 		uniFont.drawString(5 - translateX, 5 - translateY, "GoldCount: "
@@ -786,11 +801,16 @@ public class GameOn
 		ledgei = loadTexture("ledge");
 		wheeli = loadTexture("wheel");
 		wheeli2 = loadTexture("wheel1");
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 		cactus = loadTexture("cactus");
 		desertbush = loadTexture("desertbush");
 		desertback = loadTexture("deserthills1");
 		desertplatform = loadTexture("desertplatform");
+<<<<<<< HEAD
 		desertplatform1= loadTexture("desertplatform1");
 		desertplatform2= loadTexture("desertplatform2");
 		desertplatform3= loadTexture("desertplatform3");
@@ -802,6 +822,19 @@ public class GameOn
 		desertplatform9= loadTexture("desertplatform9");
 		desertplatform10= loadTexture("desertplatform10");
 		desertplatform11= loadTexture("desertplatform11");
+=======
+		desertplatform1 = loadTexture("desertplatform1");
+		desertplatform2 = loadTexture("desertplatform2");
+		desertplatform3 = loadTexture("desertplatform3");
+		desertplatform4 = loadTexture("desertplatform4");
+		desertplatform5 = loadTexture("desertplatform5");
+		desertplatform6 = loadTexture("desertplatform6");
+		desertplatform7 = loadTexture("desertplatform7");
+		desertplatform8 = loadTexture("desertplatform8");
+		desertplatform9 = loadTexture("desertplatform9");
+		desertplatform10 = loadTexture("desertplatform10");
+		desertplatform11 = loadTexture("desertplatform11");
+>>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 		cliffdesert = loadTexture("cliffdesert");
 		cliffdesert2 = loadTexture("cliffdesert2");
 	}

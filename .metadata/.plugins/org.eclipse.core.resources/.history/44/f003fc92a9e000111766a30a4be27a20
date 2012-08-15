@@ -1,0 +1,38 @@
+package entities;
+
+public class Cactus extends Shape
+{
+
+	public Cactus(double x, double y, double width, double height)
+	{
+		super(x, y, width, height);
+		code = 24;
+		name = "Cactus";
+		defaultWidth = 48;
+		defaultHeight = 48;
+	}
+
+	@Override
+	public void interact(Box player)
+	{
+		// do nothing
+	}
+
+	@Override
+	public void draw()
+	{
+		textureStart();
+		
+		GameOn.cactus.bind();
+		
+		textureVertices();
+	}
+
+	@Override
+	public boolean intersects(Shape other)
+	{
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+}

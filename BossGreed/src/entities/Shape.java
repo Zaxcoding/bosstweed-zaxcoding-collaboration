@@ -46,6 +46,7 @@ public abstract class Shape
 
 	public String tileSet = "Default";
 	public int editorPage = 1;
+	public int displayOrder = 3;
 
 	public int defaultWidth, defaultHeight, action;
 
@@ -144,12 +145,21 @@ public abstract class Shape
 			temp = new Wheel(0, 0, 0, 0);
 		else if (shapeCode == 24)
 			temp = new Cactus(0, 0, 0, 0);
+<<<<<<< HEAD
 		else if (shapeCode ==25)
 			temp = new Platform(0,0,0,0);
 		else if (shapeCode ==26)
 			temp = new Hills(0,0,0,0);
 		else if (shapeCode ==27)
 			temp = new Bush(0,0,0,0);
+=======
+		else if (shapeCode == 25)
+			temp = new Platform(0, 0, 0, 0);
+		else if (shapeCode == 26)
+			temp = new Hills(0, 0, 0, 0);
+		else if (shapeCode == 27)
+			temp = new Bush(0, 0, 0, 0);
+>>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 		loadInstanceVars(IS, temp);
 		return temp;
 	}
@@ -177,6 +187,7 @@ public abstract class Shape
 			temp.i = IS.readInt();
 			temp.type = IS.readInt();
 			temp.action = IS.readInt();
+			temp.displayOrder = IS.readInt();
 
 			temp.on = IS.readBoolean();
 			temp.vert = IS.readBoolean();
@@ -215,6 +226,7 @@ public abstract class Shape
 			OS.writeInt(temp.i);
 			OS.writeInt(temp.type);
 			OS.writeInt(temp.action);
+			OS.writeInt(temp.displayOrder);
 
 			OS.writeBoolean(temp.on);
 			OS.writeBoolean(temp.vert);

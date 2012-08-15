@@ -1,0 +1,86 @@
+How to add images to the LevelEditor
+
+1. Copy the images to /res/img/
+
+2. Determine if a new entity is needed. 
+	* In general you just need to determine if the new image will have properties/behaviors that are very 
+		different from already existing Entites.
+	* Re-skins of already existing Entities (ex. desertCliff) never need new Entities.
+
+3. If needed, create the new Entity. Else skip to 4.
+
+	3a. Right-click on the entities package and select new class.
+	
+	3b. Choose a name, then make the Superclass entities.Shape. Click 'include constructors from superclass'.
+	
+	3c. In the constructor, under 	'super(x, y, width, height);', fill in the following:
+		* code = ??; 		where ?? is the next int available in the 
+			"	else if (shapeCode == 19)
+					temp = new Sky(0, 0, 0, 0);
+				else if (shapeCode == 20)
+					temp = new Skyline(0, 0, 0, 0);
+				else if (shapeCode == 21)
+					temp = new Text(0, 0, 0, 0);
+				else if (shapeCode == 22)
+					temp = new Wall(0, 0, 0, 0);
+				else if (shapeCode == 23)
+					temp = new Wheel(0, 0, 0, 0);	" block from entities.Shape.
+		* name = "xxxx"; 	where xxxx is the exact name of the class.
+		* defaultWidth = ??;	where ?? is the default width for this shape in the editor
+		* defaultHeight = ??;	where ?? is the default height for this shape in the editor
+		* solid = true;		iff the player is able to land on the object (ie non-scenery pieces)
+	
+	3d. If the object is solid, then when the player lands on it the object will interact() with the player.
+		* Fill in this method with the desired action, or ask me to.
+		* Leaving this blank is just fine, although it's preferred to say "// do nothing" so it's intentional.
+	
+	3e. Determine the names you will use for the textures (cliffi, cliffv, deadi, etc) and add these names to the block of
+		public static Texture in both GameOn and LevelEditor.
+	
+	3f. The draw() method is called from GameOn to display the picture while the game runs.
+		* Use this sort of pattern to fill in the method:
+				textureStart();
+		
+				if (this.vert)
+					GameOn.brickv.bind();
+				else
+					GameOn.brick.bind();	
+					
+				textureVertices();
+		* Drawing always begins with textureStart(); and ends with textureVertices();
+		* In between, if logic is needed (multiple images to display depending on the instance vars) then include it.
+		* Always use GameOn.TEXTURE_NAME.bind();
+		
+	3g. The assignPic method in LevelEditor is used to display the images in the editor.
+		* Go to the assignPic method and find where (in alphabetical order) the new Entity belongs.
+		* Write if (temp.name.equals("ENTITY_NAME")).
+		* Copy everything between textureStart() and textureVertices().
+		* Make sure to replace 'this' with 'temp'.
+		* Also replace GameOn.TEXTURE_NAME.bind() with temp.setPic(TEXTURE_NAME)
+		* This is the same Brick example above in assignPic:
+				if (temp.name.equals("Brick"))
+				{
+					if (temp.vert)
+						temp.setPic(brickv);
+					else
+						temp.setPic(brick);
+				}
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+			
+				
+			
+	

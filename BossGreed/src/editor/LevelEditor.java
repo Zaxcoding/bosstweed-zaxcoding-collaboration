@@ -117,6 +117,8 @@ public class LevelEditor
 	int page = 1;					// used for the bottom pics
 	int MAX_PAGES = 1;
 
+	int currentOrder = 3;
+
 	boolean drawGrid = true, lowRes = EDITOR_RESOLUTION_X < 1280,
 			settingPartner, settingStart;
 	boolean mouseLockX = false, mouseLockY = false;
@@ -148,9 +150,17 @@ public class LevelEditor
 			words11, words12, words13, words14, words15, words16, words17,
 			words18, words19, words20, words21, words22;
 	public static Texture p, pr, pre, pres, press, news;
+<<<<<<< HEAD
 	public static Texture cliffdesert, cliffdesert2, desertbush, cactus,desertplatform,
 	desertplatform1,desertplatform2,desertplatform3,desertplatform4,desertplatform5,desertplatform6,
 	desertplatform7,desertplatform8,desertplatform9,desertplatform10,desertplatform11,desertback;
+=======
+	public static Texture cliffdesert, cliffdesert2, desertbush, cactus,
+			desertplatform, desertplatform1, desertplatform2, desertplatform3,
+			desertplatform4, desertplatform5, desertplatform6, desertplatform7,
+			desertplatform8, desertplatform9, desertplatform10,
+			desertplatform11, desertback;
+>>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 
 	public LevelEditor()
 	{
@@ -161,7 +171,6 @@ public class LevelEditor
 		initTextures();
 
 		assignPic(current);
-		shapes.add(background);
 		drawShapes();
 
 		while (!Display.isCloseRequested())
@@ -252,9 +261,12 @@ public class LevelEditor
 
 	private void render()
 	{
+		background.editorDraw();
+
 		current.setPosition(mouseX, mouseY);
 		current.setWidth(width);
 		current.setHeight(height);
+		current.displayOrder = currentOrder;
 		assignPic(current);
 
 		// draw the game box
@@ -269,8 +281,10 @@ public class LevelEditor
 
 		// this is where the level itself goes
 
-		for (Shape shape : shapes)
-			shape.editorDraw();
+		for (int i = 1; i <= 4; i++)
+			for (Shape shape : shapes)
+				if (shape.displayOrder == i)
+					shape.editorDraw();
 
 		current.editorDraw();
 
@@ -323,6 +337,7 @@ public class LevelEditor
 		{
 			if (temp.vert)
 				temp.setPic(cliffv);
+<<<<<<< HEAD
 			else if(temp.type ==1)
 				temp.setPic(cliffdesert);
 			else if(temp.type ==2)
@@ -330,6 +345,15 @@ public class LevelEditor
 			else
 				temp.setPic(cliffi);
 			
+=======
+			else if (temp.type == 1)
+				temp.setPic(cliffdesert);
+			else if (temp.type == 2)
+				temp.setPic(cliffdesert2);
+			else
+				temp.setPic(cliffi);
+
+>>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 		}
 
 		if (temp.name.equals("Box"))
@@ -344,7 +368,10 @@ public class LevelEditor
 		}
 		if (temp.name.equals("Bush"))
 			temp.setPic(desertbush);
+<<<<<<< HEAD
 
+=======
+>>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 
 		if (temp.name.equals("Cactus"))
 			temp.setPic(cactus);
@@ -437,12 +464,20 @@ public class LevelEditor
 			else
 				temp.setPic(hangv);
 		}
+<<<<<<< HEAD
 		
+=======
+
+>>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 		if (temp.name.equals("Hills"))
 		{
 			temp.setPic(desertback);
 		}
+<<<<<<< HEAD
 			
+=======
+
+>>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 		if (temp.name.equals("Ice"))
 		{
 			if (temp.vert)
@@ -468,7 +503,12 @@ public class LevelEditor
 		if (temp.name.equals("News"))
 			temp.setPic(news);
 
+<<<<<<< HEAD
 		if (temp.name.equals("Platform")){
+=======
+		if (temp.name.equals("Platform"))
+		{
+>>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 			temp.setPic(desertplatform);
 		}
 		if (temp.name.equals("Rope"))
@@ -594,7 +634,11 @@ public class LevelEditor
 			temp = new Loff(mouseX, mouseY, width, height);
 		if (currShape == "News")
 			temp = new News(mouseX, mouseY, width, height);
+<<<<<<< HEAD
 		if (currShape =="Platform")
+=======
+		if (currShape == "Platform")
+>>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 			temp = new Platform(mouseX, mouseY, width, height);
 		if (currShape == "Rope")
 			temp = new Rope(mouseX, mouseY, width, height);
@@ -824,6 +868,16 @@ public class LevelEditor
 		{
 			JOptionPane.showMessageDialog(null, "Click to set start position");
 			settingStart = true;
+			fixMouse();
+		}
+		if (Mouse.isButtonDown(0)
+				&& mouseIn(0, LEFT - 50, TOP + 17 * FONT_SIZE + 5, TOP + 18
+						* FONT_SIZE + 5))
+		{
+			inputValue = JOptionPane
+					.showInputDialog("Draw order? 1 = Background,"
+							+ "2 = Scenery, 3 = Foreground, 4 = In front of bossgreed");
+			currentOrder = Integer.parseInt(inputValue);
 			fixMouse();
 		}
 
@@ -1184,6 +1238,8 @@ public class LevelEditor
 		uniFont.drawString(5, TOP + 15 * FONT_SIZE, "File name: " + fileName);
 		uniFont.drawString(5, TOP + 16 * FONT_SIZE, "Start x,y: "
 				+ (startX - FUDGE_X) + "," + (startY - FUDGE_Y));
+		uniFont.drawString(5, TOP + 17 * FONT_SIZE, "Draw Order (1-4): "
+				+ currentOrder);
 
 		//---END LEFT SIDE
 
@@ -1297,7 +1353,7 @@ public class LevelEditor
 			try
 			{
 				ObjectOutputStream OS = new ObjectOutputStream(
-						new FileOutputStream(fileName));
+						new FileOutputStream("levels/" + fileName));
 				OS.writeInt(shapes.size());
 
 				OS.writeDouble(r);
@@ -1493,6 +1549,7 @@ public class LevelEditor
 		desertbush = loadTexture("desertbush");
 		desertback = loadTexture("deserthills1");
 		desertplatform = loadTexture("desertplatform");
+<<<<<<< HEAD
 		desertplatform1= loadTexture("desertplatform1");
 		desertplatform2= loadTexture("desertplatform2");
 		desertplatform3= loadTexture("desertplatform3");
@@ -1507,6 +1564,21 @@ public class LevelEditor
 		cliffdesert = loadTexture("cliffdesert");
 		cliffdesert2 = loadTexture("cliffdesert2");
 		
+=======
+		desertplatform1 = loadTexture("desertplatform1");
+		desertplatform2 = loadTexture("desertplatform2");
+		desertplatform3 = loadTexture("desertplatform3");
+		desertplatform4 = loadTexture("desertplatform4");
+		desertplatform5 = loadTexture("desertplatform5");
+		desertplatform6 = loadTexture("desertplatform6");
+		desertplatform7 = loadTexture("desertplatform7");
+		desertplatform8 = loadTexture("desertplatform8");
+		desertplatform9 = loadTexture("desertplatform9");
+		desertplatform10 = loadTexture("desertplatform10");
+		desertplatform11 = loadTexture("desertplatform11");
+		cliffdesert = loadTexture("cliffdesert");
+		cliffdesert2 = loadTexture("cliffdesert2");
+>>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 
 	}
 
