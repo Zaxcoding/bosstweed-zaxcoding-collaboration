@@ -1,5 +1,0 @@
-How to add images to the LevelEditor
-
-1. Copy the images to /res/img/
-
-2. If a new Entity is needed (ex: Cactus is needed but CliffDesert is not)
