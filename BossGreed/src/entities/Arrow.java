@@ -1,6 +1,7 @@
 package entities;
 
 import game.GameOn;
+import game.GameShell;
 
 public class Arrow extends Shape
 {		
@@ -23,6 +24,27 @@ public class Arrow extends Shape
 		else if (this.i >= 10 && this.i <= 20)
 		{
 			GameOn.a2.bind();
+			if (this.i == 20)
+			{
+				this.i = 0;
+			}
+		}
+		this.i++;
+		
+		textureVertices();
+	}
+	
+	public void drawShell()
+	{
+		textureStart();
+		
+		if (this.i < 10)
+		{
+			GameShell.al1.bind();
+		}
+		else if (this.i >= 10 && this.i <= 20)
+		{
+			GameShell.al2.bind();
 			if (this.i == 20)
 			{
 				this.i = 0;

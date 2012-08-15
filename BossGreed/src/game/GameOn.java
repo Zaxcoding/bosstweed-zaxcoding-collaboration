@@ -43,11 +43,12 @@ import entities.Sky;
 
 public class GameOn
 {
+	public boolean done= false;
 	public static final int WIDTH = 640;	// game window resolution
 	public static final int HEIGHT = 480;
 	public static final int FONT_SIZE = 18;
 
-	private float translateX = WIDTH / 2, translateY = HEIGHT / 2;
+	private float translateX = WIDTH / 2, translateY = HEIGHT*2/5;
 	private float startX = translateX, startY = translateY;
 	private long lastFrame, startTime;
 
@@ -70,7 +71,9 @@ public class GameOn
 			words11, words12, words13, words14, words15, words16, words17,
 			words18, words19, words20, words21, words22;
 	public static Texture p, pr, pre, pres, press, news;
-	public static Texture cliffdesert, cliffdesert2, desertbush, cactus;
+	public static Texture cliffdesert, cliffdesert2, desertbush, cactus,desertplatform,
+	desertplatform1,desertplatform2,desertplatform3,desertplatform4,desertplatform5,desertplatform6,
+	desertplatform7,desertplatform8,desertplatform9,desertplatform10,desertplatform11,desertback;
 
 	private Box player;
 	private Sky background = new Sky(-5000, -5000, 10000, 10000);
@@ -117,18 +120,19 @@ public class GameOn
 	// Sounds!
 	private Audio jumpSound, slideSound, coinSound;
 
-	public GameOn()
+	public GameOn(String level)
 	{
-		loadLevel();
-		initGL();
+		fileName = level; // make the filename the level name so restart() functions properly
+		//loadLevel();	// not needed
+		//initGL();		// already done in GameShell.initGL();
 		initFonts();
 		initTextures();
 		initSound();
-
+		load(level); //load the level passed in
 		lastFrame = getTime();
 		startTime = lastFrame;
 
-		while (!Display.isCloseRequested())
+		while (!Display.isCloseRequested()&&!done)
 		{
 			glClear(GL_COLOR_BUFFER_BIT);
 			glPushMatrix();
@@ -148,10 +152,7 @@ public class GameOn
 			Display.update();
 			Display.sync(60);
 		}
-
-		Display.destroy();
-		AL.destroy();
-		System.exit(0);
+		
 	}
 
 	// a ton of the game logic is done here
@@ -483,17 +484,19 @@ public class GameOn
 	// when the user hits 'R', this stuff happens
 	private void restart()
 	{
+		
 		player.alive = true;
 		player.x = startX;
 		player.y = startY;
 		translateX = WIDTH / 2;
-		translateY = HEIGHT / 2;
+		translateY = HEIGHT *2/5 ;
 		player.gravityMod = 1;
 		player.onIce = false;
 		startTime = getTime();
 		load(fileName);
 		fixKeyboard();
 		runSpeed = 0;
+		done = true;
 	}
 
 	// the render loop- very simple
@@ -503,8 +506,10 @@ public class GameOn
 
 		// first draw the clouds (and other background objects)
 		for (Shape shape : shapes)
-			if (shape.visible && shape.name.equals("Cloud"))
+			if (shape.visible && shape.name.equals("Clouds"))
 				shape.draw();
+		
+		
 
 		// then draw the rest of the shapes
 		for (Shape shape : shapes)
@@ -540,7 +545,7 @@ public class GameOn
 	}
 
 	// the actual work of loading from the editor-made file
-	private void load(String filename)
+	public void load(String filename)
 	{
 		try
 		{
@@ -781,6 +786,24 @@ public class GameOn
 		ledgei = loadTexture("ledge");
 		wheeli = loadTexture("wheel");
 		wheeli2 = loadTexture("wheel1");
+		
+		cactus = loadTexture("cactus");
+		desertbush = loadTexture("desertbush");
+		desertback = loadTexture("deserthills1");
+		desertplatform = loadTexture("desertplatform");
+		desertplatform1= loadTexture("desertplatform1");
+		desertplatform2= loadTexture("desertplatform2");
+		desertplatform3= loadTexture("desertplatform3");
+		desertplatform4= loadTexture("desertplatform4");
+		desertplatform5= loadTexture("desertplatform5");
+		desertplatform6= loadTexture("desertplatform6");
+		desertplatform7= loadTexture("desertplatform7");
+		desertplatform8= loadTexture("desertplatform8");
+		desertplatform9= loadTexture("desertplatform9");
+		desertplatform10= loadTexture("desertplatform10");
+		desertplatform11= loadTexture("desertplatform11");
+		cliffdesert = loadTexture("cliffdesert");
+		cliffdesert2 = loadTexture("cliffdesert2");
 	}
 
 	// if you move around the file hierarchy, adjust the image file locations here
@@ -808,7 +831,7 @@ public class GameOn
 	// GameOn
 	public static void main(String [] args)
 	{
-		new GameOn();
+		new GameOn(null);
 	}
 
 }

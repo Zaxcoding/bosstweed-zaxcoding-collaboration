@@ -144,7 +144,12 @@ public abstract class Shape
 			temp = new Wheel(0, 0, 0, 0);
 		else if (shapeCode == 24)
 			temp = new Cactus(0, 0, 0, 0);
-
+		else if (shapeCode ==25)
+			temp = new Platform(0,0,0,0);
+		else if (shapeCode ==26)
+			temp = new Hills(0,0,0,0);
+		else if (shapeCode ==27)
+			temp = new Bush(0,0,0,0);
 		loadInstanceVars(IS, temp);
 		return temp;
 	}
@@ -251,6 +256,14 @@ public abstract class Shape
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 		glColor4d(1.0, 1, 1, 1);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+	}
+	public void textureFade()
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		glColor4d(1.0, 1, 1, .7);
 		GL11.glEnable(GL11.GL_TEXTURE_2D);
 	}
 

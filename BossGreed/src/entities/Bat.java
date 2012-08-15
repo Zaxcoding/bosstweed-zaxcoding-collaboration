@@ -22,6 +22,10 @@ public class Bat extends Shape
 		
 		if (this.vert)
 			GameOn.cliffv.bind();
+		else if(this.type ==1)
+			GameOn.cliffdesert.bind();
+		else if(this.type ==2)
+			GameOn.cliffdesert2.bind();
 		else
 			GameOn.cliffi.bind();
 

@@ -54,6 +54,7 @@ import entities.ArrowKey;
 import entities.Bat;
 import entities.Box;
 import entities.Brick;
+import entities.Bush;
 import entities.Cactus;
 import entities.Cloud;
 import entities.Coin;
@@ -62,11 +63,13 @@ import entities.Doorjam;
 import entities.Gem;
 import entities.Grav;
 import entities.Hang;
+import entities.Hills;
 import entities.Ice;
 import entities.Lbox;
 import entities.Ledge;
 import entities.Loff;
 import entities.News;
+import entities.Platform;
 import entities.Rope;
 import entities.Shape;
 import entities.Sky;
@@ -78,8 +81,8 @@ import entities.Wheel;
 public class LevelEditor
 {
 	// 1280x800 for high res, 1024x600 for low res
-	protected static final int EDITOR_RESOLUTION_X = 1280;			// width of the level editor screen
-	protected static final int EDITOR_RESOLUTION_Y = 800;			// height of the level editor screen
+	protected static final int EDITOR_RESOLUTION_X = 1024;			// width of the level editor screen
+	protected static final int EDITOR_RESOLUTION_Y = 600;			// height of the level editor screen
 	protected final static int GAME_RESOLUTION_X = 640;		// game dimensions
 	protected final static int GAME_RESOLUTION_Y = 480;		// of BossGreed
 	public static final int MAX_GRID_SIZE = 200;			// maximum size for the grid
@@ -145,7 +148,9 @@ public class LevelEditor
 			words11, words12, words13, words14, words15, words16, words17,
 			words18, words19, words20, words21, words22;
 	public static Texture p, pr, pre, pres, press, news;
-	public static Texture cliffdesert, cliffdesert2, desertbush, cactus;
+	public static Texture cliffdesert, cliffdesert2, desertbush, cactus,desertplatform,
+	desertplatform1,desertplatform2,desertplatform3,desertplatform4,desertplatform5,desertplatform6,
+	desertplatform7,desertplatform8,desertplatform9,desertplatform10,desertplatform11,desertback;
 
 	public LevelEditor()
 	{
@@ -318,8 +323,13 @@ public class LevelEditor
 		{
 			if (temp.vert)
 				temp.setPic(cliffv);
+			else if(temp.type ==1)
+				temp.setPic(cliffdesert);
+			else if(temp.type ==2)
+				temp.setPic(cliffdesert2);
 			else
 				temp.setPic(cliffi);
+			
 		}
 
 		if (temp.name.equals("Box"))
@@ -332,6 +342,9 @@ public class LevelEditor
 			else
 				temp.setPic(brick);
 		}
+		if (temp.name.equals("Bush"))
+			temp.setPic(desertbush);
+
 
 		if (temp.name.equals("Cactus"))
 			temp.setPic(cactus);
@@ -424,7 +437,12 @@ public class LevelEditor
 			else
 				temp.setPic(hangv);
 		}
-
+		
+		if (temp.name.equals("Hills"))
+		{
+			temp.setPic(desertback);
+		}
+			
 		if (temp.name.equals("Ice"))
 		{
 			if (temp.vert)
@@ -450,6 +468,9 @@ public class LevelEditor
 		if (temp.name.equals("News"))
 			temp.setPic(news);
 
+		if (temp.name.equals("Platform")){
+			temp.setPic(desertplatform);
+		}
 		if (temp.name.equals("Rope"))
 			temp.setPic(ropei);
 
@@ -543,6 +564,8 @@ public class LevelEditor
 			temp = new Box(mouseX, mouseY, width, height);
 		if (currShape == "Brick")
 			temp = new Brick(mouseX, mouseY, width, height);
+		if (currShape == "Bush")
+			temp = new Bush(mouseX, mouseY, width, height);
 		if (currShape == "Cactus")
 			temp = new Cactus(mouseX, mouseY, width, height);
 		if (currShape == "Cloud")
@@ -559,6 +582,8 @@ public class LevelEditor
 			temp = new Grav(mouseX, mouseY, width, height);
 		if (currShape == "Hang")
 			temp = new Hang(mouseX, mouseY, width, height);
+		if (currShape == "Hills")
+			temp = new Hills(mouseX, mouseY, width, height);
 		if (currShape == "Ice")
 			temp = new Ice(mouseX, mouseY, width, height);
 		if (currShape == "Lbox")
@@ -569,6 +594,8 @@ public class LevelEditor
 			temp = new Loff(mouseX, mouseY, width, height);
 		if (currShape == "News")
 			temp = new News(mouseX, mouseY, width, height);
+		if (currShape =="Platform")
+			temp = new Platform(mouseX, mouseY, width, height);
 		if (currShape == "Rope")
 			temp = new Rope(mouseX, mouseY, width, height);
 		if (currShape == "Sky")
@@ -581,6 +608,7 @@ public class LevelEditor
 			temp = new Wall(mouseX, mouseY, width, height);
 		if (currShape == "Wheel")
 			temp = new Wheel(mouseX, mouseY, width, height);
+		
 
 		if (temp.defaultWidth > 0 && (mouseY + transY > BOTTOM))
 		{
@@ -603,6 +631,8 @@ public class LevelEditor
 		assignAndMove(temp);
 		temp = new Brick(picsX, picsY, picsW, picsH);
 		assignAndMove(temp);
+		temp = new Bush(picsX, picsY, picsW, picsH);
+		assignAndMove(temp);
 		temp = new Cactus(picsX, picsY, picsW, picsH);
 		assignAndMove(temp);
 		temp = new Cloud(picsX, picsY, picsW, picsH);
@@ -620,6 +650,8 @@ public class LevelEditor
 		assignAndMove(temp);
 		temp = new Hang(picsX, picsY, picsW, picsH);
 		assignAndMove(temp);
+		temp = new Hills(picsX, picsY, picsW, picsH);
+		assignAndMove(temp);
 		temp = new Ice(picsX, picsY, picsW, picsH);
 		assignAndMove(temp);
 		temp = new Lbox(picsX, picsY, picsW, picsH);
@@ -629,6 +661,8 @@ public class LevelEditor
 		temp = new Loff(picsX, picsY, picsW, picsH);
 		assignAndMove(temp);
 		temp = new News(picsX, picsY, picsW, picsH);
+		assignAndMove(temp);
+		temp = new Platform(picsX, picsY, picsW, picsH);
 		assignAndMove(temp);
 		temp = new Rope(picsX, picsY, picsW, picsH);
 		assignAndMove(temp);
@@ -1456,6 +1490,23 @@ public class LevelEditor
 		wheeli2 = loadTexture("wheel1");
 
 		cactus = loadTexture("cactus");
+		desertbush = loadTexture("desertbush");
+		desertback = loadTexture("deserthills1");
+		desertplatform = loadTexture("desertplatform");
+		desertplatform1= loadTexture("desertplatform1");
+		desertplatform2= loadTexture("desertplatform2");
+		desertplatform3= loadTexture("desertplatform3");
+		desertplatform4= loadTexture("desertplatform4");
+		desertplatform5= loadTexture("desertplatform5");
+		desertplatform6= loadTexture("desertplatform6");
+		desertplatform7= loadTexture("desertplatform7");
+		desertplatform8= loadTexture("desertplatform8");
+		desertplatform9= loadTexture("desertplatform9");
+		desertplatform10= loadTexture("desertplatform10");
+		desertplatform11= loadTexture("desertplatform11");
+		cliffdesert = loadTexture("cliffdesert");
+		cliffdesert2 = loadTexture("cliffdesert2");
+		
 
 	}
 

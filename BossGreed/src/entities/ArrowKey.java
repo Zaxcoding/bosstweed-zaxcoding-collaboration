@@ -1,6 +1,7 @@
 package entities;
 
 import game.GameOn;
+import game.GameShell;
 
 public class ArrowKey extends Shape
 {		
@@ -37,6 +38,29 @@ public class ArrowKey extends Shape
 		textureVertices();
 	}
 	
+	
+	public void drawShell()
+	{
+		textureStart();
+		
+		if(this.type==0){
+			GameShell.a3.bind();
+		}
+		else if(this.type==1){
+			GameShell.a4.bind();
+		}
+		else if(this.type==2){
+			GameShell.a5.bind();
+		}
+		else if(this.type==3){
+			GameShell.esc.bind();
+		}
+		else if(this.type==4){
+			GameShell.space.bind();
+		}
+		
+		textureVertices();
+	}
 	@Override
 	public void interact(Box player) 
 	{

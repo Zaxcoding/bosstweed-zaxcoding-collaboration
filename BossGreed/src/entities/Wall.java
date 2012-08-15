@@ -1,6 +1,7 @@
 package entities;
 
 import game.GameOn;
+import game.GameShell;
 
 public class Wall extends Shape
 {	
@@ -18,6 +19,16 @@ public class Wall extends Shape
 	{
 		textureStart();
 		GameOn.wallpaper.bind();
+		textureVertices();
+	}
+	
+	public void drawShell()
+	{	
+		textureStart();
+		if(GameShell.fade)
+			textureFade();
+		
+		GameShell.wallpaper.bind();
 		textureVertices();
 	}
 
