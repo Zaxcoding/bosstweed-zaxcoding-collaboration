@@ -1,9 +1,9 @@
 package entities;
 
-import game.GameOn;
+import game.GameShell;
 
 public class Loff extends Shape
-{		
+{
 	public Loff(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
@@ -17,12 +17,12 @@ public class Loff extends Shape
 	public void draw()
 	{
 		textureStart();
-		
-		if(!on)
-			GameOn.Loff.bind();
+
+		if (!on)
+			GameShell.Loff.bind();
 		else
-			GameOn.Lon.bind();
-		
+			GameShell.Lon.bind();
+
 		textureVertices();
 	}
 
@@ -31,9 +31,9 @@ public class Loff extends Shape
 	{
 		return false;
 	}
-	
+
 	@Override
-	public void interact(Box player) 
+	public void interact(Box player)
 	{
 		// nothing
 	}

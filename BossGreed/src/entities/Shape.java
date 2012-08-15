@@ -52,6 +52,8 @@ public abstract class Shape
 
 	public Shape partner;
 
+	public boolean faded = false;
+
 	public Shape(double x, double y, double width, double height)
 	{
 		this.x = x;
@@ -178,7 +180,7 @@ public abstract class Shape
 			temp.i = IS.readInt();
 			temp.type = IS.readInt();
 			temp.action = IS.readInt();
-			temp.displayOrder = IS.readInt();
+			//	temp.displayOrder = IS.readInt();
 
 			temp.on = IS.readBoolean();
 			temp.vert = IS.readBoolean();
@@ -230,6 +232,18 @@ public abstract class Shape
 		}
 	}
 
+	public void textureStart()
+	{
+		glEnable(GL_BLEND);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
+		if (!faded)
+			glColor4d(1, 1, 1, 1);
+		else
+			glColor4d(1, 1, 1, .7);
+		GL11.glEnable(GL11.GL_TEXTURE_2D);
+	}
+
 	public void textureVertices()
 	{
 		glBegin(GL_QUADS);
@@ -250,16 +264,18 @@ public abstract class Shape
 			if (partner != null)
 				partner.drawBorder(true);
 		}
-
+		if (faded)
+			glColor4d(1, 1, 1, 1);	// fix it back
 	}
 
-	public void textureStart()
+	public void drawHitbox()
 	{
-		glEnable(GL_BLEND);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
-		glColor4d(1.0, 1, 1, 1);
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
+		glBegin(GL_LINE_LOOP);
+		glVertex2d(x, y);
+		glVertex2d(x + width, y);
+		glVertex2d(x + width, y + height);
+		glVertex2d(x, y + height);
+		glEnd();
 	}
 
 	// for selecting in the level editor

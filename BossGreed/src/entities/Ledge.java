@@ -1,9 +1,9 @@
 package entities;
 
-import game.GameOn;
+import game.GameShell;
 
 public class Ledge extends Shape
-{	
+{
 	public Ledge(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
@@ -18,9 +18,9 @@ public class Ledge extends Shape
 	public void draw()
 	{
 		textureStart();
-		
-		GameOn.ledgei.bind();
-		
+
+		GameShell.ledgei.bind();
+
 		textureVertices();
 	}
 
@@ -29,9 +29,9 @@ public class Ledge extends Shape
 	{
 		return false;
 	}
-	
+
 	@Override
-	public void interact(Box player) 
+	public void interact(Box player)
 	{
 		// nothing
 	}

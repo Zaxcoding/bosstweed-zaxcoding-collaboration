@@ -1,9 +1,9 @@
 package entities;
 
-import game.GameOn;
+import game.GameShell;
 
 public class Ice extends Shape
-{	
+{
 	public Ice(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
@@ -12,18 +12,18 @@ public class Ice extends Shape
 		defaultWidth = 80;
 		defaultHeight = 12;
 		solid = true;
-	}		
-	
+	}
+
 	@Override
 	public void draw()
 	{
 		textureStart();
-		
+
 		if (this.vert)
-			GameOn.icev.bind();
+			GameShell.icev.bind();
 		else
-			GameOn.icel.bind();
-		
+			GameShell.icel.bind();
+
 		textureVertices();
 	}
 
@@ -32,9 +32,9 @@ public class Ice extends Shape
 	{
 		return false;
 	}
-	
+
 	@Override
-	public void interact(Box player) 
+	public void interact(Box player)
 	{
 		player.onIce = true;
 	}

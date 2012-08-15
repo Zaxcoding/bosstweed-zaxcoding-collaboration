@@ -150,6 +150,7 @@ public class LevelEditor
 			words11, words12, words13, words14, words15, words16, words17,
 			words18, words19, words20, words21, words22;
 	public static Texture p, pr, pre, pres, press, news;
+
 	public static Texture cliffdesert, cliffdesert2, desertbush, cactus,
 			desertplatform, desertplatform1, desertplatform2, desertplatform3,
 			desertplatform4, desertplatform5, desertplatform6, desertplatform7,
@@ -337,7 +338,6 @@ public class LevelEditor
 				temp.setPic(cliffdesert2);
 			else
 				temp.setPic(cliffi);
-
 		}
 
 		if (temp.name.equals("Box"))
@@ -1512,6 +1512,7 @@ public class LevelEditor
 		desertbush = loadTexture("desertbush");
 		desertback = loadTexture("deserthills1");
 		desertplatform = loadTexture("desertplatform");
+
 		desertplatform1 = loadTexture("desertplatform1");
 		desertplatform2 = loadTexture("desertplatform2");
 		desertplatform3 = loadTexture("desertplatform3");

@@ -1,6 +1,6 @@
 package entities;
 
-import game.GameOn;
+import game.GameShell;
 
 public class Hills extends Shape
 {
@@ -18,7 +18,6 @@ public class Hills extends Shape
 	public void interact(Box player)
 	{
 		//do nothing
-
 	}
 
 	@Override
@@ -26,7 +25,7 @@ public class Hills extends Shape
 	{
 		textureStart();
 
-		GameOn.desertback.bind();
+		GameShell.desertback.bind();
 
 		textureVertices();
 	}
@@ -34,7 +33,6 @@ public class Hills extends Shape
 	@Override
 	public boolean intersects(Shape other)
 	{
-		// TODO Auto-generated method stub
 		return false;
 	}
 

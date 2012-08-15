@@ -1,9 +1,9 @@
 package entities;
 
-import game.GameOn;
+import game.GameShell;
 
 public class Coin extends Shape
-{	
+{
 	public Coin(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
@@ -19,9 +19,9 @@ public class Coin extends Shape
 	public void draw()
 	{
 		textureStart();
-		
-		GameOn.coini.bind();
-		
+
+		GameShell.coini.bind();
+
 		textureVertices();
 	}
 
@@ -32,7 +32,7 @@ public class Coin extends Shape
 	}
 
 	@Override
-	public void interact(Box player) 
+	public void interact(Box player)
 	{
 		if (!this.removeMe)
 		{

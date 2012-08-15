@@ -1,6 +1,6 @@
 package entities;
 
-import game.GameOn;
+import game.GameShell;
 
 public class Platform extends Shape
 {
@@ -20,7 +20,6 @@ public class Platform extends Shape
 	public void interact(Box player)
 	{
 		//disappearCounter++;
-
 	}
 
 	@Override
@@ -28,7 +27,7 @@ public class Platform extends Shape
 	{
 		textureStart();
 
-		GameOn.desertplatform.bind();
+		GameShell.desertplatform.bind();
 
 		textureVertices();
 
@@ -37,7 +36,6 @@ public class Platform extends Shape
 	@Override
 	public boolean intersects(Shape other)
 	{
-
 		return false;
 	}
 

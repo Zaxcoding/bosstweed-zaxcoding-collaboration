@@ -1,6 +1,6 @@
 package entities;
 
-import game.GameOn;
+import game.GameShell;
 
 public class Brick extends Shape
 {
@@ -16,14 +16,15 @@ public class Brick extends Shape
 	public void draw()
 	{
 		textureStart();
-		
-		if (this.vert){
-			GameOn.brickv.bind();
+
+		if (this.vert)
+		{
+			GameShell.brickv.bind();
+		} else
+		{
+			GameShell.brick.bind();
 		}
-		else{
-			GameOn.brick.bind();
-		}	
-		
+
 		textureVertices();
 	}
 
@@ -32,9 +33,9 @@ public class Brick extends Shape
 	{
 		return false;
 	}
-	
+
 	@Override
-	public void interact(Box player) 
+	public void interact(Box player)
 	{
 		// nothing
 	}

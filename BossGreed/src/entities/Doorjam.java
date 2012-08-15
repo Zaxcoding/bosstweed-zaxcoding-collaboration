@@ -1,9 +1,9 @@
 package entities;
 
-import game.GameOn;
+import game.GameShell;
 
 public class Doorjam extends Shape
-{		
+{
 	public Doorjam(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
@@ -13,17 +13,18 @@ public class Doorjam extends Shape
 		defaultHeight = 128;
 		solid = true;
 	}
-	
+
 	@Override
 	public void draw()
 	{
 		textureStart();
-		
-		if (!this.vert){
-			GameOn.doorjam.bind();
-		}
-		else{
-			GameOn.doorjamv.bind();
+
+		if (!this.vert)
+		{
+			GameShell.doorjam.bind();
+		} else
+		{
+			GameShell.doorjamv.bind();
 		}
 		textureVertices();
 	}
@@ -33,9 +34,9 @@ public class Doorjam extends Shape
 	{
 		return false;
 	}
-	
+
 	@Override
-	public void interact(Box player) 
+	public void interact(Box player)
 	{
 		player.alive = false;
 	}

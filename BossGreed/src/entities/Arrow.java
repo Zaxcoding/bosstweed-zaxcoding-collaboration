@@ -1,9 +1,9 @@
 package entities;
 
-import game.GameOn;
+import game.GameShell;
 
 public class Arrow extends Shape
-{		
+{
 	public Arrow(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
@@ -15,21 +15,20 @@ public class Arrow extends Shape
 	public void draw()
 	{
 		textureStart();
-		
+
 		if (this.i < 10)
 		{
-			GameOn.a1.bind();
-		}
-		else if (this.i >= 10 && this.i <= 20)
+			GameShell.a1.bind();
+		} else if (this.i >= 10 && this.i <= 20)
 		{
-			GameOn.a2.bind();
+			GameShell.a2.bind();
 			if (this.i == 20)
 			{
 				this.i = 0;
 			}
 		}
 		this.i++;
-		
+
 		textureVertices();
 	}
 
@@ -40,7 +39,7 @@ public class Arrow extends Shape
 	}
 
 	@Override
-	public void interact(Box player) 
+	public void interact(Box player)
 	{
 		// nothing
 	}

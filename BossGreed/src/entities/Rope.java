@@ -1,9 +1,9 @@
 package entities;
 
-import game.GameOn;
+import game.GameShell;
 
 public class Rope extends Shape
-{	
+{
 	public Rope(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
@@ -17,9 +17,9 @@ public class Rope extends Shape
 	public void draw()
 	{
 		textureStart();
-		
-		GameOn.ropei.bind();
-		
+
+		GameShell.ropei.bind();
+
 		textureVertices();
 	}
 
@@ -28,9 +28,9 @@ public class Rope extends Shape
 	{
 		return false;
 	}
-	
+
 	@Override
-	public void interact(Box player) 
+	public void interact(Box player)
 	{
 		// nothing
 	}

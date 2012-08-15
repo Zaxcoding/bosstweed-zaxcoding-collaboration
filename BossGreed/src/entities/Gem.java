@@ -1,9 +1,9 @@
 package entities;
 
-import game.GameOn;
+import game.GameShell;
 
 public class Gem extends Shape
-{	
+{
 	public Gem(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
@@ -17,12 +17,12 @@ public class Gem extends Shape
 	public void draw()
 	{
 		textureStart();
-		
+
 		if (!this.vert)
-			GameOn.door.bind();
+			GameShell.door.bind();
 		else
-			GameOn.doorv.bind();
-		
+			GameShell.doorv.bind();
+
 		textureVertices();
 	}
 
@@ -31,9 +31,9 @@ public class Gem extends Shape
 	{
 		return false;
 	}
-	
+
 	@Override
-	public void interact(Box player) 
+	public void interact(Box player)
 	{
 		// nothing
 	}
