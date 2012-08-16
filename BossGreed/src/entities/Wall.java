@@ -1,10 +1,9 @@
 package entities;
 
-import game.GameOn;
 import game.GameShell;
 
 public class Wall extends Shape
-{	
+{
 	public Wall(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
@@ -18,16 +17,6 @@ public class Wall extends Shape
 	public void draw()
 	{
 		textureStart();
-		GameOn.wallpaper.bind();
-		textureVertices();
-	}
-	
-	public void drawShell()
-	{	
-		textureStart();
-		if(GameShell.fade)
-			textureFade();
-		
 		GameShell.wallpaper.bind();
 		textureVertices();
 	}
@@ -39,7 +28,7 @@ public class Wall extends Shape
 	}
 
 	@Override
-	public void interact(Box player) 
+	public void interact(Box player)
 	{
 		// nothing
 	}

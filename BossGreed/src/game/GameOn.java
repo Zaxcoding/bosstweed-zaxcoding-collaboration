@@ -1,17 +1,11 @@
 package game;
 
 import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_MODELVIEW;
-import static org.lwjgl.opengl.GL11.GL_PROJECTION;
 import static org.lwjgl.opengl.GL11.glClear;
-import static org.lwjgl.opengl.GL11.glLoadIdentity;
-import static org.lwjgl.opengl.GL11.glMatrixMode;
-import static org.lwjgl.opengl.GL11.glOrtho;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
 import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glTranslatef;
 
-import java.awt.Font;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -25,12 +19,8 @@ import javax.swing.JOptionPane;
 import org.lwjgl.LWJGLException;
 import org.lwjgl.Sys;
 import org.lwjgl.input.Keyboard;
-import org.lwjgl.openal.AL;
 import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-import org.newdawn.slick.SlickException;
 import org.newdawn.slick.UnicodeFont;
-import org.newdawn.slick.font.effects.ColorEffect;
 import org.newdawn.slick.openal.Audio;
 import org.newdawn.slick.openal.AudioLoader;
 import org.newdawn.slick.opengl.Texture;
@@ -43,17 +33,17 @@ import entities.Sky;
 
 public class GameOn
 {
-	public boolean done= false;
+	public boolean done = false;
 	public static final int WIDTH = 640;	// game window resolution
 	public static final int HEIGHT = 480;
 	public static final int FONT_SIZE = 18;
 
-	private float translateX = WIDTH / 2, translateY = HEIGHT*2/5;
+	private float translateX = WIDTH / 2, translateY = HEIGHT * 2 / 5;
 	private float startX = translateX, startY = translateY;
 	private long lastFrame, startTime;
 
 	private List<Shape> shapes = new ArrayList<Shape>(20);
-	private UnicodeFont uniFont;
+	private UnicodeFont uniFont = GameShell.uniFont;
 	private String inputValue, fileName;
 
 	public static Texture left, right, gright, gleft, icel, cliffi, cliffv,
@@ -71,17 +61,11 @@ public class GameOn
 			words11, words12, words13, words14, words15, words16, words17,
 			words18, words19, words20, words21, words22;
 	public static Texture p, pr, pre, pres, press, news;
-<<<<<<< HEAD
-	public static Texture cliffdesert, cliffdesert2, desertbush, cactus,desertplatform,
-	desertplatform1,desertplatform2,desertplatform3,desertplatform4,desertplatform5,desertplatform6,
-	desertplatform7,desertplatform8,desertplatform9,desertplatform10,desertplatform11,desertback;
-=======
 	public static Texture cliffdesert, cliffdesert2, desertbush, cactus,
 			desertplatform, desertplatform1, desertplatform2, desertplatform3,
 			desertplatform4, desertplatform5, desertplatform6, desertplatform7,
 			desertplatform8, desertplatform9, desertplatform10,
 			desertplatform11, desertback;
->>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 
 	private Box player;
 	private Sky background = new Sky(-5000, -5000, 10000, 10000);
@@ -126,21 +110,25 @@ public class GameOn
 	double INITIAL_FALL_SPEED = 1.2;
 
 	// Sounds!
-	private Audio jumpSound, slideSound, coinSound;
+	private Audio jumpSound, coinSound;
+
+	// Show hitboxes
+	boolean displayHitbox = false;
 
 	public GameOn(String level)
 	{
-		fileName = level; // make the filename the level name so restart() functions properly
-		//loadLevel();	// not needed
-		//initGL();		// already done in GameShell.initGL();
-		initFonts();
-		initTextures();
+		fileName = level; 	// make the filename the level name so restart() functions properly
+		// loadLevel();		// not needed
+		// initGL();		// already done in GameShell.initGL();
+		//initFonts();		// already done
+		//initTextures();	// already done
 		initSound();
 		load(level); //load the level passed in
+
 		lastFrame = getTime();
 		startTime = lastFrame;
 
-		while (!Display.isCloseRequested()&&!done)
+		while (!Display.isCloseRequested() && !done)
 		{
 			glClear(GL_COLOR_BUFFER_BIT);
 			glPushMatrix();
@@ -160,7 +148,7 @@ public class GameOn
 			Display.update();
 			Display.sync(60);
 		}
-		
+
 	}
 
 	// a ton of the game logic is done here
@@ -201,11 +189,9 @@ public class GameOn
 			if (getTime() - lastFrame - HANGTIME > TERMINAL_VELOCITY_TIME)
 			{
 				player.setY(player.y + INITIAL_FALL_SPEED * player.gravityMod);
-				System.out.println("Stall");
 			} else
 			{
 				player.setY(player.y + GRAVITY_FALL_AMOUNT * player.gravityMod);
-				System.out.println("HERE");
 			}
 
 			player.groundPiece = null;
@@ -264,9 +250,10 @@ public class GameOn
 
 			player.x += runSpeed * player.lastDIR;
 			for (Shape shape : shapes)
-				if (player.intersects(shape) && shape.solid)
+				if (player.intersects(shape) && shape.solid && shape.visible
+						&& player.groundPiece != shape)
 				{
-					System.out.println("Hit!");
+					System.out.println("Hit!  " + shape.name);
 					player.x -= runSpeed * player.lastDIR;
 					moving = false;
 					runSpeed = 0;
@@ -375,6 +362,13 @@ public class GameOn
 			coinSound.playAsSoundEffect(1, 1, false);
 			fixKeyboard();
 		}
+
+		if (Keyboard.isKeyDown(Keyboard.KEY_H))
+		{
+			displayHitbox = !displayHitbox;
+			fixKeyboard();
+		}
+
 	}
 
 	// this method is called from the main loop (grounded = onGround()) to see
@@ -492,12 +486,12 @@ public class GameOn
 	// when the user hits 'R', this stuff happens
 	private void restart()
 	{
-		
+
 		player.alive = true;
 		player.x = startX;
 		player.y = startY;
 		translateX = WIDTH / 2;
-		translateY = HEIGHT *2/5 ;
+		translateY = HEIGHT * 2 / 5;
 		player.gravityMod = 1;
 		player.onIce = false;
 		startTime = getTime();
@@ -512,24 +506,15 @@ public class GameOn
 	{
 		background.draw();		// draw the sky
 
-		// first draw the clouds (and other background objects)
-<<<<<<< HEAD
-		for (Shape shape : shapes)
-			if (shape.visible && shape.name.equals("Clouds"))
-				shape.draw();
-		
-		
-
-		// then draw the rest of the shapes
-		for (Shape shape : shapes)
-			if (shape.visible && !shape.name.equals("Cloud"))
-				shape.draw();
-=======
+		// draw everything in order
 		for (int i = 1; i <= 4; i++)
 			for (Shape shape : shapes)
 				if (shape.visible && shape.displayOrder == i)
+				{
 					shape.draw();
->>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
+					if (displayHitbox)
+						shape.drawHitbox();
+				}
 
 		// draw the text
 		uniFont.drawString(5 - translateX, 5 - translateY, "GoldCount: "
@@ -566,7 +551,7 @@ public class GameOn
 		{
 			shapes.clear();		// clear the array of the old shapes (if any)
 			ObjectInputStream IS = new ObjectInputStream(new FileInputStream(
-					filename));
+					"levels/" + filename));
 			int size = IS.readInt();	// first thing is an int with the amount of
 										// shapes
 
@@ -629,49 +614,6 @@ public class GameOn
 		}
 	}
 
-	// standard GL initialization
-	public void initGL()
-	{
-		try
-		{
-			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
-			Display.setTitle("BossGreed");
-			Display.create();
-		}
-		catch (LWJGLException e)
-		{
-			e.printStackTrace();
-		}
-
-		glMatrixMode(GL_PROJECTION);
-		glLoadIdentity();
-		glOrtho(0, WIDTH, HEIGHT, 0, -1, 1);
-		glMatrixMode(GL_MODELVIEW);
-	}
-
-	// standard font initialization
-	@SuppressWarnings("unchecked")
-	private void initFonts()
-	{
-
-		Font awtFont = new Font("", Font.PLAIN, FONT_SIZE);
-
-		uniFont = new UnicodeFont(awtFont, FONT_SIZE, false, false);
-		uniFont.addAsciiGlyphs();
-		uniFont.addGlyphs(400, 600);           // Setting the unicode Range
-		uniFont.getEffects().add(new ColorEffect(java.awt.Color.white));
-		try
-		{
-			uniFont.loadGlyphs();
-		}
-		catch (SlickException e)
-		{
-		}
-		;
-
-		System.out.println("Fonts initialized!");
-	}
-
 	// NEEDS MORE SOUNDS
 	private void initSound()
 	{
@@ -687,156 +629,6 @@ public class GameOn
 			e.printStackTrace();
 		}
 
-	}
-
-	// just a huge dump of all the textures needed
-	public static void initTextures()
-	{
-		left = loadTexture("bag");
-		right = loadTexture("bagi1");
-		gleft = loadTexture("bagv1");
-		gright = loadTexture("bagv2");
-
-		sky1 = loadTexture("skyline1");
-		sky2 = loadTexture("skyline2");
-		sky3 = loadTexture("skyline3");
-		sky4 = loadTexture("skyline4");
-		sky5 = loadTexture("skyline5");
-		sky6 = loadTexture("skyline6");
-		icel = loadTexture("air");
-		cliffi = loadTexture("cliff");
-		cliffv = loadTexture("cliff2");
-		icev = loadTexture("air1");
-		deadi = loadTexture("dead");
-		coini = loadTexture("coin2");
-		gravflip = loadTexture("gravflip1");
-		gravflip2 = loadTexture("gravflip2");
-		gravflip3 = loadTexture("gravflip3");
-		gravflip4 = loadTexture("gravflip4");
-		gravflip5 = loadTexture("gravflip5");
-		gravflip6 = loadTexture("gravflip6");
-		gravflip7 = loadTexture("gravflip7");
-		gravflip8 = loadTexture("gravflip8");
-		gravflip9 = loadTexture("gravflip9");
-		gravflip10 = loadTexture("gravflip10");
-		gravflip11 = loadTexture("gravflip11");
-		gravflip12 = loadTexture("gravflip12");
-		gravflip13 = loadTexture("gravflip13");
-		gravflip14 = loadTexture("gravflip14");
-		gravflip15 = loadTexture("gravflip15");
-		gravflip16 = loadTexture("gravflip16");
-		gravflip17 = loadTexture("gravflip17");
-		gravflip18 = loadTexture("gravflip18");
-		Lon = loadTexture("lighton");
-		Loff = loadTexture("lightoff");
-		// ski = loadTexture("sky");
-		cloud1 = loadTexture("cloud1");
-		cloud2 = loadTexture("cloud2");
-		cloud3 = loadTexture("cloud3");
-		cloud4 = loadTexture("cloud4");
-		cloud5 = loadTexture("cloud5");
-		cloud6 = loadTexture("cloud6");
-		cloud7 = loadTexture("cloud7");
-		cloud8 = loadTexture("cloud8");
-		cloud9 = loadTexture("cloud9");
-		cloud10 = loadTexture("cloud10");
-		lboxi = loadTexture("lbox");
-		doorjam = loadTexture("doorjam");
-		woodi = loadTexture("wood");
-		brick = loadTexture("brick");
-		brickv = loadTexture("brickv");
-		a1 = loadTexture("arrow");
-		a2 = loadTexture("arrow1");
-		words = loadTexture("words");
-		words2 = loadTexture("wordsLevel");
-		words3 = loadTexture("wordsAbout");
-		words4 = loadTexture("wordsExit");
-		words5 = loadTexture("wordsControls");
-		words6 = loadTexture("wordsMove");
-		words7 = loadTexture("wordsJump");
-		words8 = loadTexture("wordsMainMenu");
-		words9 = loadTexture("level1");
-		words10 = loadTexture("level2");
-		words11 = loadTexture("wordsGameOver");
-		words12 = loadTexture("wordsRestart");
-		words13 = loadTexture("wordsYouWon");
-		words14 = loadTexture("wordsWelcome");
-		words15 = loadTexture("wordsIntroLevel");
-		words16 = loadTexture("wordsto");
-		words17 = loadTexture("wordsAvoidFire");
-		words18 = loadTexture("wordsBossGreed");
-		words19 = loadTexture("wordsSlidesonIce");
-		words20 = loadTexture("wordsGravityFlipper");
-		words21 = loadTexture("wordsCoinsAddWeightto");
-		words22 = loadTexture("wordsAvoidspike");
-		wallpaper = loadTexture("bgwallpaper3");
-		p = loadTexture("wordsP");
-		pr = loadTexture("wordsPr");
-		pre = loadTexture("wordsPre");
-		pres = loadTexture("wordsPres");
-		press = loadTexture("wordsPress");
-		news = loadTexture("news");
-
-		a3 = loadTexture("arrowup");
-		a4 = loadTexture("arrowleft");
-		a5 = loadTexture("arrowright");
-		esc = loadTexture("esc");
-		space = loadTexture("spacebar");
-
-		deadi1 = loadTexture("deadi1");
-		deadi2 = loadTexture("deadi2");
-		deadi3 = loadTexture("deadi3");
-		deadi4 = loadTexture("deadi4");
-		deadv = loadTexture("deadv");
-		deadv1 = loadTexture("deadv1");
-		deadv2 = loadTexture("deadv2");
-		deadv3 = loadTexture("deadv3");
-		deadv4 = loadTexture("deadv4");
-		door = loadTexture("door");
-		doorv = loadTexture("doorv");
-		ropei = loadTexture("rope");
-		hangi = loadTexture("hang");
-		doorjamv = loadTexture("doorjamv");
-		hangv = loadTexture("hangv");
-		ledgei = loadTexture("ledge");
-		wheeli = loadTexture("wheel");
-		wheeli2 = loadTexture("wheel1");
-<<<<<<< HEAD
-		
-=======
-
->>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
-		cactus = loadTexture("cactus");
-		desertbush = loadTexture("desertbush");
-		desertback = loadTexture("deserthills1");
-		desertplatform = loadTexture("desertplatform");
-<<<<<<< HEAD
-		desertplatform1= loadTexture("desertplatform1");
-		desertplatform2= loadTexture("desertplatform2");
-		desertplatform3= loadTexture("desertplatform3");
-		desertplatform4= loadTexture("desertplatform4");
-		desertplatform5= loadTexture("desertplatform5");
-		desertplatform6= loadTexture("desertplatform6");
-		desertplatform7= loadTexture("desertplatform7");
-		desertplatform8= loadTexture("desertplatform8");
-		desertplatform9= loadTexture("desertplatform9");
-		desertplatform10= loadTexture("desertplatform10");
-		desertplatform11= loadTexture("desertplatform11");
-=======
-		desertplatform1 = loadTexture("desertplatform1");
-		desertplatform2 = loadTexture("desertplatform2");
-		desertplatform3 = loadTexture("desertplatform3");
-		desertplatform4 = loadTexture("desertplatform4");
-		desertplatform5 = loadTexture("desertplatform5");
-		desertplatform6 = loadTexture("desertplatform6");
-		desertplatform7 = loadTexture("desertplatform7");
-		desertplatform8 = loadTexture("desertplatform8");
-		desertplatform9 = loadTexture("desertplatform9");
-		desertplatform10 = loadTexture("desertplatform10");
-		desertplatform11 = loadTexture("desertplatform11");
->>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
-		cliffdesert = loadTexture("cliffdesert");
-		cliffdesert2 = loadTexture("cliffdesert2");
 	}
 
 	// if you move around the file hierarchy, adjust the image file locations here

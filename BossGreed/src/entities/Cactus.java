@@ -1,6 +1,6 @@
 package entities;
 
-import game.GameOn;
+import game.GameShell;
 
 public class Cactus extends Shape
 {
@@ -25,7 +25,7 @@ public class Cactus extends Shape
 	{
 		textureStart();
 
-		GameOn.cactus.bind();
+		GameShell.cactus.bind();
 
 		textureVertices();
 	}

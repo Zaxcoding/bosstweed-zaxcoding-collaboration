@@ -1,9 +1,9 @@
 package entities;
 
-import game.GameOn;
+import game.GameShell;
 
 public class Skyline extends Shape
-{	
+{
 	public Skyline(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
@@ -17,26 +17,27 @@ public class Skyline extends Shape
 	public void draw()
 	{
 		textureStart();
-		
-		if(this.type ==0){
-			GameOn.sky1.bind();
+
+		if (this.type == 0)
+		{
+			GameShell.sky1.bind();
+		} else if (this.type == 1)
+		{
+			GameShell.sky2.bind();
+		} else if (this.type == 2)
+		{
+			GameShell.sky3.bind();
+		} else if (this.type == 3)
+		{
+			GameShell.sky4.bind();
+		} else if (this.type == 4)
+		{
+			GameShell.sky5.bind();
+		} else if (this.type == 5)
+		{
+			GameShell.sky6.bind();
 		}
-		else if(this.type==1){
-			GameOn.sky2.bind();
-		}
-		else if(this.type ==2){
-			GameOn.sky3.bind();
-		}
-		else if(this.type ==3){
-			GameOn.sky4.bind();
-		}
-		else if(this.type ==4){
-			GameOn.sky5.bind();
-		}
-		else if(this.type ==5){
-			GameOn.sky6.bind();
-		}
-		
+
 		textureVertices();
 	}
 
@@ -45,9 +46,9 @@ public class Skyline extends Shape
 	{
 		return false;
 	}
-	
+
 	@Override
-	public void interact(Box player) 
+	public void interact(Box player)
 	{
 		// nothing
 	}

@@ -1,9 +1,9 @@
 package entities;
 
-import game.GameOn;
+import game.GameShell;
 
 public class Hang extends Shape
-{	
+{
 	public Hang(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
@@ -17,15 +17,15 @@ public class Hang extends Shape
 	public void draw()
 	{
 		textureStart();
-		
+
 		if (!this.vert)
 		{
-			GameOn.hangi.bind();
+			GameShell.hangi.bind();
+		} else
+		{
+			GameShell.hangv.bind();
 		}
-		else{
-			GameOn.hangv.bind();
-		}
-		
+
 		textureVertices();
 	}
 
@@ -34,9 +34,9 @@ public class Hang extends Shape
 	{
 		return false;
 	}
-	
+
 	@Override
-	public void interact(Box player) 
+	public void interact(Box player)
 	{
 		// nothing
 	}

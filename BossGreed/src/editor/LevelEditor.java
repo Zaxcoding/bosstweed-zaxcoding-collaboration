@@ -150,17 +150,12 @@ public class LevelEditor
 			words11, words12, words13, words14, words15, words16, words17,
 			words18, words19, words20, words21, words22;
 	public static Texture p, pr, pre, pres, press, news;
-<<<<<<< HEAD
-	public static Texture cliffdesert, cliffdesert2, desertbush, cactus,desertplatform,
-	desertplatform1,desertplatform2,desertplatform3,desertplatform4,desertplatform5,desertplatform6,
-	desertplatform7,desertplatform8,desertplatform9,desertplatform10,desertplatform11,desertback;
-=======
+
 	public static Texture cliffdesert, cliffdesert2, desertbush, cactus,
 			desertplatform, desertplatform1, desertplatform2, desertplatform3,
 			desertplatform4, desertplatform5, desertplatform6, desertplatform7,
 			desertplatform8, desertplatform9, desertplatform10,
 			desertplatform11, desertback;
->>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 
 	public LevelEditor()
 	{
@@ -337,23 +332,12 @@ public class LevelEditor
 		{
 			if (temp.vert)
 				temp.setPic(cliffv);
-<<<<<<< HEAD
-			else if(temp.type ==1)
-				temp.setPic(cliffdesert);
-			else if(temp.type ==2)
-				temp.setPic(cliffdesert2);
-			else
-				temp.setPic(cliffi);
-			
-=======
 			else if (temp.type == 1)
 				temp.setPic(cliffdesert);
 			else if (temp.type == 2)
 				temp.setPic(cliffdesert2);
 			else
 				temp.setPic(cliffi);
-
->>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 		}
 
 		if (temp.name.equals("Box"))
@@ -368,10 +352,6 @@ public class LevelEditor
 		}
 		if (temp.name.equals("Bush"))
 			temp.setPic(desertbush);
-<<<<<<< HEAD
-
-=======
->>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 
 		if (temp.name.equals("Cactus"))
 			temp.setPic(cactus);
@@ -464,20 +444,12 @@ public class LevelEditor
 			else
 				temp.setPic(hangv);
 		}
-<<<<<<< HEAD
-		
-=======
 
->>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 		if (temp.name.equals("Hills"))
 		{
 			temp.setPic(desertback);
 		}
-<<<<<<< HEAD
-			
-=======
 
->>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 		if (temp.name.equals("Ice"))
 		{
 			if (temp.vert)
@@ -503,12 +475,8 @@ public class LevelEditor
 		if (temp.name.equals("News"))
 			temp.setPic(news);
 
-<<<<<<< HEAD
-		if (temp.name.equals("Platform")){
-=======
 		if (temp.name.equals("Platform"))
 		{
->>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 			temp.setPic(desertplatform);
 		}
 		if (temp.name.equals("Rope"))
@@ -634,11 +602,7 @@ public class LevelEditor
 			temp = new Loff(mouseX, mouseY, width, height);
 		if (currShape == "News")
 			temp = new News(mouseX, mouseY, width, height);
-<<<<<<< HEAD
-		if (currShape =="Platform")
-=======
 		if (currShape == "Platform")
->>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 			temp = new Platform(mouseX, mouseY, width, height);
 		if (currShape == "Rope")
 			temp = new Rope(mouseX, mouseY, width, height);
@@ -652,7 +616,6 @@ public class LevelEditor
 			temp = new Wall(mouseX, mouseY, width, height);
 		if (currShape == "Wheel")
 			temp = new Wheel(mouseX, mouseY, width, height);
-		
 
 		if (temp.defaultWidth > 0 && (mouseY + transY > BOTTOM))
 		{
@@ -1549,22 +1512,7 @@ public class LevelEditor
 		desertbush = loadTexture("desertbush");
 		desertback = loadTexture("deserthills1");
 		desertplatform = loadTexture("desertplatform");
-<<<<<<< HEAD
-		desertplatform1= loadTexture("desertplatform1");
-		desertplatform2= loadTexture("desertplatform2");
-		desertplatform3= loadTexture("desertplatform3");
-		desertplatform4= loadTexture("desertplatform4");
-		desertplatform5= loadTexture("desertplatform5");
-		desertplatform6= loadTexture("desertplatform6");
-		desertplatform7= loadTexture("desertplatform7");
-		desertplatform8= loadTexture("desertplatform8");
-		desertplatform9= loadTexture("desertplatform9");
-		desertplatform10= loadTexture("desertplatform10");
-		desertplatform11= loadTexture("desertplatform11");
-		cliffdesert = loadTexture("cliffdesert");
-		cliffdesert2 = loadTexture("cliffdesert2");
-		
-=======
+
 		desertplatform1 = loadTexture("desertplatform1");
 		desertplatform2 = loadTexture("desertplatform2");
 		desertplatform3 = loadTexture("desertplatform3");
@@ -1578,7 +1526,6 @@ public class LevelEditor
 		desertplatform11 = loadTexture("desertplatform11");
 		cliffdesert = loadTexture("cliffdesert");
 		cliffdesert2 = loadTexture("cliffdesert2");
->>>>>>> d11c89e14c50b3b44bef1eb885706da4a4e17caa
 
 	}
 

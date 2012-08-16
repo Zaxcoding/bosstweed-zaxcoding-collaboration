@@ -1,9 +1,9 @@
 package entities;
 
-import game.GameOn;
+import game.GameShell;
 
 public class News extends Shape
-{		
+{
 	public News(double x, double y, double width, double height)
 	{
 		super(x, y, width, height);
@@ -19,9 +19,9 @@ public class News extends Shape
 	public void draw()
 	{
 		textureStart();
-		
-		GameOn.news.bind();
-		
+
+		GameShell.news.bind();
+
 		textureVertices();
 	}
 
@@ -30,9 +30,9 @@ public class News extends Shape
 	{
 		return false;
 	}
-	
+
 	@Override
-	public void interact(Box player) 
+	public void interact(Box player)
 	{
 		this.alive = false;
 	}
