@@ -7,9 +7,12 @@ import static org.lwjgl.opengl.GL11.glClear;
 import static org.lwjgl.opengl.GL11.glLoadIdentity;
 import static org.lwjgl.opengl.GL11.glMatrixMode;
 import static org.lwjgl.opengl.GL11.glOrtho;
+<<<<<<< HEAD
 import static org.lwjgl.opengl.GL11.glPushMatrix;
 import static org.lwjgl.opengl.GL11.glTranslated;
 import static org.lwjgl.opengl.GL11.glPopMatrix;
+=======
+>>>>>>> 2276985d9a0328a0fc96bc5ee539cc61599601e2
 
 import java.awt.Font;
 import java.io.File;
@@ -30,8 +33,11 @@ import org.newdawn.slick.opengl.TextureLoader;
 
 import entities.Arrow;
 import entities.ArrowKey;
+<<<<<<< HEAD
 import entities.Box;
 import entities.Map;
+=======
+>>>>>>> 2276985d9a0328a0fc96bc5ee539cc61599601e2
 import entities.Text;
 import entities.Wall;
 
@@ -64,7 +70,11 @@ public class GameShell
 			desertplatform, desertplatform1, desertplatform2, desertplatform3,
 			desertplatform4, desertplatform5, desertplatform6, desertplatform7,
 			desertplatform8, desertplatform9, desertplatform10,
+<<<<<<< HEAD
 			desertplatform11, desertback,map;
+=======
+			desertplatform11, desertback;
+>>>>>>> 2276985d9a0328a0fc96bc5ee539cc61599601e2
 
 	//INTRO VARS
 
@@ -78,6 +88,7 @@ public class GameShell
 	private Text gameText, controlsText, exitText;
 	private Arrow row1, row2, row3;
 	private int row = 1;
+<<<<<<< HEAD
 	//WORLD VARS
 	private Map gameMap;
 	double translate_x,translate_y;
@@ -86,6 +97,8 @@ public class GameShell
 	private boolean pushed=false,pushRight=false,pushLeft;
 	
 	
+=======
+>>>>>>> 2276985d9a0328a0fc96bc5ee539cc61599601e2
 
 	// declare different states for the game
 	/*
@@ -145,10 +158,13 @@ public class GameShell
 		row1 = new Arrow(290, 200, 100, 48);
 		row2 = new Arrow(290, 270, 100, 48);
 		row3 = new Arrow(290, 340, 100, 48);
+<<<<<<< HEAD
 		
 		//World variables initialized
 		gameMap = new Map(0,0,4000,1024);
 		box = new Box(10,830,32,32);
+=======
+>>>>>>> 2276985d9a0328a0fc96bc5ee539cc61599601e2
 
 		//logic loop
 		while (!Display.isCloseRequested())
@@ -286,7 +302,11 @@ public class GameShell
 			{
 				if (row == 1)
 				{
+<<<<<<< HEAD
 					state = State.WORLD;
+=======
+					state = State.LEVEL1;
+>>>>>>> 2276985d9a0328a0fc96bc5ee539cc61599601e2
 				} else if (row == 2)
 				{
 					//settings
@@ -301,6 +321,7 @@ public class GameShell
 			// same as above
 			break;
 		case WORLD:
+<<<<<<< HEAD
 			if (Keyboard.isKeyDown(Keyboard.KEY_SPACE))
 			{
 				if(inLevel1()){
@@ -333,6 +354,17 @@ public class GameShell
 			{
 				translate_y-=3;
 				System.out.println("Y:" + translate_y);
+=======
+			if (Keyboard.isKeyDown(Keyboard.KEY_RETURN))
+			{
+				//enter current level
+			} else if (Keyboard.isKeyDown(Keyboard.KEY_LEFT))
+			{
+				//go left one level
+			} else if (Keyboard.isKeyDown(Keyboard.KEY_RIGHT))
+			{
+				//go right one level
+>>>>>>> 2276985d9a0328a0fc96bc5ee539cc61599601e2
 			}
 			break;
 		case LEVEL1:
@@ -351,6 +383,7 @@ public class GameShell
 		 */
 		}
 	}
+<<<<<<< HEAD
 	private void animateBox(){
 		if(inLevel1()){
 			if(pushRight){
@@ -460,6 +493,8 @@ public class GameShell
 			System.out.println("done animating");
 		}
 	}
+=======
+>>>>>>> 2276985d9a0328a0fc96bc5ee539cc61599601e2
 
 	private void drawSettings()
 	{
@@ -469,9 +504,13 @@ public class GameShell
 
 	private void playLevel2()
 	{
+<<<<<<< HEAD
 		new GameOn("alex");
 		state = State.INTRO;
 		pressText.i = 1;
+=======
+		// TODO Auto-generated method stub
+>>>>>>> 2276985d9a0328a0fc96bc5ee539cc61599601e2
 
 	}
 
@@ -484,6 +523,7 @@ public class GameShell
 
 	private void drawWorld()
 	{
+<<<<<<< HEAD
 		glPushMatrix();
 			glTranslated(translate_x,translate_y,0);
 			gameMap.draw();
@@ -495,6 +535,9 @@ public class GameShell
 				animateBox();
 			}
 		glPopMatrix();
+=======
+		// TODO Auto-generated method stub
+>>>>>>> 2276985d9a0328a0fc96bc5ee539cc61599601e2
 
 	}
 
@@ -701,7 +744,10 @@ public class GameShell
 		desertplatform11 = loadTexture("desertplatform11");
 		cliffdesert = loadTexture("cliffdesert");
 		cliffdesert2 = loadTexture("cliffdesert2");
+<<<<<<< HEAD
 		map = loadTexture("map");
+=======
+>>>>>>> 2276985d9a0328a0fc96bc5ee539cc61599601e2
 	}
 
 }

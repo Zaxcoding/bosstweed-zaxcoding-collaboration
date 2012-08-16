@@ -18,10 +18,17 @@ public class Arrow extends Shape
 
 		if (this.i < 10)
 		{
+<<<<<<< HEAD
 			GameShell.al1.bind();
 		} else if (this.i >= 10 && this.i <= 20)
 		{
 			GameShell.al2.bind();
+=======
+			GameShell.a1.bind();
+		} else if (this.i >= 10 && this.i <= 20)
+		{
+			GameShell.a2.bind();
+>>>>>>> 2276985d9a0328a0fc96bc5ee539cc61599601e2
 			if (this.i == 20)
 			{
 				this.i = 0;
